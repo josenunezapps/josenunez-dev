@@ -344,3 +344,8 @@ html{scroll-padding-top:96px}
 /* ===== Corrección ancla Contacto ===== */
 #contacto{scroll-margin-top:0 !important;}
 @media(max-width:720px){#contacto{scroll-margin-top:0 !important;}}
+
+
+/* ===== Favicon + marca del sitio ===== */
+.brand-mark-logo{padding:0;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.015))}
+.brand-mark-logo img{width:100%;height:100%;display:block;border-radius:inherit}
