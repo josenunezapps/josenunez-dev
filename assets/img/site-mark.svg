@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="20" x2="232" y2="236" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#171326"/>
+      <stop offset="1" stop-color="#090A10"/>
+    </linearGradient>
+    <linearGradient id="strokeA" x1="66" y1="56" x2="182" y2="188" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8B1FF"/>
+      <stop offset="1" stop-color="#8B5DFF"/>
+    </linearGradient>
+    <linearGradient id="strokeB" x1="88" y1="80" x2="205" y2="201" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9E7AFF"/>
+      <stop offset="1" stop-color="#FF5C95"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="10" y="10" width="236" height="236" rx="60" fill="url(#bg)"/>
+  <rect x="10.5" y="10.5" width="235" height="235" rx="59.5" stroke="rgba(255,255,255,0.08)" stroke-opacity="0.12"/>
+  <rect x="58" y="54" width="100" height="100" rx="28" stroke="url(#strokeA)" stroke-width="18"/>
+  <rect x="98" y="94" width="100" height="100" rx="28" stroke="url(#strokeB)" stroke-width="18"/>
+  <circle cx="184" cy="72" r="10" fill="#B67BFF" filter="url(#glow)"/>
+  <circle cx="72" cy="184" r="8" fill="#F3E8FF" fill-opacity="0.92"/>
+</svg>
