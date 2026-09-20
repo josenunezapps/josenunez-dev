@@ -19,6 +19,7 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeMobileMenu();
 });
 
+
 /* En móvil, abrir las apps de contacto directamente.
    En computadora se conservan los enlaces web actuales. */
 const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
