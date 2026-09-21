@@ -110,6 +110,13 @@ export async function onRequestPost(context) {
   return json({ success: true, id: result.id || null });
 }
 
-export function onRequestGet() {
-  return json({ success: false, message: "Método no permitido." }, 405);
+export function onRequestGet(context) {
+  const { env } = context;
+  return json({
+    success: true,
+    service: "zenix-contact",
+    resendConfigured: Boolean(env.RESEND_API_KEY),
+    fromConfigured: env.CONTACT_FROM || "Zenix AR <contacto@zenix.com.ar>",
+    toConfigured: env.CONTACT_TO || "josene242@gmail.com"
+  });
 }
