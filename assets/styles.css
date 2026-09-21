@@ -1105,7 +1105,7 @@ button{font:inherit}
 .footer-contact-logo svg{width:26px;height:26px;display:block}
 .footer-contact-logo:hover{transform:translateY(-2px);box-shadow:0 15px 30px rgba(0,0,0,.24)}
 .footer-contact-logo.gmail-logo:hover{border-color:rgba(234,67,53,.45);background:linear-gradient(180deg,rgba(234,67,53,.12),rgba(255,255,255,.025))}
-.footer-contact-logo.whatsapp-logo:hover{border-color:rgba(37,211,102,.42);background:linear-gradient(180deg,rgba(37,211,102,.12),rgba(255,255,255,.025))}
+.footer-contact-logo.whatsapp-logo:hover{border-color:rgba(37,211,102,.42);background:linear-gradient(180deg,rgba(37,211,102,.12),rgba(255,255,255,.025))}\n.footer-contact-logo.instagram-logo:hover{border-color:rgba(214,41,118,.46);background:linear-gradient(180deg,rgba(214,41,118,.12),rgba(255,255,255,.025))}
 @media(max-width:760px){.footer-contact-logo{width:44px;height:44px;flex-basis:44px}}
 
 
