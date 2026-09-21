@@ -132,7 +132,7 @@
     } catch (error) {
       const message = error && error.name === 'AbortError'
         ? 'El envío tardó demasiado. Probá nuevamente o escribime por WhatsApp/Gmail.'
-        : 'No se pudo enviar la consulta. Probá nuevamente o escribime por WhatsApp/Gmail.';
+        : (error && error.message ? error.message : 'No se pudo enviar la consulta. Probá nuevamente o escribime por WhatsApp/Gmail.');
       alert(message);
       resetSubmitButton();
     }
