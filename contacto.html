@@ -83,6 +83,14 @@
   const submitButton = form.querySelector('button[type="submit"]');
   const originalText = submitButton ? submitButton.textContent : '';
 
+  function resetSubmitButton(){
+    if (!submitButton) return;
+    submitButton.disabled = false;
+    submitButton.textContent = originalText;
+  }
+
+  window.addEventListener('pageshow', resetSubmitButton);
+
   form.addEventListener('submit', async function(event){
     event.preventDefault();
 
@@ -96,14 +104,23 @@
       const payload = {};
       formData.forEach((value, key) => { payload[key] = value; });
 
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+      let response;
+      try {
+        response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+      } finally {
+        clearTimeout(timeoutId);
+      }
 
       const data = await response.json().catch(() => ({}));
 
@@ -113,11 +130,11 @@
 
       window.location.href = 'gracias.html';
     } catch (error) {
-      alert('No se pudo enviar la consulta. Probá nuevamente o escribime por WhatsApp/Gmail.');
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-      }
+      const message = error && error.name === 'AbortError'
+        ? 'El envío tardó demasiado. Probá nuevamente o escribime por WhatsApp/Gmail.'
+        : 'No se pudo enviar la consulta. Probá nuevamente o escribime por WhatsApp/Gmail.';
+      alert(message);
+      resetSubmitButton();
     }
   });
 })();
