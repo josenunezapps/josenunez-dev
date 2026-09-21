@@ -34,16 +34,7 @@ export async function onRequestPost(context) {
     body = await request.json();
   } catch {
     return json({ success: false, message: "Solicitud inválida." }, 400);
-  }
-
-  // Honeypot: durante el diagnóstico NO simulamos éxito.
-  // Si algún navegador/autocompletado completa este campo por error,
-  // devolvemos un error visible para poder detectarlo.
-  if (clean(body._honey, 200)) {
-    return json({
-      success: false,
-      message: "El filtro antispam bloqueó este envío."
-    }, 400);
+  }, 400);
   }
 
   const nombre = clean(body.Nombre, 120);
