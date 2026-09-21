@@ -84,27 +84,47 @@ export async function onRequestPost(context) {
     mensaje
   ].join("\n");
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      from: env.CONTACT_FROM || "Zenix AR <contacto@zenix.com.ar>",
-      to: [env.CONTACT_TO || "josene242@gmail.com"],
-      reply_to: email,
-      subject: `Nueva consulta Zenix AR — ${nombre}`,
-      html,
-      text
-    })
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  const result = await response.json().catch(() => ({}));
+  let response;
+  let result = {};
+
+  try {
+    response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: env.CONTACT_FROM || "Zenix AR <contacto@zenix.com.ar>",
+        to: [env.CONTACT_TO || "josene242@gmail.com"],
+        reply_to: email,
+        subject: `Nueva consulta Zenix AR — ${nombre}`,
+        html,
+        text
+      }),
+      signal: controller.signal
+    });
+
+    result = await response.json().catch(() => ({}));
+  } catch (error) {
+    const message = error && error.name === "AbortError"
+      ? "Resend no respondió dentro de 15 segundos."
+      : "No se pudo conectar con Resend.";
+    return json({ success: false, message }, 502);
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!response.ok) {
     console.error("Resend error", response.status, result);
-    return json({ success: false, message: "No se pudo enviar el correo." }, 502);
+    const detail = result && (result.message || result.name || result.error);
+    return json({
+      success: false,
+      message: detail ? `Resend: ${detail}` : `Resend devolvió HTTP ${response.status}.`
+    }, 502);
   }
 
   return json({ success: true, id: result.id || null });
