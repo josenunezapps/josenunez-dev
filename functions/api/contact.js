@@ -36,9 +36,14 @@ export async function onRequestPost(context) {
     return json({ success: false, message: "Solicitud inválida." }, 400);
   }
 
-  // Honeypot: los usuarios reales nunca completan este campo.
+  // Honeypot: durante el diagnóstico NO simulamos éxito.
+  // Si algún navegador/autocompletado completa este campo por error,
+  // devolvemos un error visible para poder detectarlo.
   if (clean(body._honey, 200)) {
-    return json({ success: true });
+    return json({
+      success: false,
+      message: "El filtro antispam bloqueó este envío."
+    }, 400);
   }
 
   const nombre = clean(body.Nombre, 120);
@@ -127,7 +132,11 @@ export async function onRequestPost(context) {
     }, 502);
   }
 
-  return json({ success: true, id: result.id || null });
+  return json({
+    success: true,
+    id: result.id || null,
+    provider: "resend"
+  });
 }
 
 export function onRequestGet(context) {
