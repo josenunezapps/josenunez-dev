@@ -22,11 +22,7 @@
       </div>
     </div>
 
-    <form id="zenixContactForm" class="zenix-contact-form" action="https://formsubmit.co/josene242@gmail.com" method="POST">
-      <input type="hidden" name="_subject" value="Nueva consulta desde Zenix">
-      <input type="hidden" name="_url" value="https://josenunez.pages.dev/contacto.html">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_autoresponse" value="Gracias por contactarte con Zenix. Recibí tu mensaje y te responderé apenas pueda. — José Nuñez">
+    <form id="zenixContactForm" class="zenix-contact-form" action="/api/contact" method="POST">
       <input class="form-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off">
 
       <div class="form-grid">
@@ -83,26 +79,45 @@
 (function(){
   const form = document.getElementById('zenixContactForm');
   if(!form) return;
+
   const submitButton = form.querySelector('button[type="submit"]');
   const originalText = submitButton ? submitButton.textContent : '';
+
   form.addEventListener('submit', async function(event){
     event.preventDefault();
-    if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Enviando…'; }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Enviando…';
+    }
+
     try {
       const formData = new FormData(form);
       const payload = {};
       formData.forEach((value, key) => { payload[key] = value; });
-      const response = await fetch('https://formsubmit.co/ajax/josene242@gmail.com', {
+
+      const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify(payload)
       });
+
       const data = await response.json().catch(() => ({}));
-      if (!response.ok || data.success === false) throw new Error(data.message || 'No se pudo enviar el formulario.');
+
+      if (!response.ok || data.success !== true) {
+        throw new Error(data.message || 'No se pudo enviar el formulario.');
+      }
+
       window.location.href = 'gracias.html';
     } catch (error) {
       alert('No se pudo enviar la consulta. Probá nuevamente o escribime por WhatsApp/Gmail.');
-      if (submitButton) { submitButton.disabled = false; submitButton.textContent = originalText; }
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
     }
   });
 })();
