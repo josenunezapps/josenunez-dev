@@ -34,7 +34,6 @@ export async function onRequestPost(context) {
     body = await request.json();
   } catch {
     return json({ success: false, message: "Solicitud inválida." }, 400);
-  }, 400);
   }
 
   const nombre = clean(body.Nombre, 120);
