@@ -105,6 +105,10 @@ export async function onRequestPost(context) {
   }
 }
 
-export function onRequestGet() {
-  return json({ success: true, service: "zenix-chat" });
+export function onRequestGet(context) {
+  return json({
+    success: true,
+    service: "zenix-chat",
+    aiConfigured: Boolean(context.env.AI)
+  });
 }
