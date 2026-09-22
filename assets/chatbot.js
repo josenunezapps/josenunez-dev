@@ -99,11 +99,11 @@
   }
 
   function isEmail(value){
-    return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
   function isPhone(value){
-    const digits = value.replace(/\\D/g, '');
+    const digits = value.replace(/\D/g, '');
     return digits.length >= 8 && digits.length <= 18;
   }
 
