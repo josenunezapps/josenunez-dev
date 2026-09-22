@@ -16,8 +16,12 @@ function clean(value, max = 800) {
 const HANDOFF_MARKER = "[[CONTACTAR_JOSE]]";
 
 function wantsHumanContact(message) {
-  const q = String(message || "").toLowerCase();
-  return /(?:quiero|quisiera|necesito|podr[ií]a|me gustar[ií]a).{0,45}(?:hablar|contactar|comunicarme|contratar|seguir).{0,35}(?:jos[eé]|persona|humano)|(?:contactame|cont[aá]ctame|que me contacte|que jos[eé] me contacte|pasame con jos[eé]|hablar con jos[eé]|contactar a jos[eé]|quiero contratar)/i.test(q);
+  const q = String(message || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  return /contact|hablar|persona|humano|jose|contratar|contratacion|comunicar/.test(q);
 }
 
 function fallbackReply(message) {
