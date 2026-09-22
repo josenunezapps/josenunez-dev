@@ -31,7 +31,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 5 16 7-16 7 2.7-7L4 5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6.7 12H20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
       </form>
-      <div class="zenix-chat-foot">Orientación inicial · Para cerrar un proyecto, seguís con José.</div>
+      <div class="zenix-chat-foot">Orientación inicial · Para avanzar con un proyecto, seguís con nuestro equipo.</div>
     </section>`;
 
   document.body.appendChild(root);
@@ -121,7 +121,7 @@
     leadState = { step: 'name', name: '', contact: '' };
     quick.innerHTML = '';
     input.placeholder = 'Tu nombre';
-    addMessage('assistant', 'Perfecto. Para que José pueda ponerse en contacto con vos, primero decime tu nombre.');
+    addMessage('assistant', 'Perfecto. Para que nuestro equipo pueda ponerse en contacto con vos, primero decime tu nombre.');
     input.focus();
   }
 
@@ -161,8 +161,8 @@
         throw new Error(data.message || 'No pude enviar tus datos.');
       }
 
-      addMessage('assistant', 'Listo. Ya le envié a José tus datos de contacto y un resumen de esta conversación. Se va a poner en contacto con vos por el medio que me pasaste.');
-      history.push({ role: 'assistant', content: 'Los datos de contacto fueron enviados a José.' });
+      addMessage('assistant', 'Listo. Ya envié tus datos de contacto y un resumen de esta conversación al equipo de Zenix AR. Se van a poner en contacto con vos por el medio que me pasaste.');
+      history.push({ role: 'assistant', content: 'Los datos de contacto fueron enviados al equipo de Zenix AR.' });
       if (history.length > 12) history.splice(0, history.length - 12);
       resetLeadCapture();
     } catch (error) {
@@ -194,7 +194,7 @@
       leadState.step = 'contact';
       input.value = '';
       input.placeholder = 'Email o WhatsApp';
-      addMessage('assistant', 'Gracias. Ahora pasame un email o número de WhatsApp donde José pueda contactarte.');
+      addMessage('assistant', 'Gracias. Ahora pasame un email o número de WhatsApp donde el equipo pueda contactarte.');
       return;
     }
 
@@ -213,7 +213,7 @@
       send.disabled = true;
       addMessage(
         'assistant',
-        'Voy a enviarle a José tu nombre, el contacto que me pasaste y un resumen de esta conversación únicamente para que pueda responder tu consulta. ¿Confirmás el envío?'
+        'Voy a enviar al equipo de Zenix AR tu nombre, el contacto que me pasaste y un resumen de esta conversación únicamente para que puedan responder tu consulta. ¿Confirmás el envío?'
       );
       showConsentButtons();
     }
@@ -260,7 +260,7 @@
       typing.remove();
       const msg = error && error.name === 'AbortError'
         ? 'Estoy tardando más de lo normal. Podés intentar otra vez o escribir directamente desde la sección Contacto.'
-        : 'No pude responder ahora. Podés usar el formulario de Contacto o WhatsApp y José te responde directamente.';
+        : 'No pude responder ahora. Podés usar el formulario de Contacto o WhatsApp y el equipo te responde directamente.';
       addMessage('assistant', msg);
     } finally {
       clearTimeout(timer);

@@ -55,7 +55,7 @@ async function makeSummary(ai, history) {
 
   const fallback = userMessages.length
     ? userMessages.slice(-4).join(" / ").slice(0, 1200)
-    : "El visitante pidió que José se ponga en contacto.";
+    : "El visitante pidió que el equipo de Zenix AR se ponga en contacto.";
 
   if (!ai || !history.length) return fallback;
 
@@ -66,7 +66,7 @@ async function makeSummary(ai, history) {
         messages: [
           {
             role: "system",
-            content: "Resumí para José, en español y en máximo 5 líneas, qué quiere el potencial cliente de Zenix AR. Incluí objetivo, tipo de proyecto y contexto útil si están presentes. No inventes datos ni precios."
+            content: "Resumí para el equipo de Zenix AR, en español y en máximo 5 líneas, qué quiere el potencial cliente. Incluí objetivo, tipo de proyecto y contexto útil si están presentes. No inventes datos ni precios."
           },
           {
             role: "user",
