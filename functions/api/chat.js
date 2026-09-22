@@ -93,12 +93,21 @@ export async function onRequestPost(context) {
   const ai = context.env.AI || context.env.IA;
   const directHandoff = wantsHumanContact(message);
 
+  if (directHandoff) {
+    return json({
+      success: true,
+      reply: "Claro. Puedo tomar tus datos para que José reciba tu consulta y se ponga en contacto con vos.",
+      mode: "guided",
+      handoff: true
+    });
+  }
+
   if (!ai) {
     return json({
       success: true,
       reply: fallbackReply(message),
       mode: "guided",
-      handoff: directHandoff
+      handoff: false
     });
   }
 
