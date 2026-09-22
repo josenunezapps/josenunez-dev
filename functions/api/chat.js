@@ -75,12 +75,14 @@ export async function onRequestPost(context) {
     }))
     .filter(item => item.content);
 
-  if (!context.env.AI) {
+  const ai = context.env.AI || context.env.IA;
+
+  if (!ai) {
     return json({ success: true, reply: fallbackReply(message), mode: "guided" });
   }
 
   try {
-    const result = await context.env.AI.run(
+    const result = await ai.run(
       "@cf/meta/llama-3.1-8b-instruct-fp8",
       {
         messages: [
@@ -109,6 +111,7 @@ export function onRequestGet(context) {
   return json({
     success: true,
     service: "zenix-chat",
-    aiConfigured: Boolean(context.env.AI)
+    aiConfigured: Boolean(context.env.AI || context.env.IA),
+    bindingDetected: context.env.AI ? "AI" : (context.env.IA ? "IA" : null)
   });
 }
