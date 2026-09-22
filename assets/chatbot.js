@@ -44,9 +44,12 @@
   const input = root.querySelector('.zenix-chat-input');
   const send = root.querySelector('.zenix-chat-send');
   const quick = root.querySelector('.zenix-chat-quick');
+  const defaultQuickHtml = quick.innerHTML;
   const history = [];
+
   let busy = false;
   let greeted = false;
+  let leadState = null;
 
   function setOpen(open){
     root.classList.toggle('is-open', open);
@@ -87,9 +90,143 @@
     send.disabled = value;
   }
 
+  function restoreQuick(){
+    quick.innerHTML = defaultQuickHtml;
+  }
+
+  function showConsentButtons(){
+    quick.innerHTML = '<button type="button" data-consent="yes">Confirmar envío</button><button type="button" data-consent="no">Cancelar</button>';
+  }
+
+  function isEmail(value){
+    return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+  }
+
+  function isPhone(value){
+    const digits = value.replace(/\\D/g, '');
+    return digits.length >= 8 && digits.length <= 18;
+  }
+
+  function resetLeadCapture(){
+    leadState = null;
+    input.placeholder = 'Escribí tu consulta…';
+    input.disabled = false;
+    send.disabled = false;
+    restoreQuick();
+    input.focus();
+  }
+
+  function startLeadCapture(){
+    if (leadState) return;
+    leadState = { step: 'name', name: '', contact: '' };
+    quick.innerHTML = '';
+    input.placeholder = 'Tu nombre';
+    addMessage('assistant', 'Perfecto. Para que José pueda ponerse en contacto con vos, primero decime tu nombre.');
+    input.focus();
+  }
+
+  function cancelLead(){
+    addMessage('assistant', 'Perfecto, no envié ningún dato. Podemos seguir hablando por acá.');
+    resetLeadCapture();
+  }
+
+  async function submitLead(){
+    if (!leadState || leadState.step !== 'confirm' || busy) return;
+
+    const payload = {
+      name: leadState.name,
+      contact: leadState.contact,
+      history: history.slice(-12)
+    };
+
+    setBusy(true);
+    quick.innerHTML = '';
+    const typing = addTyping();
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 22000);
+
+    try {
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+
+      const data = await response.json().catch(() => ({}));
+      typing.remove();
+
+      if (!response.ok || data.success !== true) {
+        throw new Error(data.message || 'No pude enviar tus datos.');
+      }
+
+      addMessage('assistant', 'Listo. Ya le envié a José tus datos de contacto y un resumen de esta conversación. Se va a poner en contacto con vos por el medio que me pasaste.');
+      history.push({ role: 'assistant', content: 'Los datos de contacto fueron enviados a José.' });
+      if (history.length > 12) history.splice(0, history.length - 12);
+      resetLeadCapture();
+    } catch (error) {
+      typing.remove();
+      addMessage('assistant', error && error.name === 'AbortError'
+        ? 'El envío tardó demasiado. Podés intentar otra vez o usar la sección Contacto.'
+        : 'No pude enviar tus datos en este momento. Podés reintentar o usar la sección Contacto.');
+      setBusy(false);
+      leadState.step = 'confirm';
+      input.disabled = true;
+      send.disabled = true;
+      showConsentButtons();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async function handleLeadInput(text){
+    const clean = String(text || '').trim();
+    if (!clean || !leadState || busy) return;
+
+    if (leadState.step === 'name') {
+      addMessage('user', clean);
+      if (clean.length < 2) {
+        addMessage('assistant', 'Decime tu nombre para poder identificar la consulta.');
+        return;
+      }
+      leadState.name = clean.slice(0, 120);
+      leadState.step = 'contact';
+      input.value = '';
+      input.placeholder = 'Email o WhatsApp';
+      addMessage('assistant', 'Gracias. Ahora pasame un email o número de WhatsApp donde José pueda contactarte.');
+      return;
+    }
+
+    if (leadState.step === 'contact') {
+      addMessage('user', clean);
+      if (!isEmail(clean) && !isPhone(clean)) {
+        addMessage('assistant', 'Necesito un email válido o un número de WhatsApp con código de área/país.');
+        return;
+      }
+
+      leadState.contact = clean.slice(0, 254);
+      leadState.step = 'confirm';
+      input.value = '';
+      input.placeholder = 'Confirmá el envío';
+      input.disabled = true;
+      send.disabled = true;
+      addMessage(
+        'assistant',
+        'Voy a enviarle a José tu nombre, el contacto que me pasaste y un resumen de esta conversación únicamente para que pueda responder tu consulta. ¿Confirmás el envío?'
+      );
+      showConsentButtons();
+    }
+  }
+
   async function ask(text){
     const clean = String(text || '').trim();
     if (!clean || busy) return;
+
+    if (leadState) {
+      await handleLeadInput(clean);
+      return;
+    }
 
     addMessage('user', clean);
     history.push({ role: 'user', content: clean });
@@ -110,10 +247,15 @@
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.reply) throw new Error(data.message || 'No pude responder en este momento.');
+
       typing.remove();
       addMessage('assistant', data.reply);
       history.push({ role: 'assistant', content: data.reply });
       if (history.length > 10) history.splice(0, history.length - 10);
+
+      if (data.handoff === true) {
+        startLeadCapture();
+      }
     } catch (error) {
       typing.remove();
       const msg = error && error.name === 'AbortError'
@@ -122,21 +264,38 @@
       addMessage('assistant', msg);
     } finally {
       clearTimeout(timer);
-      setBusy(false);
-      input.focus();
+      if (!leadState || leadState.step !== 'confirm') {
+        setBusy(false);
+      }
+      if (leadState && leadState.step === 'confirm') {
+        input.disabled = true;
+        send.disabled = true;
+      } else {
+        input.focus();
+      }
     }
   }
 
   launcher.addEventListener('click', () => setOpen(!root.classList.contains('is-open')));
   close.addEventListener('click', () => setOpen(false));
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     ask(input.value);
   });
+
   quick.addEventListener('click', (event) => {
+    const consent = event.target.closest('button[data-consent]');
+    if (consent) {
+      if (consent.dataset.consent === 'yes') submitLead();
+      else cancelLead();
+      return;
+    }
+
     const button = event.target.closest('button[data-message]');
     if (button) ask(button.dataset.message);
   });
+
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && root.classList.contains('is-open')) setOpen(false);
   });
