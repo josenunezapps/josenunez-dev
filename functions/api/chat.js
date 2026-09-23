@@ -80,6 +80,9 @@ function fallbackReply(message, profile) {
   if (/presupuesto|precio|cuanto|costo|costar|tarifa/.test(q)) {
     return "El presupuesto depende del alcance real. Contame qué querés resolver y qué resultado esperás; con eso podemos definir mejor el proyecto.";
   }
+  if (/recomend|idea de app|que app|qué app/.test(q)) {
+    return "Depende de qué objetivo tengas. Para recomendarte una app útil necesito saber una sola cosa: ¿la querés para un negocio que ya existe, para venderla como producto o para resolver un problema personal?";
+  }
   if (/android|app|aplicacion|play store|play console/.test(q)) {
     return "Podemos trabajar una app Android desde una primera versión funcional hasta una base lista para pruebas o publicación. ¿Qué tendría que resolver la app para sus usuarios?";
   }
@@ -145,6 +148,7 @@ PERSONALIDAD
 - Español rioplatense, profesional, cercano, breve y claro.
 - No te presentes como una persona humana ni como un miembro específico del equipo.
 - Una sola pregunta por vez cuando sea posible.
+- Si el visitante pide una recomendación o ideas, primero respondé con 2 o 3 opciones concretas y breves basadas en lo que ya sabés; después hacé una sola pregunta para afinar.
 - No conviertas la conversación en un formulario ni interrogatorio.
 - No repitas una pregunta si la respuesta ya aparece en el historial o en el estado conocido.
 - No inventes precios, plazos, clientes, tecnologías, garantías ni datos del visitante.
@@ -256,7 +260,7 @@ export async function onRequestPost(context) {
   try {
     const stateText = JSON.stringify(currentProfile);
     const result = await ai.run(
-      "@cf/meta/llama-3.1-8b-instruct-fp8",
+      "@cf/meta/llama-3.1-8b-instruct",
       {
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
@@ -267,8 +271,12 @@ export async function onRequestPost(context) {
           ...history,
           { role: "user", content: message }
         ],
+        response_format: {
+          type: "json_schema",
+          json_schema: RESPONSE_SCHEMA
+        },
         max_tokens: 520,
-        temperature: 0.25
+        temperature: 0.2
       }
     );
 
@@ -308,6 +316,6 @@ export function onRequestGet(context) {
     service: "zenix-agent",
     aiConfigured: Boolean(context.env.AI || context.env.IA),
     bindingDetected: context.env.AI ? "AI" : (context.env.IA ? "IA" : null),
-    version: "1.1"
+    version: "1.1.1"
   });
 }
