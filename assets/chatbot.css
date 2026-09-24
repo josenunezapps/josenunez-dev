@@ -25,7 +25,7 @@
 .zenix-chat-typing span:nth-child(2){animation-delay:.13s}.zenix-chat-typing span:nth-child(3){animation-delay:.26s}
 @keyframes zenixTyping{0%,60%,100%{transform:translateY(0);opacity:.55}30%{transform:translateY(-4px);opacity:1}}
 
-.zenix-agent-card{margin:0 14px 9px;padding:10px 11px;width:calc(100% - 28px);display:block;border:1px solid rgba(157,106,226,.22);border-radius:15px;background:linear-gradient(135deg,rgba(116,67,176,.10),rgba(255,255,255,.025));color:inherit;text-align:left;cursor:pointer;overflow:hidden}
+.zenix-agent-card{display:none!important;margin:0 14px 9px;padding:10px 11px;width:calc(100% - 28px);border:1px solid rgba(157,106,226,.22);border-radius:15px;background:linear-gradient(135deg,rgba(116,67,176,.10),rgba(255,255,255,.025));color:inherit;text-align:left;cursor:pointer;overflow:hidden}
 .zenix-agent-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .zenix-agent-card-label{font-size:.61rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a992c4}
 .zenix-agent-card-status{flex:0 0 auto;padding:4px 7px;border-radius:999px;background:rgba(164,99,241,.12);border:1px solid rgba(181,130,255,.18);font-size:.58rem;font-weight:800;color:#d8c5f2}
