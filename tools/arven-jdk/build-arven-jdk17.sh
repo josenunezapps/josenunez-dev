@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Public runtime builder used by Arven IDE automatic toolchain setup.
 set -euo pipefail
 
 ARVEN_PACKAGE="com.arven.ide"
