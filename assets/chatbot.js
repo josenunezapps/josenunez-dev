@@ -34,7 +34,7 @@
       <header class="zenix-chat-head">
         <div class="zenix-chat-brand">
           <img src="assets/zenix-icon-home-cropped.png" alt="">
-          <div><strong>Zenix Agent</strong><span><i></i> En línea · IA comercial</span></div>
+          <div><strong>Zenix Agent</strong><span><i></i> En línea</span></div>
         </div>
         <button class="zenix-chat-close" type="button" aria-label="Cerrar chat">×</button>
       </header>
