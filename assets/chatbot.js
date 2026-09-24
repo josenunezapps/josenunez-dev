@@ -55,9 +55,9 @@
 
       <div class="zenix-chat-quick" aria-label="Opciones rápidas">
         <button type="button" data-message="Necesito una página web">Web</button>
-        <button type="button" data-message="Necesito una app Android">App Android</button>
+        <button type="button" data-message="Necesito una app Android">App</button>
         <button type="button" data-message="Quiero automatizar mi negocio">Automatizar</button>
-        <button type="button" data-message="Tengo una idea y quiero desarrollarla">Tengo una idea</button>
+        <button type="button" data-message="Tengo una idea y quiero desarrollarla">Idea</button>
         <button type="button" data-message="Quiero pedir un presupuesto">Presupuesto</button>
       </div>
 
