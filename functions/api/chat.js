@@ -272,15 +272,17 @@ export async function onRequestPost(context) {
           { role: "user", content: message }
         ],
         response_format: {
-          type: "json_schema",
-          json_schema: RESPONSE_SCHEMA
+          type: "json_object"
         },
         max_tokens: 520,
         temperature: 0.2
       }
     );
 
-    const parsed = extractJson(result && result.response);
+    const rawResponse = result && result.response;
+    const parsed = rawResponse && typeof rawResponse === "object"
+      ? rawResponse
+      : extractJson(rawResponse);
     if (!parsed || typeof parsed.reply !== "string") {
       throw new Error("Respuesta IA no estructurada");
     }
@@ -316,6 +318,6 @@ export function onRequestGet(context) {
     service: "zenix-agent",
     aiConfigured: Boolean(context.env.AI || context.env.IA),
     bindingDetected: context.env.AI ? "AI" : (context.env.IA ? "IA" : null),
-    version: "1.1.1"
+    version: "1.1.2"
   });
 }
