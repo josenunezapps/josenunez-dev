@@ -1,0 +1,227 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ARVEN_PACKAGE="com.arven.ide"
+ARCH="${1:-aarch64}"
+WORK_ROOT="${2:-$PWD/.arven-jdk-build}"
+TERMUX_REPO="$WORK_ROOT/termux-packages"
+OUTPUT_DIR="$WORK_ROOT/output"
+
+echo "[Arven JDK] Package: $ARVEN_PACKAGE"
+echo "[Arven JDK] Architecture: $ARCH"
+echo "[Arven JDK] Work dir: $WORK_ROOT"
+
+rm -rf "$WORK_ROOT"
+mkdir -p "$WORK_ROOT" "$OUTPUT_DIR"
+
+echo "[1/8] Cloning Termux packages..."
+git clone --depth 1 https://github.com/termux/termux-packages.git "$TERMUX_REPO"
+
+cd "$TERMUX_REPO"
+
+echo "[2/8] Configuring Termux build for Arven's private prefix..."
+python3 - <<'PY'
+from pathlib import Path
+p = Path("scripts/properties.sh")
+text = p.read_text(encoding="utf-8")
+old = 'TERMUX_APP__PACKAGE_NAME="com.termux"'
+new = 'TERMUX_APP__PACKAGE_NAME="com.arven.ide"'
+if old not in text:
+    raise SystemExit("Could not find TERMUX_APP__PACKAGE_NAME in scripts/properties.sh")
+p.write_text(text.replace(old, new, 1), encoding="utf-8")
+PY
+
+grep -n 'TERMUX_APP__PACKAGE_NAME=' scripts/properties.sh | head -n 1
+
+echo "[3/8] Applying Termux CI workaround for AppArmor/fuse-overlayfs SDK bug..."
+python3 - <<'PY'
+from pathlib import Path
+
+toolchain = Path("scripts/build/toolchain/termux_setup_toolchain_29.sh")
+text = toolchain.read_text(encoding="utf-8")
+old_mount = 'if ! mountpoint -q "${TERMUX_STANDALONE_TOOLCHAIN}"; then'
+if old_mount not in text:
+    raise SystemExit("Could not find fuse-overlayfs mount block in termux_setup_toolchain_29.sh")
+text = text.replace(old_mount, 'if false; then', 1)
+
+needle = '''\t\treturn
+\tfi
+
+\tlocal _NDK_ARCHNAME=$TERMUX_ARCH'''
+replacement = '''\t\treturn
+\tfi
+
+\trm -rf "${TERMUX_STANDALONE_TOOLCHAIN}"
+\tcp "$NDK/toolchains/llvm/prebuilt/linux-x86_64" "${TERMUX_STANDALONE_TOOLCHAIN}" -r
+\tcp "$NDK/source.properties" "${TERMUX_STANDALONE_TOOLCHAIN}"
+
+\tlocal _NDK_ARCHNAME=$TERMUX_ARCH'''
+if needle not in text:
+    raise SystemExit("Could not find toolchain insertion point")
+text = text.replace(needle, replacement, 1)
+toolchain.write_text(text, encoding="utf-8")
+
+run_docker = Path("scripts/run-docker.sh")
+text = run_docker.read_text(encoding="utf-8")
+old_sec = 'SEC_OPT=" --security-opt seccomp=$REPOROOT/scripts/profile.json --security-opt apparmor=_custom-termux-package-builder-$CONTAINER_NAME --cap-add CAP_SYS_ADMIN --device /dev/fuse"'
+new_sec = 'SEC_OPT=" --security-opt seccomp=$REPOROOT/scripts/profile.json"'
+if old_sec not in text:
+    raise SystemExit("Could not find AppArmor/fuse SEC_OPT line in scripts/run-docker.sh")
+text = text.replace(old_sec, new_sec, 1)
+
+needle = '''if [ -z "$APPARMOR_PARSER" ] || ! $SUDO aa-status --enabled; then'''
+pos = text.find(needle)
+if pos == -1:
+    raise SystemExit("Could not find AppArmor detection block in scripts/run-docker.sh")
+load_fn = '\nload_apparmor_profile() {'
+idx = text.find(load_fn, pos)
+if idx == -1:
+    raise SystemExit("Could not find load_apparmor_profile() in scripts/run-docker.sh")
+text = text[:idx] + '\nAPPARMOR_PARSER=""\n' + text[idx:]
+run_docker.write_text(text, encoding="utf-8")
+PY
+
+echo "[4/8] Fixing upstream bootstrap package name bug (bzip2 -> libbz2)..."
+python3 - <<'PY2'
+from pathlib import Path
+p = Path("scripts/build-bootstraps.sh")
+text = p.read_text(encoding="utf-8")
+old = 'PACKAGES+=("bzip2")'
+new = 'PACKAGES+=("libbz2")'
+if old in text:
+    text = text.replace(old, new, 1)
+elif new not in text:
+    raise SystemExit("Could not find expected bzip2/libbz2 bootstrap package entry")
+p.write_text(text, encoding="utf-8")
+PY2
+
+grep -n 'PACKAGES+=("libbz2")' scripts/build-bootstraps.sh
+
+echo "[5/8] Breaking the libsndfile/libmpg123/PulseAudio dependency cycle..."
+python3 - <<'PY3'
+from pathlib import Path
+import re
+
+snd = Path("packages/libsndfile/build.sh")
+pulse = Path("packages/pulseaudio/build.sh")
+if not snd.is_file():
+    raise SystemExit("Could not find packages/libsndfile/build.sh")
+if not pulse.is_file():
+    raise SystemExit("Could not find packages/pulseaudio/build.sh")
+
+text = snd.read_text(encoding="utf-8")
+m = re.search(r'^TERMUX_PKG_DEPENDS="([^"]*)"', text, flags=re.MULTILINE)
+if not m:
+    raise SystemExit("Could not find TERMUX_PKG_DEPENDS in packages/libsndfile/build.sh")
+
+deps = [d.strip() for d in m.group(1).split(",") if d.strip()]
+for dep in ("libmp3lame", "libmpg123"):
+    deps = [d for d in deps if d != dep]
+replacement = 'TERMUX_PKG_DEPENDS="' + ', '.join(deps) + '"'
+text = text[:m.start()] + replacement + text[m.end():]
+
+cfg = re.search(r'(TERMUX_PKG_EXTRA_CONFIGURE_ARGS="\n)(.*?)(\n")', text, flags=re.DOTALL)
+if not cfg:
+    raise SystemExit("Could not find TERMUX_PKG_EXTRA_CONFIGURE_ARGS in packages/libsndfile/build.sh")
+body = cfg.group(2)
+if "--disable-mpeg" not in body.splitlines():
+    body = body.rstrip() + "\n--disable-mpeg"
+text = text[:cfg.start()] + cfg.group(1) + body + cfg.group(3) + text[cfg.end():]
+snd.write_text(text, encoding="utf-8")
+
+ptext = pulse.read_text(encoding="utf-8")
+pm = re.search(r'^TERMUX_PKG_DEPENDS="([^"]*)"', ptext, flags=re.MULTILINE)
+if not pm:
+    raise SystemExit("Could not find TERMUX_PKG_DEPENDS in packages/pulseaudio/build.sh")
+pdeps = [d.strip() for d in pm.group(1).split(",") if d.strip()]
+if "libsndfile" not in pdeps:
+    raise SystemExit("PulseAudio no longer declares libsndfile; upstream layout changed")
+
+print("libsndfile MPEG dependencies removed; --disable-mpeg enabled")
+print("PulseAudio still depends on libsndfile")
+PY3
+
+grep -n 'TERMUX_PKG_DEPENDS=' packages/libsndfile/build.sh | head -n 1
+grep -n -- '--disable-mpeg' packages/libsndfile/build.sh
+grep -n 'TERMUX_PKG_DEPENDS=.*libsndfile' packages/pulseaudio/build.sh
+
+echo "[6/8] Building Android-10-compatible bootstrap + libsndfile + OpenJDK 17..."
+./scripts/run-docker.sh \
+    ./scripts/build-bootstraps.sh \
+    --android10 \
+    --architectures "$ARCH" \
+    --add libsndfile,openjdk-17
+
+BOOTSTRAP="$TERMUX_REPO/bootstrap-$ARCH.zip"
+if [ ! -f "$BOOTSTRAP" ]; then
+    echo "ERROR: bootstrap was not created: $BOOTSTRAP" >&2
+    exit 1
+fi
+
+echo "[7/8] Validating JDK/runtime contents..."
+python3 - "$BOOTSTRAP" <<'PY'
+import sys, zipfile
+
+archive = sys.argv[1]
+required = [
+    "lib/jvm/java-17-openjdk/bin/java",
+    "lib/jvm/java-17-openjdk/bin/javac",
+    "lib/jvm/java-17-openjdk/lib/modules",
+    "lib/jvm/java-17-openjdk/lib/libjava.so",
+    "lib/jvm/java-17-openjdk/lib/server/libjvm.so",
+    "SYMLINKS.txt",
+]
+
+termux_exec_candidates = [
+    "lib/libtermux-exec-ld-preload.so",
+    "lib/libtermux-exec-direct-ld-preload.so",
+    "lib/libtermux-exec-linker-ld-preload.so",
+    "lib/libtermux-exec.so",
+]
+
+with zipfile.ZipFile(archive) as z:
+    names = set(z.namelist())
+    missing = [p for p in required if p not in names]
+    if missing:
+        print("Missing required runtime files:", file=sys.stderr)
+        for item in missing:
+            print(" -", item, file=sys.stderr)
+        raise SystemExit(2)
+
+    exec_found = [p for p in termux_exec_candidates if p in names]
+    if not exec_found:
+        print("Missing a usable termux-exec preload library.", file=sys.stderr)
+        print("Checked:", file=sys.stderr)
+        for item in termux_exec_candidates:
+            print(" -", item, file=sys.stderr)
+        raise SystemExit(2)
+
+print("Runtime archive contains all required JDK 17 files.")
+print("termux-exec preload library:", exec_found[0])
+PY
+
+echo "[8/8] Preparing Arven artifact..."
+FINAL="$OUTPUT_DIR/arven-jdk17-$ARCH.zip"
+cp "$BOOTSTRAP" "$FINAL"
+
+(
+    cd "$OUTPUT_DIR"
+    sha256sum "$(basename "$FINAL")" > "$(basename "$FINAL").sha256"
+)
+
+TERMUX_COMMIT="$(git rev-parse HEAD)"
+cat > "$OUTPUT_DIR/build-info.txt" <<EOF2
+Arven JDK 17 runtime
+package=$ARVEN_PACKAGE
+architecture=$ARCH
+termux-packages-commit=$TERMUX_COMMIT
+built-at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+source=https://github.com/termux/termux-packages
+workaround=termux-packages-29118-apparmor-fuse-overlayfs;bootstrap-libbz2;libsndfile-disable-mpeg-cycle-break;termux-exec-current-layout
+EOF2
+
+echo
+echo "READY:"
+echo "  $FINAL"
+echo "  $FINAL.sha256"
+echo "  $OUTPUT_DIR/build-info.txt"
