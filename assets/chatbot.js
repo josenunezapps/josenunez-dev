@@ -2,7 +2,7 @@
   if (window.__zenixChatLoaded) return;
   window.__zenixChatLoaded = true;
 
-  const STORAGE_KEY = 'zenix-agent-session-v1';
+  const STORAGE_KEY = 'zenix-agent-session-v2';
 
   const emptyProfile = () => ({
     business: '',
@@ -153,7 +153,7 @@
       }
 
       if (!greeted) {
-        addMessage('assistant', 'Hola 👋 Soy Zenix Agent. Contame qué necesitás y te ayudo a definir la mejor solución. Mientras hablamos voy a ordenar la información del proyecto.');
+        addMessage('assistant', 'Hola 👋 Soy Zenix Agent, el asistente con IA de Zenix AR. Contame qué necesitás y te ayudo.');
         greeted = true;
       }
 
@@ -212,13 +212,27 @@
     if (!value || typeof value !== 'object') return;
 
     const next = { ...profile };
-    const stringKeys = ['business','industry','city','projectType','need','budget','timeline','urgency','classification','interest','summary','nextAction'];
-    stringKeys.forEach(key => {
-      if (typeof value[key] === 'string') next[key] = value[key].trim();
+    const dataKeys = ['business','industry','city','projectType','need','budget','timeline','urgency','summary','nextAction'];
+    dataKeys.forEach(key => {
+      if (typeof value[key] === 'string' && value[key].trim()) next[key] = value[key].trim();
     });
 
-    if (Array.isArray(value.features)) {
-      next.features = [...new Set(value.features.map(item => String(item || '').trim()).filter(Boolean))].slice(0, 10);
+    if (typeof value.classification === 'string' && value.classification.trim()) {
+      const rank = { 'Consulta': 0, 'Lead': 1, 'Lead calificado': 2, 'Lead caliente': 3 };
+      const current = rank[next.classification] ?? 0;
+      const incoming = rank[value.classification.trim()] ?? 0;
+      if (incoming >= current) next.classification = value.classification.trim();
+    }
+
+    if (typeof value.interest === 'string' && value.interest.trim()) {
+      const rank = { 'Bajo': 0, 'Medio': 1, 'Alto': 2 };
+      const current = rank[next.interest] ?? 0;
+      const incoming = rank[value.interest.trim()] ?? 0;
+      if (incoming >= current) next.interest = value.interest.trim();
+    }
+
+    if (Array.isArray(value.features) && value.features.length) {
+      next.features = [...new Set([...(next.features || []), ...value.features.map(item => String(item || '').trim()).filter(Boolean)])].slice(0, 10);
     }
 
     profile = next;
