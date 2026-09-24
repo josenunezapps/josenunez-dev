@@ -38,7 +38,7 @@ echo "[3/8] Applying Termux CI workaround for AppArmor/fuse-overlayfs SDK bug...
 python3 - <<'PY'
 from pathlib import Path
 
-toolchain = Path("scripts/build/toolchain/termux_setup_toolchain_29.sh")
+toolchain = Path("scripts/build/toolchain/termux_setup_toolchain_30.sh")
 text = toolchain.read_text(encoding="utf-8")
 old_mount = 'if ! mountpoint -q "${TERMUX_STANDALONE_TOOLCHAIN}"; then'
 if old_mount not in text:
