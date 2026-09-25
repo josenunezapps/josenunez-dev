@@ -15,8 +15,14 @@ echo "[Arven JDK] Work dir: $WORK_ROOT"
 rm -rf "$WORK_ROOT"
 mkdir -p "$WORK_ROOT" "$OUTPUT_DIR"
 
-echo "[1/8] Cloning Termux packages..."
-git clone --depth 1 https://github.com/termux/termux-packages.git "$TERMUX_REPO"
+TERMUX_COMMIT_PIN="65dff9f786968c486e55f46e592027102c219b12"
+
+echo "[1/8] Fetching pinned Termux packages revision..."
+mkdir -p "$TERMUX_REPO"
+git -C "$TERMUX_REPO" init
+git -C "$TERMUX_REPO" remote add origin https://github.com/termux/termux-packages.git
+git -C "$TERMUX_REPO" fetch --depth 1 origin "$TERMUX_COMMIT_PIN"
+git -C "$TERMUX_REPO" checkout --detach FETCH_HEAD
 
 cd "$TERMUX_REPO"
 
@@ -38,11 +44,11 @@ echo "[3/8] Applying Termux CI workaround for AppArmor/fuse-overlayfs SDK bug...
 python3 - <<'PY'
 from pathlib import Path
 
-toolchain = Path("scripts/build/toolchain/termux_setup_toolchain_29.sh")
+toolchain = Path("scripts/build/toolchain/termux_setup_toolchain_30.sh")
 text = toolchain.read_text(encoding="utf-8")
 old_mount = 'if ! mountpoint -q "${TERMUX_STANDALONE_TOOLCHAIN}"; then'
 if old_mount not in text:
-    raise SystemExit("Could not find fuse-overlayfs mount block in termux_setup_toolchain_29.sh")
+    raise SystemExit("Could not find fuse-overlayfs mount block in termux_setup_toolchain_30.sh")
 text = text.replace(old_mount, 'if false; then', 1)
 
 needle = '''\t\treturn
