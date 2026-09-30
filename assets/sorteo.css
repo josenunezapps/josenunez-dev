@@ -1,0 +1,29 @@
+/* Zenix AR · Sorteo primeros 100 seguidores */
+.giveaway-section{padding:108px 0 110px;background:radial-gradient(circle at 78% 12%,rgba(153,82,255,.2),transparent 24rem),radial-gradient(circle at 14% 90%,rgba(176,74,255,.12),transparent 26rem),#0b0c13;border-bottom:1px solid rgba(255,255,255,.08)}
+.giveaway-head{display:grid;grid-template-columns:1fr auto;gap:34px;align-items:end;margin-bottom:34px}
+.giveaway-kicker{display:inline-flex;align-items:center;gap:9px;color:#c9aaff;font-size:.66rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.giveaway-kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:#a16fff;box-shadow:0 0 16px rgba(161,111,255,.8)}
+.giveaway-head h2{margin:12px 0 14px;max-width:10ch;font-size:clamp(3.4rem,5.7vw,5.9rem);line-height:.9;letter-spacing:-.065em}
+.giveaway-head h2 span{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;color:#b995e9}
+.giveaway-head p{max-width:720px;margin:0;color:#b8bcc7;line-height:1.75}
+.giveaway-cta{white-space:nowrap}
+.giveaway-feature{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:stretch}
+.giveaway-main-image,.giveaway-gallery figure{margin:0;overflow:hidden;border:1px solid rgba(255,255,255,.11);border-radius:24px;background:#11131a;box-shadow:0 26px 60px rgba(0,0,0,.28)}
+.giveaway-main-image img{width:100%;height:100%;min-height:510px;object-fit:cover}
+.giveaway-info{display:grid;gap:18px}
+.giveaway-card{padding:25px;border:1px solid rgba(255,255,255,.1);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.018));box-shadow:0 18px 42px rgba(0,0,0,.18)}
+.giveaway-card>span{color:#c9aaff;font-size:.62rem;font-weight:900;letter-spacing:.14em}
+.giveaway-card h3{margin:9px 0 16px;font-size:1.45rem;line-height:1.12;letter-spacing:-.035em}
+.giveaway-card ul,.giveaway-card ol{margin:0;padding-left:1.15rem;color:#c8cbd3;display:grid;gap:10px}
+.giveaway-card li{padding-left:4px;line-height:1.45}
+.giveaway-card strong{color:#fff}
+.giveaway-card small{display:block;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);color:#8f94a0;line-height:1.55}
+.giveaway-gallery{margin-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.giveaway-gallery img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.giveaway-final{margin-top:18px;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;border:1px solid rgba(185,149,255,.24);border-radius:20px;background:linear-gradient(100deg,rgba(127,70,191,.2),rgba(177,71,235,.08));box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.giveaway-final strong{font-size:1.12rem;letter-spacing:-.02em}
+.giveaway-final span{color:#c9aaff;font-weight:900}
+.giveaway-final a{color:#fff;font-weight:900;white-space:nowrap}
+.giveaway-final a:hover{color:#d8c4ff}
+@media(max-width:980px){.giveaway-head{grid-template-columns:1fr}.giveaway-feature{grid-template-columns:1fr}.giveaway-main-image img{min-height:0;aspect-ratio:16/9}.giveaway-info{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.giveaway-section{padding:76px 0}.giveaway-head h2{font-size:clamp(3rem,14vw,4.4rem)}.giveaway-info,.giveaway-gallery{grid-template-columns:1fr}.giveaway-card{padding:20px}.giveaway-main-image,.giveaway-gallery figure{border-radius:18px}.giveaway-gallery img{aspect-ratio:4/3}.giveaway-final{align-items:flex-start;flex-direction:column}}
