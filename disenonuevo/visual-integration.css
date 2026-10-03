@@ -1,27 +1,23 @@
-/* Capa visual de prueba: integra las imágenes con el fondo sin tocar la web pública */
+/* Ruta privada /disenonuevo/: imágenes integradas sin bordes duros */
+.hero-visual-blend{position:relative;isolation:isolate;min-height:440px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:30px;background:#0b0e15}
+.hero-visual-blend:before{content:"";position:absolute;inset:4% -2%;z-index:-1;background:radial-gradient(ellipse at center,rgba(168,85,247,.25),rgba(59,130,246,.10) 38%,transparent 72%);filter:blur(28px)}
+.hero-visual-blend:after{content:"";position:absolute;inset:-1px;pointer-events:none;z-index:2;background:linear-gradient(90deg,#0b0e15 0%,rgba(11,14,21,.45) 8%,transparent 20%,transparent 80%,rgba(11,14,21,.45) 92%,#0b0e15 100%),linear-gradient(180deg,#0b0e15 0%,transparent 14%,transparent 72%,#0b0e15 100%)}
+.hero-visual-blend img{width:106%;height:440px;object-fit:cover;display:block;filter:saturate(.96) contrast(1.02);-webkit-mask-image:radial-gradient(ellipse 72% 66% at center,#000 52%,rgba(0,0,0,.97) 66%,rgba(0,0,0,.62) 80%,transparent 100%);mask-image:radial-gradient(ellipse 72% 66% at center,#000 52%,rgba(0,0,0,.97) 66%,rgba(0,0,0,.62) 80%,transparent 100%)}
 
-/* Visual principal nuevo: se funde con el hero sin borde duro */
-.hero-visual-blend{position:relative;isolation:isolate;min-height:430px;display:flex;align-items:center;justify-content:center}
-.hero-visual-blend:before{content:"";position:absolute;inset:8% 0 2%;background:radial-gradient(circle at 50% 50%,rgba(168,85,247,.28),rgba(59,130,246,.12) 35%,transparent 72%);filter:blur(28px);z-index:-1}
-.hero-visual-blend:after{content:"";position:absolute;inset:-2px;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(9,11,18,.18) 72%,#0b0e15 100%),linear-gradient(to bottom,rgba(9,11,18,.08),transparent 22%,transparent 72%,rgba(9,11,18,.9) 100%)}
-.hero-visual-blend img{width:100%;max-width:650px;height:auto;display:block;transform:scale(1.025);filter:saturate(.97) contrast(1.03);-webkit-mask-image:radial-gradient(ellipse at center,#000 54%,rgba(0,0,0,.92) 68%,rgba(0,0,0,.45) 82%,transparent 100%);mask-image:radial-gradient(ellipse at center,#000 54%,rgba(0,0,0,.92) 68%,rgba(0,0,0,.45) 82%,transparent 100%)}
+.real-card .media,.dark-card .thumb{position:relative;isolation:isolate;overflow:hidden;border:0!important;box-shadow:none!important}
+.real-card .media{height:250px;background:#fff}
+.real-card .media img{width:104%;height:104%;object-fit:cover;transform:translate(-2%,-2%) scale(1.035);filter:saturate(.95) contrast(1.02);-webkit-mask-image:radial-gradient(ellipse 78% 72% at 50% 42%,#000 54%,rgba(0,0,0,.95) 68%,rgba(0,0,0,.56) 83%,transparent 100%);mask-image:radial-gradient(ellipse 78% 72% at 50% 42%,#000 54%,rgba(0,0,0,.95) 68%,rgba(0,0,0,.56) 83%,transparent 100%)}
+.real-card .media:after{content:"";position:absolute;inset:-1px;pointer-events:none;z-index:2;background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.42) 7%,transparent 18%,transparent 82%,rgba(255,255,255,.42) 93%,#fff 100%),linear-gradient(180deg,rgba(255,255,255,.72) 0%,transparent 13%,transparent 68%,#fff 100%)}
+.real-card{background:#fff;border-color:rgba(32,24,43,.07)}
+.real-card .copy{position:relative;z-index:3;margin-top:-8px}
 
-.real-card .media,
-.dark-card .thumb,
-.service-media,
-.portfolio-strip .panel,
-.real-collage .main-shot,
-.real-collage .phone-shot{position:relative;isolation:isolate;overflow:hidden}
-
-.real-card .media::after,
-.service-media::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(to bottom,transparent 58%,rgba(255,255,255,.16) 74%,rgba(255,255,255,.94) 100%),linear-gradient(to right,rgba(255,255,255,.65) 0%,transparent 9%,transparent 91%,rgba(255,255,255,.65) 100%)}
-.real-card .media img,.service-media img{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 72%,rgba(0,0,0,.82) 86%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 72%,rgba(0,0,0,.82) 86%,transparent 100%);transform:scale(1.015)}
-
-.dark-card .thumb::after,.portfolio-strip .panel::after,.real-collage .main-shot::after,.real-collage .phone-shot::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at center,transparent 56%,rgba(14,18,26,.14) 72%,rgba(14,18,26,.82) 100%),linear-gradient(to bottom,transparent 62%,rgba(14,18,26,.18) 76%,rgba(14,18,26,.95) 100%)}
-.dark-card .thumb img,.portfolio-strip .panel img,.real-collage .main-shot img,.real-collage .phone-shot img{transform:scale(1.025);filter:saturate(.96) contrast(1.02)}
-.real-card .media,.dark-card .thumb{border:0!important;box-shadow:none!important}
-.real-card{background:linear-gradient(180deg,rgba(255,255,255,.96),#fff 62%)}
 .dark-card{background:radial-gradient(circle at 50% 0%,rgba(124,58,237,.09),transparent 42%),linear-gradient(145deg,#151a25,#10131b)}
-.real-card .copy,.dark-card h3,.dark-card p{position:relative;z-index:3}
+.dark-card .thumb{height:205px;background:#10131b}
+.dark-card .thumb img{width:106%;height:106%;object-fit:cover;transform:translate(-3%,-3%) scale(1.04);filter:saturate(.91) brightness(.88) contrast(1.04);-webkit-mask-image:radial-gradient(ellipse 76% 70% at 50% 44%,#000 54%,rgba(0,0,0,.94) 68%,rgba(0,0,0,.52) 83%,transparent 100%);mask-image:radial-gradient(ellipse 76% 70% at 50% 44%,#000 54%,rgba(0,0,0,.94) 68%,rgba(0,0,0,.52) 83%,transparent 100%)}
+.dark-card .thumb:after{content:"";position:absolute;inset:-1px;pointer-events:none;z-index:2;background:linear-gradient(90deg,#10131b 0%,rgba(16,19,27,.48) 8%,transparent 19%,transparent 81%,rgba(16,19,27,.48) 92%,#10131b 100%),linear-gradient(180deg,rgba(16,19,27,.62) 0%,transparent 14%,transparent 62%,#10131b 100%)}
+.dark-card h3,.dark-card p{position:relative;z-index:3}
 
-@media(max-width:720px){.hero-visual-blend{min-height:300px}.hero-visual-blend img{max-width:100%}.real-card .media::after,.service-media::after{background:linear-gradient(to bottom,transparent 60%,rgba(255,255,255,.2) 76%,#fff 100%)}.dark-card .thumb::after{background:linear-gradient(to bottom,transparent 58%,rgba(14,18,26,.3) 76%,rgba(14,18,26,.98) 100%)}}
+/* Elimina cualquier marco visual viejo alrededor de imágenes */
+.blend-light,.blend-dark{border:0!important;box-shadow:none!important}
+
+@media(max-width:720px){.hero-visual-blend{min-height:310px;border-radius:22px}.hero-visual-blend img{height:320px;width:112%}.real-card .media{height:220px}.dark-card .thumb{height:190px}.hero-visual-blend:after{background:linear-gradient(90deg,#0b0e15 0%,transparent 18%,transparent 82%,#0b0e15 100%),linear-gradient(180deg,#0b0e15 0%,transparent 12%,transparent 70%,#0b0e15 100%)}}
