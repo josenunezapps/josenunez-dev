@@ -1,0 +1,111 @@
+/* Capa visual de prueba: integra las imágenes con el fondo sin tocar la web pública */
+
+/* El tratamiento se aplica solo dentro de /disenonuevo/ */
+.real-card .media,
+.dark-card .thumb,
+.service-media,
+.portfolio-strip .panel,
+.real-collage .main-shot,
+.real-collage .phone-shot {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* En secciones claras, la imagen se funde con el blanco/hueso de la tarjeta */
+.real-card .media::after,
+.service-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    linear-gradient(to bottom, transparent 58%, rgba(255,255,255,.16) 74%, rgba(255,255,255,.94) 100%),
+    linear-gradient(to right, rgba(255,255,255,.65) 0%, transparent 9%, transparent 91%, rgba(255,255,255,.65) 100%);
+}
+
+.real-card .media img,
+.service-media img {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0,0,0,.82) 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0,0,0,.82) 86%, transparent 100%);
+  transform: scale(1.015);
+}
+
+/* En secciones oscuras, los bordes desaparecen dentro del fondo de la página */
+.dark-card .thumb::after,
+.portfolio-strip .panel::after,
+.real-collage .main-shot::after,
+.real-collage .phone-shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at center, transparent 56%, rgba(14,18,26,.14) 72%, rgba(14,18,26,.82) 100%),
+    linear-gradient(to bottom, transparent 62%, rgba(14,18,26,.18) 76%, rgba(14,18,26,.95) 100%);
+}
+
+.dark-card .thumb img,
+.portfolio-strip .panel img,
+.real-collage .main-shot img,
+.real-collage .phone-shot img {
+  transform: scale(1.025);
+  filter: saturate(.96) contrast(1.02);
+}
+
+/* Evita el efecto de "foto rectangular pegada" */
+.real-card .media,
+.dark-card .thumb {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.real-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.96), #fff 62%);
+}
+
+.dark-card {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(124,58,237,.09), transparent 42%),
+    linear-gradient(145deg,#151a25,#10131b);
+}
+
+/* Hero: elimina el corte duro alrededor de la vista visual */
+.real-frame {
+  border-color: rgba(255,255,255,.08);
+  background:
+    radial-gradient(circle at 50% 20%, rgba(124,58,237,.16), transparent 48%),
+    linear-gradient(145deg,rgba(23,28,40,.82),rgba(9,12,18,.55));
+  box-shadow: 0 28px 70px rgba(0,0,0,.26), 0 0 80px rgba(124,58,237,.07);
+}
+
+.real-frame::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,.12), transparent 67%);
+  filter: blur(18px);
+}
+
+/* Suaviza el salto entre imagen y texto */
+.real-card .copy,
+.dark-card h3,
+.dark-card p {
+  position: relative;
+  z-index: 3;
+}
+
+@media (max-width: 720px) {
+  .real-card .media::after,
+  .service-media::after {
+    background: linear-gradient(to bottom, transparent 60%, rgba(255,255,255,.2) 76%, #fff 100%);
+  }
+
+  .dark-card .thumb::after {
+    background: linear-gradient(to bottom, transparent 58%, rgba(14,18,26,.3) 76%, rgba(14,18,26,.98) 100%);
+  }
+}
