@@ -1,0 +1,84 @@
+@import url('./premium-v5.css?v=5');
+
+/* Cobalto v6 — microinteracciones y movimiento sutil */
+
+/* Entrada inicial: rápida, limpia y sin bloquear contenido */
+.hero-grid>div:first-child,.page-hero-grid>div:first-child{animation:zenixFadeUp .7s cubic-bezier(.2,.7,.2,1) both}
+.hero .visual-stage,.page-art{animation:zenixFadeSoft .8s .08s cubic-bezier(.2,.7,.2,1) both}
+.hero .eyebrow,.page-hero .eyebrow{animation:zenixFadeUp .55s .04s both}
+.hero h1,.page-hero h1{animation:zenixFadeUp .65s .10s both}
+.hero p,.page-hero p{animation:zenixFadeUp .65s .16s both}
+.hero .actions,.page-hero .actions,.value-points{animation:zenixFadeUp .65s .22s both}
+
+/* Tarjetas: profundidad sutil en escritorio */
+@media (hover:hover) and (pointer:fine){
+  .principle-grid article,.service-card,.value-points article,.principle-stack article,.mini-steps article,.contact-form,.detail-art,.about-visual,.need-box{
+    transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease,border-color .28s ease,background .28s ease;
+  }
+  .principle-grid article:hover,.service-card:hover,.value-points article:hover,.principle-stack article:hover,.mini-steps article:hover{
+    transform:translateY(-5px);
+    box-shadow:0 20px 44px rgba(24,52,97,.10);
+    border-color:rgba(36,87,255,.16);
+  }
+  .detail-art:hover,.about-visual:hover{transform:translateY(-4px)}
+  .detail-art:hover img,.about-visual:hover img{box-shadow:0 34px 76px rgba(24,58,114,.18)}
+  .contact-form:hover{transform:translateY(-3px);box-shadow:0 34px 78px rgba(24,58,114,.16)}
+  .need-box:hover{transform:translateY(-3px);box-shadow:0 34px 78px rgba(8,28,64,.27)}
+  .btn,.topcta,.mobile-cta{transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+  .btn:hover,.topcta:hover,.mobile-cta:hover{transform:translateY(-2px);filter:saturate(1.05)}
+  .btn:active,.topcta:active,.mobile-cta:active{transform:translateY(0) scale(.985)}
+}
+
+/* Gráficos e ilustraciones: movimiento mínimo */
+.page-art img{animation:zenixDrift 8.5s ease-in-out infinite}
+.detail-row:nth-child(odd) .detail-art img{animation:zenixDrift 9s ease-in-out infinite}
+.detail-row:nth-child(even) .detail-art img{animation:zenixDriftReverse 9.5s ease-in-out infinite}
+.about-visual img{animation:zenixDrift 10s ease-in-out infinite}
+.orbit .core{animation:zenixCore 5.5s ease-in-out infinite}
+.orbit-node{transition:transform .25s ease,box-shadow .25s ease;border-color .25s ease}
+.orbit-node.n1{animation:zenixNode 6.8s .1s ease-in-out infinite}
+.orbit-node.n2{animation:zenixNode 7.4s .6s ease-in-out infinite}
+.orbit-node.n3{animation:zenixNode 7.1s 1s ease-in-out infinite}
+.orbit-node.n4{animation:zenixNode 7.8s .35s ease-in-out infinite}
+
+/* Pequeños detalles vivos */
+.eyebrow:before{animation:zenixDot 3.4s ease-in-out infinite}
+.visual-badge{animation:zenixBadge 6s ease-in-out infinite}
+.footer:before{animation:zenixFooterGlow 6.5s ease-in-out infinite}
+
+/* Entrada por scroll en navegadores modernos. Si no existe soporte, todo queda visible. */
+@supports (animation-timeline:view()){
+  .need-head,.need-layout,.need-conclusion,.principle-grid,.section-head,.visual-grid,.service-list,.process-grid,.detail-row,.about-grid,.contact-grid,.ctabox,.quote,.footergrid{
+    animation:zenixReveal linear both;
+    animation-timeline:view();
+    animation-range:entry 5% cover 24%;
+  }
+  .need-signals .need-signal:nth-child(2),.visual-grid .visual-card:nth-child(2),.service-list .service-card:nth-child(2),.value-points article:nth-child(2),.principle-grid article:nth-child(2){animation-range:entry 8% cover 27%}
+  .need-signals .need-signal:nth-child(3),.visual-grid .visual-card:nth-child(3),.service-list .service-card:nth-child(3),.value-points article:nth-child(3),.principle-grid article:nth-child(3){animation-range:entry 11% cover 30%}
+  .need-signals .need-signal:nth-child(4),.service-list .service-card:nth-child(4){animation-range:entry 14% cover 33%}
+}
+
+/* El menú móvil aparece en vez de simplemente saltar */
+@media(max-width:820px){
+  .mobile[open] .mobile-panel{transform-origin:top right;animation:zenixMenuIn .18s cubic-bezier(.2,.75,.25,1) both}
+  .page-art img,.detail-art img,.about-visual img{animation-duration:11s}
+}
+
+@keyframes zenixFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes zenixFadeSoft{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes zenixReveal{from{opacity:.12;transform:translateY(26px) scale(.992)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes zenixDrift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-7px,0)}}
+@keyframes zenixDriftReverse{0%,100%{transform:translate3d(0,-2px,0)}50%{transform:translate3d(0,5px,0)}}
+@keyframes zenixCore{0%,100%{box-shadow:0 28px 60px rgba(36,87,255,.25);transform:translate(-50%,-50%) scale(1)}50%{box-shadow:0 30px 70px rgba(36,87,255,.34);transform:translate(-50%,-50%) scale(1.025)}}
+@keyframes zenixNode{0%,100%{margin-top:0}50%{margin-top:-5px}}
+@keyframes zenixDot{0%,100%{box-shadow:0 0 0 4px rgba(36,87,255,.08)}50%{box-shadow:0 0 0 7px rgba(36,87,255,.025)}}
+@keyframes zenixBadge{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes zenixFooterGlow{0%,100%{opacity:.65;filter:blur(0)}50%{opacity:1;filter:blur(.4px)}}
+@keyframes zenixMenuIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-grid>div:first-child,.page-hero-grid>div:first-child,.hero .visual-stage,.page-art,.hero .eyebrow,.page-hero .eyebrow,.hero h1,.page-hero h1,.hero p,.page-hero p,.hero .actions,.page-hero .actions,.value-points,.page-art img,.detail-art img,.about-visual img,.orbit .core,.orbit-node,.eyebrow:before,.visual-badge,.footer:before,.mobile[open] .mobile-panel{
+    animation:none!important;
+  }
+  .principle-grid article,.service-card,.value-points article,.principle-stack article,.mini-steps article,.contact-form,.detail-art,.about-visual,.need-box,.btn,.topcta,.mobile-cta{transition:none!important}
+}
