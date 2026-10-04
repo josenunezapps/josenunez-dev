@@ -1,5 +1,9 @@
 @import url('./premium-v4.css?v=2');
 
+/* Etiqueta de contacto */
+.topcta{font-size:0!important}
+.topcta:before{content:'Contacto';font-size:.8rem;font-weight:850}
+
 /* Cobalto v5 — menú móvil compacto y premium */
 @media(max-width:820px){
   .header{overflow:visible}
@@ -100,9 +104,10 @@
     border-radius:12px!important;
     background:linear-gradient(135deg,#0a1d3d,#184ec8)!important;
     color:#fff!important;
-    font-size:.78rem!important;
+    font-size:0!important;
     font-weight:850!important;
     box-shadow:0 9px 22px rgba(20,62,148,.18)!important;
   }
+  .mobile-cta:before{content:'Contacto';font-size:.78rem;font-weight:850}
   .mobile-cta:after{content:'→';font-size:.86rem}
 }
