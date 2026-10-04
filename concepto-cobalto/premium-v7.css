@@ -1,0 +1,132 @@
+@import url('./premium-v6.css?v=1');
+
+/* Cobalto v7 — violeta de marca, usado como acento secundario */
+:root{
+  --zenix-violet:#7b4dff;
+  --zenix-violet-2:#a35cff;
+  --zenix-violet-soft:rgba(123,77,255,.12);
+  --zenix-violet-line:rgba(123,77,255,.20);
+}
+
+/* El azul sigue siendo principal; el violeta entra como firma visual */
+.accent{
+  background:linear-gradient(90deg,#2457ff 0%,#6653ff 48%,#a35cff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent!important;
+}
+
+.eyebrow{
+  border-color:rgba(123,77,255,.14)!important;
+  background:linear-gradient(135deg,rgba(36,87,255,.08),rgba(123,77,255,.08))!important;
+}
+.eyebrow:before{
+  background:linear-gradient(135deg,#2457ff,#8a55ff)!important;
+}
+
+.topcta,.btn.primary,.btn.blue,.mobile-cta{
+  background:linear-gradient(135deg,#173a98 0%,#315dff 48%,#7b4dff 100%)!important;
+  box-shadow:0 12px 30px rgba(83,66,221,.22)!important;
+}
+
+.nav a.active{
+  color:#6847f5!important;
+  background:linear-gradient(135deg,rgba(36,87,255,.08),rgba(123,77,255,.10))!important;
+}
+.mobile a.active:not(.mobile-cta){
+  color:#6847f5!important;
+  background:linear-gradient(135deg,#eef3ff,#f5efff)!important;
+  box-shadow:inset 0 0 0 1px rgba(123,77,255,.12)!important;
+}
+.mobile a.active:not(.mobile-cta):after{color:#7b4dff!important}
+.mobile .menu-label:before{
+  background:linear-gradient(135deg,#2457ff,#9a5cff)!important;
+  box-shadow:0 0 0 3px rgba(123,77,255,.08)!important;
+}
+
+.visual-stage,.page-art,.detail-art,.about-visual{
+  box-shadow:0 26px 70px rgba(42,72,145,.10),0 12px 46px rgba(123,77,255,.07)!important;
+}
+.visual-badge b{color:#9a5cff!important}
+
+.principle-grid article,.service-card,.value-points article,.principle-stack article,.mini-steps article{
+  border-color:rgba(91,76,174,.09)!important;
+}
+.service-card .index,.visual-card .index,.detail-copy .eyebrow{
+  color:#7050ef!important;
+}
+.sales-note{
+  border-color:rgba(123,77,255,.18)!important;
+  background:linear-gradient(135deg,rgba(36,87,255,.055),rgba(123,77,255,.06))!important;
+}
+
+/* Inicio: sumar morado al bloque oscuro sin perder el cobalto */
+.need-web{
+  background:
+    radial-gradient(circle at 86% 18%,rgba(139,79,255,.19),transparent 27%),
+    radial-gradient(circle at 10% 76%,rgba(67,204,255,.09),transparent 31%),
+    linear-gradient(180deg,#07152d 0%,#0b1b3b 52%,#09162f 100%)!important;
+}
+.need-web:before{
+  background:radial-gradient(circle,rgba(154,92,255,.24),rgba(56,83,255,.08) 48%,transparent 72%)!important;
+}
+.need-head .eyebrow{
+  color:#c6b5ff!important;
+  background:rgba(132,86,255,.10)!important;
+  border-color:rgba(163,92,255,.15)!important;
+}
+.need-icon{
+  background:linear-gradient(135deg,rgba(55,102,255,.25),rgba(145,78,255,.22))!important;
+  border-color:rgba(170,119,255,.18)!important;
+  color:#c6b5ff!important;
+}
+.need-signal:hover{
+  border-color:rgba(165,104,255,.30)!important;
+  background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(130,76,255,.055))!important;
+}
+.need-conclusion{
+  border-color:rgba(157,100,255,.18)!important;
+  background:linear-gradient(135deg,rgba(43,94,255,.13),rgba(130,70,255,.10))!important;
+}
+.need-softlink{color:#c3acff!important}
+.need-softlink:hover{color:#fff!important}
+
+/* Proceso */
+.orbit .core{
+  background:linear-gradient(135deg,#2457ff,#744eff 62%,#9f5dff)!important;
+}
+.orbit-node b{color:#7b4dff!important}
+
+/* Contacto */
+.contact-form:focus-within{
+  border-color:rgba(123,77,255,.18)!important;
+  box-shadow:0 30px 80px rgba(54,76,149,.11),0 14px 44px rgba(123,77,255,.08)!important;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:rgba(123,77,255,.46)!important;
+  box-shadow:0 0 0 4px rgba(123,77,255,.08)!important;
+}
+
+/* Footer: un halo violeta que conecte con el isotipo */
+.footer{
+  background:
+    radial-gradient(circle at 82% 12%,rgba(122,75,255,.22),transparent 30%),
+    radial-gradient(circle at 17% 86%,rgba(84,218,255,.08),transparent 32%),
+    linear-gradient(180deg,#060f22 0%,#030a16 100%)!important;
+}
+.footer:before{
+  background:linear-gradient(90deg,transparent,rgba(93,214,255,.38),rgba(125,77,255,.70),rgba(178,96,255,.38),transparent)!important;
+  box-shadow:0 0 38px rgba(123,77,255,.22)!important;
+}
+.footer-title{color:#bda7ff!important}
+.footerlinks a:hover:after{color:#ad89ff!important}
+
+@media (hover:hover) and (pointer:fine){
+  .principle-grid article:hover,.service-card:hover,.value-points article:hover,.principle-stack article:hover,.mini-steps article:hover{
+    border-color:rgba(123,77,255,.20)!important;
+    box-shadow:0 20px 44px rgba(67,57,156,.11)!important;
+  }
+  .btn:hover,.topcta:hover,.mobile-cta:hover{
+    box-shadow:0 16px 36px rgba(96,67,222,.28)!important;
+  }
+}
