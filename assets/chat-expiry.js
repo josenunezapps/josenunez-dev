@@ -64,7 +64,9 @@
   }else if(storedLast){
     schedule();
   }else if(localStorage.getItem(SESSION_KEY)){
-    markActivity();
+    // Sesiones creadas antes de incorporar el temporizador no tienen fecha
+    // de actividad confiable: se eliminan en vez de regalarles otros 10 minutos.
+    expire();
   }
 
   document.addEventListener('click',function(event){
