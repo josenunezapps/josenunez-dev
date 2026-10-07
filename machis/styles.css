@@ -873,3 +873,154 @@ body.cart-open{overflow:hidden}
     white-space:nowrap;
   }
 }
+
+
+/* v15 desktop reveal reliability */
+@media (prefers-reduced-motion:no-preference){
+  .reveal{
+    transition-delay:var(--reveal-delay,0ms);
+  }
+  .reveal.visible{
+    animation:zenixRevealIn .72s cubic-bezier(.2,.72,.2,1) both;
+    animation-delay:var(--reveal-delay,0ms);
+  }
+  @keyframes zenixRevealIn{
+    from{opacity:0;transform:translateY(28px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+}
+
+/* v15 compact mobile experience */
+.mobile-menu-tabs{display:none}
+
+@media(max-width:700px){
+  .menu-section{
+    overflow:hidden;
+  }
+
+  /* Favorites become a swipeable rail instead of six stacked cards */
+  .pizza-grid-rich{
+    display:flex !important;
+    grid-template-columns:none !important;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-inline:contain;
+    padding:0 16px 10px 0;
+    margin-right:-16px;
+    scrollbar-width:none;
+  }
+  .pizza-grid-rich::-webkit-scrollbar{display:none}
+  .pizza-grid-rich .pizza-card,
+  .pizza-grid-rich .pizza-card:nth-child(1),
+  .pizza-grid-rich .pizza-card:nth-child(n+2),
+  .pizza-grid-rich .pizza-card:nth-child(6){
+    flex:0 0 min(84vw,360px);
+    width:min(84vw,360px);
+    scroll-snap-align:start;
+  }
+  .pizza-grid-rich .pizza-card .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(1) .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(6) .pizza-image,
+  .pizza-grid-rich .pizza-card.featured .pizza-image{
+    height:235px !important;
+    min-height:235px !important;
+  }
+
+  /* Compact the stats into one horizontal rail */
+  .menu-intro-grid{
+    display:flex !important;
+    gap:10px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    padding-bottom:6px;
+  }
+  .menu-intro-grid::-webkit-scrollbar{display:none}
+  .menu-stat{
+    flex:0 0 72%;
+    min-width:230px;
+    scroll-snap-align:start;
+  }
+
+  /* Only one full-menu category is shown at a time */
+  .mobile-menu-tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    position:sticky;
+    top:74px;
+    z-index:15;
+    margin:22px -16px 8px;
+    padding:10px 16px 12px;
+    background:linear-gradient(180deg,rgba(21,18,15,.98),rgba(21,18,15,.94));
+    border-bottom:1px solid rgba(255,255,255,.08);
+    scrollbar-width:none;
+  }
+  .mobile-menu-tabs::-webkit-scrollbar{display:none}
+  .mobile-menu-tab{
+    flex:0 0 auto;
+    border:1px solid rgba(255,255,255,.13);
+    background:#211c18;
+    color:#bdb4ab;
+    min-height:38px;
+    padding:0 14px;
+    border-radius:999px;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .mobile-menu-tab.active{
+    background:var(--tomato);
+    border-color:var(--tomato);
+    color:#fff;
+  }
+  .visual-category.mobile-hidden{display:none}
+  .visual-category.mobile-active{display:block}
+  .visual-category{
+    padding:26px 0 18px;
+    scroll-margin-top:128px;
+  }
+  .menu-block-title{margin-bottom:14px}
+
+  /* Products inside the selected category swipe horizontally */
+  .visual-product-grid,
+  .visual-product-grid.large,
+  .promos-grid,
+  .drinks-small{
+    display:flex !important;
+    grid-template-columns:none !important;
+    max-width:none !important;
+    gap:12px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-inline:contain;
+    padding:0 16px 8px 0;
+    margin-right:-16px;
+    scrollbar-width:none;
+  }
+  .visual-product-grid::-webkit-scrollbar,
+  .promos-grid::-webkit-scrollbar,
+  .drinks-small::-webkit-scrollbar{display:none}
+  .visual-product-card{
+    flex:0 0 min(82vw,340px);
+    width:min(82vw,340px);
+    min-height:0;
+    scroll-snap-align:start;
+  }
+  .visual-product-photo,
+  .compact-card .visual-product-photo{
+    height:210px !important;
+  }
+  .full-menu{
+    padding-top:62px;
+    padding-bottom:68px;
+  }
+  .full-menu-head{
+    padding-bottom:18px;
+  }
+}
