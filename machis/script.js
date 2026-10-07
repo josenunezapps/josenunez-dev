@@ -1,3 +1,4 @@
+const revealElements = [...document.querySelectorAll('.reveal')];
 const observer = new IntersectionObserver((entries)=>{
   entries.forEach((entry)=>{
     if(entry.isIntersecting){
@@ -5,9 +6,18 @@ const observer = new IntersectionObserver((entries)=>{
       observer.unobserve(entry.target);
     }
   });
-},{threshold:0.12});
+},{threshold:0.08, rootMargin:'0px 0px -6% 0px'});
 
-document.querySelectorAll('.reveal').forEach((el)=>observer.observe(el));
+// Give desktop browsers one painted frame before observing, so the transition
+// always starts from the hidden state instead of being skipped on fast loads.
+requestAnimationFrame(()=>{
+  requestAnimationFrame(()=>{
+    revealElements.forEach((el,index)=>{
+      el.style.setProperty('--reveal-delay', Math.min(index % 4, 3) * 55 + 'ms');
+      observer.observe(el);
+    });
+  });
+});
 
 const header = document.querySelector('.site-header');
 window.addEventListener('scroll',()=>{
@@ -183,4 +193,60 @@ window.addEventListener('scroll',()=>{
 
   addButtons();
   render();
+})();
+
+
+// v15 compact mobile menu navigation
+(() => {
+  const fullMenu = document.querySelector('.visual-menu');
+  if (!fullMenu || fullMenu.querySelector('.mobile-menu-tabs')) return;
+
+  const categories = [...fullMenu.querySelectorAll(':scope > .visual-category')];
+  if (!categories.length) return;
+
+  const tabs = document.createElement('div');
+  tabs.className = 'mobile-menu-tabs';
+  tabs.setAttribute('aria-label','Categorías del menú');
+
+  categories.forEach((category,index)=>{
+    category.dataset.mobileCategory = index;
+    const title = category.querySelector('.menu-block-title h3')?.textContent.trim() || ('Categoría '+(index+1));
+    const labelMap = {
+      'Pizzas enteras':'Enteras',
+      'Medias pizzas':'Medias',
+      'Medianas':'Medianas',
+      'Promos y adicionales':'Promos',
+      'Cervezas':'Cervezas',
+      'Gaseosas y aguas':'Bebidas'
+    };
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'mobile-menu-tab' + (index===0 ? ' active' : '');
+    button.textContent = labelMap[title] || title;
+    button.dataset.target = index;
+    button.addEventListener('click',()=>{
+      tabs.querySelectorAll('.mobile-menu-tab').forEach(b=>b.classList.toggle('active',b===button));
+      categories.forEach((cat,i)=>cat.classList.toggle('mobile-active',i===index));
+      category.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    tabs.appendChild(button);
+  });
+
+  const firstCategory = categories[0];
+  firstCategory.parentNode.insertBefore(tabs,firstCategory);
+  categories.forEach((cat,i)=>cat.classList.toggle('mobile-active',i===0));
+
+  const syncMode = () => {
+    const mobile = window.matchMedia('(max-width: 700px)').matches;
+    categories.forEach((cat,i)=>{
+      if (!mobile) cat.classList.remove('mobile-hidden');
+      else cat.classList.toggle('mobile-hidden',!cat.classList.contains('mobile-active'));
+    });
+  };
+
+  tabs.addEventListener('click',()=>{
+    categories.forEach(cat=>cat.classList.toggle('mobile-hidden',!cat.classList.contains('mobile-active')));
+  });
+  window.addEventListener('resize',syncMode,{passive:true});
+  syncMode();
 })();
