@@ -813,3 +813,63 @@ body.cart-open{overflow:hidden}
     padding:0 5px;
   }
 }
+
+
+/* v14 price + add-to-order button on the same row */
+.product-buy-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:8px 0 10px;
+}
+.product-buy-row .pizza-price,
+.product-buy-row > strong{
+  margin:0 !important;
+  padding:0 !important;
+  flex:0 0 auto;
+}
+.add-cart-btn.inline{
+  width:auto;
+  min-height:38px;
+  margin:0;
+  padding:0 14px;
+  border-radius:999px;
+  flex:0 0 auto;
+  white-space:nowrap;
+  font-size:9px;
+  letter-spacing:.07em;
+}
+.add-cart-btn.inline svg{
+  width:17px;
+  height:17px;
+}
+.pizza-card .product-buy-row{
+  margin-top:7px;
+  margin-bottom:8px;
+}
+.visual-product-copy .product-buy-row{
+  margin-top:auto;
+  padding-top:14px;
+  margin-bottom:0;
+}
+.visual-product-copy .product-buy-row > strong{
+  margin:0 !important;
+  padding:0 !important;
+}
+.visual-product-copy .product-buy-row + p{
+  margin-top:8px;
+}
+@media(max-width:620px){
+  .product-buy-row{
+    gap:8px;
+  }
+  .add-cart-btn.inline{
+    min-height:36px;
+    padding:0 11px;
+    font-size:8px;
+  }
+  .add-cart-btn.inline span{
+    white-space:nowrap;
+  }
+}
