@@ -640,3 +640,57 @@ a{text-decoration:none;color:inherit}
   }
   .premium-wa-copy{display:none}
 }
+
+
+/* v12 exact branded beverage imagery */
+.visual-product-photo[class*="drink-"]{
+  background-size:contain !important;
+  background-repeat:no-repeat !important;
+  background-position:center !important;
+  background-color:#f4f0e9;
+}
+
+/* Coca-Cola Argentina official product photography */
+.visual-product-photo.drink-coke,
+.visual-product-photo.drink-coke-can{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156556-800-800?v=639231959510570000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-coke-zero{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156427-800-800?v=639063351477670000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-sprite{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/155756-800-800?v=638290010972070000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-sprite-can{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156274-800-800?v=638659848033530000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-fanta,
+.visual-product-photo.drink-fanta-can{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156347-800-800?v=638857652534800000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-fanta-zero{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156345-800-800?v=638857649029630000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-aquarius-manzana{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156195-800-800?v=638568224355070000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-aquarius-pomelo{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156196-800-800?v=638568224976930000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-aquarius-pera{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156197-800-800?v=638568225573870000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-aquarius-naranja{
+  background-image:url('https://andinacocacolaar.vtexassets.com/arquivos/ids/156198-800-800?v=638568226224070000&width=800&height=800&aspect=true') !important;
+}
+.visual-product-photo.drink-bonaqua{
+  background-image:url('https://modomarketar.vteximg.com.br/arquivos/ids/169212/Agua-Bonaqua-X-1-5-L-1-2415.jpg?v=638356593675230000') !important;
+}
+
+/* Heineken product photography */
+.visual-product-photo.drink-heineken-330{
+  background-image:url('https://ardiaprod.vtexassets.com/arquivos/ids/310561-800-auto?v=638599374702900000&width=800&height=auto&aspect=true') !important;
+}
+.visual-product-photo.drink-heineken-1l{
+  background-image:url('https://jumboargentina.vtexassets.com/arquivos/ids/579428-800-auto?v=637215672574430000&width=800&height=auto&aspect=true') !important;
+}
