@@ -694,3 +694,122 @@ a{text-decoration:none;color:inherit}
 .visual-product-photo.drink-heineken-1l{
   background-image:url('https://jumboargentina.vtexassets.com/arquivos/ids/579428-800-auto?v=637215672574430000&width=800&height=auto&aspect=true') !important;
 }
+
+
+/* v13 cart + add buttons */
+.add-cart-btn{
+  margin-top:14px;
+  width:100%;
+  min-height:42px;
+  border:1px solid rgba(213,73,47,.34);
+  background:transparent;
+  color:inherit;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font:inherit;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.add-cart-btn svg{width:16px;height:16px;fill:currentColor}
+.pizza-card .add-cart-btn{color:var(--tomato-dark);border-color:rgba(172,50,31,.28);background:#fff9f1}
+.visual-product-card .add-cart-btn{color:#ffd1c3;border-color:rgba(255,155,121,.28);background:rgba(255,255,255,.025)}
+.add-cart-btn:hover,.add-cart-btn.added{background:var(--tomato);border-color:var(--tomato);color:#fff;transform:translateY(-1px)}
+.visual-product-copy .add-cart-btn{margin-top:12px}
+
+.cart-fab{
+  position:fixed;
+  right:24px;
+  bottom:98px;
+  z-index:1000;
+  min-width:172px;
+  min-height:58px;
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:rgba(18,16,14,.9);
+  color:#fff;
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:0 16px 45px rgba(0,0,0,.30);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+.cart-fab>svg{width:23px;height:23px;fill:#f3ead9;margin-left:5px}
+.cart-fab-copy{display:flex;flex-direction:column;text-align:left;line-height:1}
+.cart-fab-copy small{font-size:7px;letter-spacing:.15em;text-transform:uppercase;color:#9f968e;margin-bottom:4px}
+.cart-fab-copy strong{font-family:'Bebas Neue';font-size:21px;font-weight:400}
+.cart-count{
+  margin-left:auto;
+  min-width:26px;height:26px;padding:0 7px;border-radius:99px;
+  display:grid;place-items:center;background:#3a342f;color:#fff;font-size:10px
+}
+.cart-fab.has-items .cart-count{background:var(--tomato)}
+.cart-fab.bump{animation:cartBump .32s ease}
+@keyframes cartBump{50%{transform:scale(1.06)}}
+
+.cart-backdrop{
+  position:fixed;inset:0;z-index:1090;background:rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;transition:.25s ease;backdrop-filter:blur(3px)
+}
+.cart-backdrop.open{opacity:1;pointer-events:auto}
+.cart-drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:1100;width:min(440px,100%);
+  background:#15120f;color:#fff;transform:translateX(102%);transition:transform .3s ease;
+  box-shadow:-24px 0 60px rgba(0,0,0,.35);display:flex;flex-direction:column
+}
+.cart-drawer.open{transform:none}
+body.cart-open{overflow:hidden}
+.cart-head{padding:24px 24px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.1)}
+.cart-head small{font-size:8px;letter-spacing:.18em;color:#f28b69}
+.cart-head h3{font-family:'Bebas Neue';font-size:42px;font-weight:400;margin:3px 0 0}
+.cart-close{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:transparent;color:#fff;font-size:25px;cursor:pointer}
+.cart-items{padding:8px 20px;overflow:auto;flex:1}
+.cart-empty{padding:42px 24px;color:#928980;font-size:13px}
+.cart-line{display:grid;grid-template-columns:1fr auto;gap:10px;padding:16px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
+.cart-line-main{display:flex;flex-direction:column;gap:5px}
+.cart-line-main strong{font-size:13px}
+.cart-line-main span{font-size:10px;color:#968c83}
+.cart-qty{display:flex;align-items:center;gap:9px}
+.cart-qty button{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:#211c18;color:#fff;cursor:pointer}
+.cart-qty b{font-size:11px;min-width:12px;text-align:center}
+.cart-line-total{grid-column:1/3;font-family:'Bebas Neue';font-size:20px;font-weight:400;color:#ff9b79}
+.cart-summary{padding:20px 24px 24px;border-top:1px solid rgba(255,255,255,.1);background:#100e0c}
+.cart-summary>div{display:flex;justify-content:space-between;align-items:end;margin-bottom:14px}
+.cart-summary span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9c938b}
+.cart-summary .cart-total{font-family:'Bebas Neue';font-size:34px;font-weight:400}
+.cart-whatsapp{width:100%;min-height:50px;border:0;border-radius:999px;background:#25D366;color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.cart-summary.disabled .cart-whatsapp{opacity:.35;pointer-events:none}
+.cart-summary>small{display:block;margin-top:10px;color:#756e68;font-size:8px;line-height:1.5}
+
+@media(max-width:620px){
+  .cart-fab{
+    right:14px;
+    bottom:82px;
+    width:58px;
+    height:58px;
+    min-width:58px;
+    min-height:58px;
+    padding:0;
+    justify-content:center;
+  }
+  .cart-fab-copy{display:none}
+  .cart-fab>svg{margin:0}
+  .cart-count{
+    position:absolute;
+    right:-3px;
+    top:-4px;
+    min-width:22px;
+    height:22px;
+    border:2px solid #15120f;
+    padding:0 5px;
+  }
+}
