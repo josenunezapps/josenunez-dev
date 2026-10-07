@@ -142,21 +142,25 @@ window.addEventListener('scroll',()=>{
 
       const button = document.createElement('button');
       button.type = 'button';
-      button.className = 'add-cart-btn';
+      button.className = 'add-cart-btn inline';
       button.innerHTML = `
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4H3V2H8.4L9.3 4H21.2L18.6 13.2C18.4 13.9 17.8 14.3 17.1 14.3H10.3L9.7 16H19V18H9.3C8.1 18 7.3 16.8 7.8 15.7L8.6 13.6 5.6 6H4V4H7Zm3.2 8.3h6.5L18.5 6H8l2.2 6.3Z"/></svg>
-        <span>Agregar</span>`;
+        <span>Agregar pedido</span>`;
       button.addEventListener('click', () => {
         addProduct(name, price);
         button.classList.add('added');
         button.querySelector('span').textContent = 'Agregado';
         setTimeout(() => {
           button.classList.remove('added');
-          button.querySelector('span').textContent = 'Agregar';
+          button.querySelector('span').textContent = 'Agregar pedido';
         }, 900);
       });
       const target = card.querySelector('.pizza-card-body, .visual-product-copy');
-      target.appendChild(button);
+      const buyRow = document.createElement('div');
+      buyRow.className = 'product-buy-row';
+      priceEl.parentNode.insertBefore(buyRow, priceEl);
+      buyRow.appendChild(priceEl);
+      buyRow.appendChild(button);
     });
   }
 
