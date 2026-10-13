@@ -113,6 +113,35 @@ body{background:#f7f5ef}
 @media(max-width:1090px){.hero-grid{min-height:560px}.hero-copy{padding:50px 30px}.hero-copy h1{font-size:clamp(46px,5.15vw,62px)}.hero-photo{min-height:560px}}
 @media(max-width:760px){.mark{width:39px;height:39px;font-size:25px}.brand strong{font-size:15px}.hero{padding:17px 0 15px}.hero-grid{grid-template-columns:1fr;gap:0;min-height:0}.hero-copy{min-height:0;padding:51px 24px 36px}.hero-copy h1{font-size:clamp(45px,10.4vw,63px);margin:24px 0 18px}.hero-copy>p{font-size:14px;line-height:1.8}.hero-foot{margin-top:31px;padding-top:20px;gap:13px}.hero-photo{height:330px;min-height:330px}.hero-photo-pill{right:14px;top:15px;font-size:8px}.hero-photo-caption{left:19px;bottom:21px}.hero-photo-caption strong{font-size:28px}.sectiontop h2{font-size:43px}.how h2,.cta h2{font-size:41px}}
 @media(max-width:400px){.hero-copy{padding:43px 18px 33px}.hero-copy h1{font-size:45px}.hero-actions{width:100%;flex-direction:column}.hero-actions .btn{width:100%}.hero-photo{height:290px;min-height:290px}}
+
+/* Carruseles móviles: productos compactos, scroll nativo y flechas activas. */
+.swipe-catalog{display:none}
+@media(max-width:760px){
+  #catalog{display:none}
+  .swipe-catalog{display:block;margin-top:10px}
+  .swipe-category{margin:0 0 27px}
+  .swipe-category-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 11px}
+  .swipe-category-head h3{font:500 26px/1.1 'Playfair Display',Georgia,serif;letter-spacing:-.032em;color:#31533c;margin:0}
+  .swipe-actions{display:flex;align-items:center;gap:6px}
+  .swipe-hint{font-size:10px;color:#6d8571;font-weight:800;white-space:nowrap}
+  .swipe-arrow{width:30px;height:30px;border-radius:50%;background:#fffef8;color:#2b5439;border:1px solid #d0ddcf;font-size:20px;display:grid;place-items:center;padding:0;line-height:1}
+  .swipe-arrow:disabled{opacity:.3}
+  .swipe-arrow:hover:not(:disabled){background:#e5eee3}
+  .swipe-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:2px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 2px 10px}
+  .swipe-track::-webkit-scrollbar{display:none}
+  .swipe-track>.tile{flex:0 0 clamp(216px,69vw,275px);scroll-snap-align:start;min-width:0;border-radius:10px}
+  .swipe-track>.tile .tile-picture{height:159px}
+  .swipe-track>.tile .tileinfo{padding:13px}
+  .swipe-track>.tile .tileinfo h3{font-size:23px;line-height:1.03;margin:6px 0 7px}
+  .swipe-track>.tile .tileinfo p{font-size:11px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px;margin-bottom:8px}
+  .swipe-track>.tile .tilebottom{padding:1px 0 9px}
+  .swipe-track>.tile .tilebottom .price{font-size:11px}
+  .swipe-track>.tile .tile-details{min-height:36px;padding:8px;font-size:10.5px;margin:2px 0 7px}
+  .swipe-track>.tile .tile-add{min-height:41px;font-size:11px!important;padding:9px}
+  .swipe-track>.tile .tile-fav{width:31px;height:31px;font-size:20px}
+  .swipe-track>.tile .demo-tag{font-size:8px;padding:7px 8px}
+  .swipe-category:last-child{margin:0}
+}
 </style>
 </head>
 <body>
@@ -149,7 +178,7 @@ body{background:#f7f5ef}
   <div class="sectiontop"><div><span class="micro" style="color:#9c7b53">Una manera simple de elegir</span><h2>Explorá el catálogo.</h2></div><p>Buscá productos, guardá favoritos y agregá lo que necesites al carrito.</p></div>
   <div class="toolbox"><label class="search" aria-label="Buscar productos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6.4"/><path d="m15 15 6 6"/></svg><input id="product-search" type="search" placeholder="Buscar puertas, ventanas, manijones..." autocomplete="off"></label><label class="sort-select">Ordenar <select id="product-sort" aria-label="Ordenar productos"><option value="default">Destacados</option><option value="az">Nombre A–Z</option><option value="za">Nombre Z–A</option><option value="category">Categoría</option></select></label><span class="counter" id="result-count" aria-live="polite"></span></div>
   <div class="filters" role="group" aria-label="Filtrar por categoría"><button class="chip" data-filter="Todas" aria-pressed="true">Todos</button><button class="chip" data-filter="Puertas" aria-pressed="false">Puertas</button><button class="chip" data-filter="Ventanas" aria-pressed="false">Ventanas</button><button class="chip" data-filter="Accesorios" aria-pressed="false">Accesorios</button><button class="chip" data-filter="A medida" aria-pressed="false">A medida</button><button class="chip" data-filter="Favoritos" aria-pressed="false">♡ Favoritos</button></div>
-  <div class="catalog" id="catalog" aria-live="polite"></div>
+  <div class="catalog" id="catalog" aria-live="polite"></div><div class="swipe-catalog" id="swipe-catalog" aria-label="Productos por categoría con desplazamiento horizontal"></div>
   <div class="emptystate" id="empty-search" hidden><b>No encontramos resultados</b><p>Probá con otra palabra o categoría.</p><button type="button" class="smallbtn" id="reset-search">Ver todo</button></div>
   <p class="catalog-note">* Catálogo demostrativo con fotos ilustrativas. No representa inventario ni precios confirmados. Los productos, medidas, pagos y envíos se acuerdan con Norte Aberturas. No hay cobro online desde esta demo.</p>
 </div></section>
@@ -247,6 +276,47 @@ function renderCatalog(){
  all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
  all('[data-detail]',$('catalog')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
  all('[data-favorite]',$('catalog')).forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.favorite;if(favorites.has(id))favorites.delete(id);else favorites.add(id);setStored(FAV_STORE,[...favorites]);renderCatalog();toast(favorites.has(id)?'Guardado en favoritos':'Quitado de favoritos')}));
+ renderMobileCarousels(visible);
+}
+
+
+const swipeOffsets={};
+function renderMobileCarousels(visible){
+ const holder=$('swipe-catalog'),cards=new Map();
+ all('[data-add]',$('catalog')).forEach(b=>cards.set(b.dataset.add,b.closest('.tile')));
+ const categories=CATEGORIES.filter(c=>visible.some(p=>p.category===c));
+ holder.innerHTML=categories.map((cat,i)=>{
+   const count=visible.filter(p=>p.category===cat).length, arrows=count>1, trackId='swipe-app-'+i;
+   return '<section class="swipe-category" aria-label="Catálogo de '+esc(cat)+'"><div class="swipe-category-head"><h3>'+esc(cat)+'</h3>'+(arrows?'<div class="swipe-actions"><span class="swipe-hint">Deslizá para ver más →</span><button class="swipe-arrow" data-direction="-1" data-for="'+trackId+'" aria-label="Anterior producto de '+esc(cat)+'" disabled>‹</button><button class="swipe-arrow" data-direction="1" data-for="'+trackId+'" aria-label="Siguiente producto de '+esc(cat)+'">›</button></div>':'')+'</div><div class="swipe-track" id="'+trackId+'" role="region" aria-label="Desplazá los productos de '+esc(cat)+'" tabindex="0"></div></section>';
+ }).join('');
+ categories.forEach((cat,i)=>{
+   const track=$('swipe-app-'+i);
+   visible.filter(p=>p.category===cat).forEach(p=>{
+     const source=cards.get(p.id);if(!source)return;
+     const node=source.cloneNode(true);track.append(node);
+     all('[data-add]',node).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
+     all('[data-detail]',node).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
+     all('[data-favorite]',node).forEach(b=>b.addEventListener('click',()=>{
+       const id=b.dataset.favorite;
+       favorites.has(id)?favorites.delete(id):favorites.add(id);
+       setStored(FAV_STORE,[...favorites]);renderCatalog();
+       toast(favorites.has(id)?'Guardado en favoritos':'Quitado de favoritos');
+     }));
+   });
+   if(swipeOffsets[cat])track.scrollLeft=swipeOffsets[cat];
+   const buttons=all('[data-for="'+track.id+'"]',holder);
+   function update(){
+     const prev=buttons.find(b=>b.dataset.direction==='-1'),next=buttons.find(b=>b.dataset.direction==='1');
+     if(prev)prev.disabled=track.scrollLeft<=3;
+     if(next)next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-3;
+   }
+   track.addEventListener('scroll',()=>{swipeOffsets[cat]=track.scrollLeft;update()},{passive:true});
+   buttons.forEach(b=>b.addEventListener('click',()=>{
+     const tile=track.querySelector('.tile');
+     if(tile)track.scrollBy({left:Number(b.dataset.direction)*(tile.getBoundingClientRect().width+12),behavior:'smooth'});
+   }));
+   update();
+ });
 }
 
 function addToCart(id){if(!products.some(p=>p.id===id))return;const item=cart[id]||{qty:0,note:''};item.qty=Math.min(99,item.qty+1);cart[id]=item;setStored(CART_STORE,cart);renderCart();toast('¡Producto agregado al carrito!');showPanel('cart-drawer')}
