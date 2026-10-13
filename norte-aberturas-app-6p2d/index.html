@@ -166,12 +166,18 @@ body{background:var(--bg)}
 'use strict';
 const PHONE='5493644326505',STORE='zenix_norte_app_demo_products_v1',CART_STORE='zenix_norte_app_demo_cart_v1',FAV_STORE='zenix_norte_app_demo_favorites_v1',CATEGORIES=['Puertas','Ventanas','Accesorios','A medida'];
 const DEFAULTS=[
-{id:'p1',name:'Puertas de entrada',category:'Puertas',description:'Opciones de entrada para sumar carácter y personalidad a tus espacios.',price:null,image:'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80'},
-{id:'p2',name:'Puertas estilo colonial',category:'Puertas',description:'Inspiración en aberturas clásicas con detalles y terminaciones cálidas.',price:null,image:'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80'},
-{id:'p3',name:'Puertas interiores',category:'Puertas',description:'Ideas para renovar o completar ambientes interiores.',price:null,image:'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=900&q=80'},
-{id:'p4',name:'Ventanas y ventanales',category:'Ventanas',description:'Opciones para aprovechar la luz natural en obras y reformas.',price:null,image:'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80'},
-{id:'p5',name:'Barrales',category:'Accesorios',description:'Consultá por opciones de barrales y accesorios para puertas.',price:null,image:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80'},
-{id:'p6',name:'Aberturas a medida',category:'A medida',description:'Contanos las medidas que necesitás y consultá alternativas.',price:null,image:'https://images.unsplash.com/photo-1600566753051-f0b89df2dd90?auto=format&fit=crop&w=900&q=80'},
+{id:'p1',name:'Puertas de entrada',category:'Puertas',description:'Opciones de entrada para sumar carácter y personalidad a tus espacios.',price:null,image:'https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&fit=crop&w=900&q=80'},
+{id:'p2',name:'Puertas estilo colonial',category:'Puertas',description:'Inspiración en aberturas clásicas con detalles y terminaciones cálidas.',price:null,image:'https://images.unsplash.com/photo-1542354642-233af003db87?auto=format&fit=crop&w=900&q=80'},
+{id:'p3',name:'Puertas interiores',category:'Puertas',description:'Ideas para renovar o completar ambientes interiores.',price:null,image:'https://images.unsplash.com/photo-1776417091038-df7f71687a1e?auto=format&fit=crop&w=900&q=80'},
+{id:'p4',name:'Ventanas y ventanales',category:'Ventanas',description:'Opciones para aprovechar la luz natural en obras y reformas.',price:null,image:'https://images.unsplash.com/photo-1552602989-715150494024?auto=format&fit=crop&w=900&q=80'},
+{id:'p5',name:'Barrales',category:'Accesorios',description:'Consultá por opciones de barrales y accesorios para puertas.',price:null,image:'https://images.unsplash.com/photo-1646872686934-cf4c910fc219?auto=format&fit=crop&w=900&q=80'},
+{id:'p6',name:'Aberturas a medida',category:'A medida',description:'Contanos las medidas que necesitás y consultá alternativas.',price:null,image:'https://images.unsplash.com/photo-1569216961559-fd512349ebba?auto=format&fit=crop&w=900&q=80'},
+{id:'p7',name:'Puerta doble hoja',category:'Puertas',description:'Accesos de dos hojas con una presencia protagonista.',price:null,image:'https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&fit=crop&w=900&q=80'},
+{id:'p8',name:'Ventana corrediza',category:'Ventanas',description:'Opciones prácticas para ventilación y luz natural.',price:null,image:'https://images.unsplash.com/photo-1552602989-715150494024?auto=format&fit=crop&w=900&q=80'},
+{id:'p9',name:'Ventana para ambientes',category:'Ventanas',description:'Aberturas para diferentes sectores del hogar.',price:null,image:'https://images.unsplash.com/photo-1569216961559-fd512349ebba?auto=format&fit=crop&w=900&q=80'},
+{id:'p10',name:'Manijones',category:'Accesorios',description:'Herrajes de referencia para entradas y puertas.',price:null,image:'https://images.unsplash.com/photo-1776417091038-df7f71687a1e?auto=format&fit=crop&w=900&q=80'},
+{id:'p11',name:'Herrajes y terminaciones',category:'Accesorios',description:'Detalles que completan distintos estilos de aberturas.',price:null,image:'https://images.unsplash.com/photo-1487755738157-c32022897246?auto=format&fit=crop&w=900&q=80'},
+{id:'p12',name:'Puertas a medida',category:'A medida',description:'Cotizaciones para medidas, terminaciones o estilos especiales.',price:null,image:'https://images.unsplash.com/photo-1542354642-233af003db87?auto=format&fit=crop&w=900&q=80'},
 ];
 const $=id=>document.getElementById(id),all=(s,root=document)=>Array.from(root.querySelectorAll(s));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
