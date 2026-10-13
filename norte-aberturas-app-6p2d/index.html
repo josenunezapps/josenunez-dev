@@ -142,6 +142,71 @@ body{background:#f7f5ef}
   .swipe-track>.tile .demo-tag{font-size:8px;padding:7px 8px}
   .swipe-category:last-child{margin:0}
 }
+
+/* Nueva organización comercial tipo tienda, manteniendo Norte verde/salvia y Playfair. */
+.shop-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.shop-search-strip{background:#fffef9;border-bottom:1px solid #dce6da}
+.shop-search-inner{display:flex;align-items:center;gap:20px;padding-top:11px;padding-bottom:11px}
+.shop-search-form{display:flex;gap:10px;align-items:center;border:1px solid #d5dfd4;border-radius:5px;background:#fff;min-height:46px;flex:1;min-width:240px;padding:4px 4px 4px 15px}
+.shop-search-form>span{font-size:26px;color:#6d8976}
+.shop-search-form input{font-family:inherit;color:#264634;min-width:0;flex:1;border:0;outline:0;background:transparent;font-size:12px}
+.shop-search-form button{min-height:38px;border:0;border-radius:3px;background:#254e38;color:white;font-size:11px;font-weight:800;padding:9px 15px}
+.shop-search-form button:hover{background:#3d7150}
+.shop-quicknav{display:flex;align-items:center;gap:6px}
+.shop-quicknav button{background:transparent;border:0;border-bottom:2px solid transparent;padding:10px 8px;white-space:nowrap;font-size:11px;color:#456650;font-weight:800}
+.shop-quicknav button:hover,.shop-quicknav button:focus-visible{color:#9d6a3e;border-bottom-color:#ae814c}
+.shop-shelf{padding:49px 0 51px;background:#fffefa}
+#shop-new-app{background:#edf1e8}
+.shop-heading{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:23px}
+.shop-heading .micro{color:#a77a4b;font-size:10px;letter-spacing:.13em}
+.shop-heading h2{font:500 clamp(34px,4.1vw,53px)/1.09 'Playfair Display',Georgia,serif;letter-spacing:-.035em;color:#274635;margin:9px 0 11px}
+.shop-heading p{font-size:12px;color:#6e8272;line-height:1.7;margin:0}
+.shop-heading-actions{display:flex;align-items:center;gap:8px}
+.shop-heading-actions>span{font-size:11px;font-weight:800;color:#6d846f;white-space:nowrap;margin-right:6px}
+.shop-arrow{width:36px;height:36px;border:1px solid #c9d9ca;border-radius:50%;color:#305a40;background:white;font-size:23px;display:grid;place-items:center;line-height:1;padding:0}
+.shop-arrow:disabled{opacity:.28}.shop-arrow:hover:not(:disabled){background:#e3ede3}
+.shop-rail{display:flex;gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:2px 2px 13px}
+.shop-rail::-webkit-scrollbar{display:none}
+.shop-item{flex:0 0 calc((100% - 48px)/4);display:flex;flex-direction:column;min-width:0;border:1px solid #dfe5de;background:white;border-radius:8px;overflow:hidden;scroll-snap-align:start}
+.shop-img{height:183px;position:relative;background:#e9eae2}
+.shop-img img{height:100%;width:100%;object-fit:cover}
+.shop-img small{position:absolute;top:9px;left:9px;font-size:9px;letter-spacing:.07em;text-transform:uppercase;font-weight:800;color:#47674f;background:#fffdf2eb;padding:8px}
+.shop-cardbody{padding:14px;display:flex;flex-direction:column;flex:1}
+.shop-cardbody>small{font-size:10px;color:#a27850;font-weight:800;letter-spacing:.08em}
+.shop-cardbody h3{font:800 23px/1.03 'Barlow Condensed',Impact,sans-serif;text-transform:uppercase;color:#264833;margin:8px 0 12px;min-height:47px}
+.shop-price{font-size:12px;color:#8e7255;font-weight:800;margin-top:auto;margin-bottom:11px}
+.shop-actions{display:grid;grid-template-columns:1fr auto;gap:8px}
+.shop-actions button{min-height:41px;border-radius:4px;padding:9px 11px;font:800 11px/1.15 'DM Sans',Arial,sans-serif}
+.shop-add{border:0;background:#254634;color:#fff}.shop-add:hover{background:#3f7153}
+.shop-detail{border:1px solid #d3e0d3;background:#fff;color:#305842}
+.shop-categories{padding:49px 0;background:#f7f6ef}
+.shop-category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.shop-cat{position:relative;height:191px;padding:0;border:0;background:#d9e2d8;text-align:left;overflow:hidden;border-radius:7px}
+.shop-cat img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.shop-cat:hover img{transform:scale(1.045)}
+.shop-cat:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#122c20c7,transparent 70%)}
+.shop-cat span{position:absolute;z-index:2;left:14px;right:14px;bottom:14px;color:white;font:500 23px 'Playfair Display',Georgia,serif;display:flex;align-items:center;justify-content:space-between}
+.shop-cat b{font:500 19px Arial,sans-serif}
+#catalogo.section{padding-top:48px}
+.hero-grid{min-height:530px}.hero-photo{min-height:530px}
+@media(max-width:1120px){.shop-search-inner{display:block}.shop-quicknav{margin-top:6px;overflow-x:auto;scrollbar-width:none}.shop-item{flex-basis:calc((100% - 32px)/3)}}
+@media(max-width:760px){
+ .shop-search-inner{padding-top:10px;padding-bottom:10px}
+ .shop-search-form{min-height:44px;padding-left:12px}.shop-search-form input{font-size:11px}.shop-search-form button{font-size:11px;padding:9px 12px}
+ .shop-quicknav button{padding:10px 12px}
+ .shop-shelf{padding:34px 0 36px}.shop-heading{margin-bottom:15px;gap:9px}
+ .shop-heading h2{font-size:31px;margin:6px 0}.shop-heading p{font-size:11px;max-width:260px}
+ .shop-heading-actions>span{display:none}.shop-arrow{width:31px;height:31px;font-size:20px}
+ .shop-rail{gap:12px;padding-bottom:9px}.shop-item{flex-basis:clamp(182px,59vw,242px)}
+ .shop-img{height:145px}.shop-cardbody{padding:11px}.shop-cardbody h3{font-size:21px;min-height:43px;margin:6px 0 7px}
+ .shop-price{font-size:11px}.shop-actions button{min-height:37px;padding:8px}
+ .shop-categories{padding:35px 0}.shop-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .shop-cat{height:139px}.shop-cat span{font-size:19px;left:12px;right:12px;bottom:12px}
+ .hero-grid{min-height:0}.hero-photo{min-height:300px;height:300px}.hero-copy{padding-top:43px;padding-bottom:32px}
+ #catalogo.section{padding-top:33px}
+}
+@media(max-width:400px){.shop-item{flex-basis:205px}.shop-heading h2{font-size:29px}.shop-cat{height:127px}}
+@media(prefers-reduced-motion:reduce){.shop-cat img{transition:none}}
 </style>
 </head>
 <body>
@@ -153,6 +218,10 @@ body{background:#f7f5ef}
     <div class="headtools"><button type="button" class="btn btn-outline header-admin" id="admin-open">⚙ Panel demo</button><button type="button" class="btn btn-primary" id="cart-open">🛒 <span class="cart-label">Carrito</span><span class="cartnum" id="cart-count">0</span></button></div>
   </div>
 </header>
+<section class="shop-search-strip" aria-label="Búsqueda rápida"><div class="shell shop-search-inner">
+<form id="shop-search-app-form" class="shop-search-form" role="search"><label for="shop-search-app" class="shop-hidden">Buscar en el catálogo</label><span aria-hidden="true">⌕</span><input id="shop-search-app" type="search" placeholder="¿Qué estás buscando? Puertas, ventanas, accesorios..." autocomplete="off"><button type="submit">Buscar ↗</button></form>
+<div class="shop-quicknav" aria-label="Categorías"><button type="button" data-shop-app-cat="Todas">Todos</button><button type="button" data-shop-app-cat="Puertas">Puertas</button><button type="button" data-shop-app-cat="Ventanas">Ventanas</button><button type="button" data-shop-app-cat="Accesorios">Accesorios</button><button type="button" data-shop-app-cat="A medida">A medida</button></div>
+</div></section>
 <main>
 <section class="hero" id="inicio"><div class="shell hero-grid">
   <div class="hero-copy">
@@ -174,6 +243,20 @@ body{background:#f7f5ef}
   <div class="feature"><div class="feature-icon">🛒</div><div><strong>Agregá al carrito</strong><small>Sumá cantidades y medidas en un único pedido.</small></div></div>
   <div class="feature"><div class="feature-icon">↗</div><div><strong>Pedí presupuesto</strong><small>Enviá las características directamente por WhatsApp.</small></div></div>
 </div></section>
+<section class="shop-shelf" id="shop-featured-app"><div class="shell">
+<div class="shop-heading"><div><span class="micro">SELECCIÓN DEL CATÁLOGO</span><h2>Destacados</h2><p>Productos de referencia para inspirarte y consultar.</p></div><div class="shop-heading-actions"><span>Deslizá para ver más →</span><button type="button" class="shop-arrow" data-app-shelf="shop-featured-app" data-app-dir="-1" aria-label="Ver productos anteriores de Destacados">‹</button><button type="button" class="shop-arrow" data-app-shelf="shop-featured-app" data-app-dir="1" aria-label="Ver más productos de Destacados">›</button></div></div>
+<div id="shop-featured-app-rail" class="shop-rail" tabindex="0" role="region" aria-label="Productos Destacados"></div></div></section>
+<section class="shop-categories" id="shop-categories-app"><div class="shell">
+<div class="shop-heading"><div><span class="micro">COMPRÁ POR CATEGORÍA</span><h2>Encontrá lo que buscás.</h2><p>Elegí una colección y explorá sus modelos.</p></div></div>
+<div class="shop-category-grid">
+<button type="button" data-shop-app-cat="Puertas" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&fit=crop&w=650&q=75" alt="Puerta de madera de referencia"><span>Puertas <b>↗</b></span></button>
+<button type="button" data-shop-app-cat="Ventanas" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1755378402362-40cbb72abb63?auto=format&fit=crop&w=650&q=75" alt="Ventana de referencia"><span>Ventanas <b>↗</b></span></button>
+<button type="button" data-shop-app-cat="Accesorios" class="shop-cat"><img loading="lazy" src="https://zenix.com.ar/norte-aberturas-recursos/barral-puerta.svg" alt="Barral de acero, ilustración de referencia"><span>Accesorios <b>↗</b></span></button>
+<button type="button" data-shop-app-cat="A medida" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1764592119348-0aaeab50e2d0?auto=format&fit=crop&w=650&q=75" alt="Puerta a medida, imagen de referencia"><span>A medida <b>↗</b></span></button>
+</div></div></section>
+<section class="shop-shelf" id="shop-new-app"><div class="shell">
+<div class="shop-heading"><div><span class="micro">MÁS IDEAS PARA TU OBRA</span><h2>Para descubrir</h2><p>Explorá otros modelos y detalles para tu proyecto.</p></div><div class="shop-heading-actions"><span>Deslizá para ver más →</span><button type="button" class="shop-arrow" data-app-shelf="shop-new-app" data-app-dir="-1" aria-label="Ver productos anteriores de Para descubrir">‹</button><button type="button" class="shop-arrow" data-app-shelf="shop-new-app" data-app-dir="1" aria-label="Ver más productos de Para descubrir">›</button></div></div>
+<div id="shop-new-app-rail" class="shop-rail" tabindex="0" role="region" aria-label="Productos Para descubrir"></div></div></section>
 <section class="section" id="catalogo"><div class="shell">
   <div class="sectiontop"><div><span class="micro" style="color:#9c7b53">Una manera simple de elegir</span><h2>Explorá el catálogo.</h2></div><p>Buscá productos, guardá favoritos y agregá lo que necesites al carrito.</p></div>
   <div class="toolbox"><label class="search" aria-label="Buscar productos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6.4"/><path d="m15 15 6 6"/></svg><input id="product-search" type="search" placeholder="Buscar puertas, ventanas, manijones..." autocomplete="off"></label><label class="sort-select">Ordenar <select id="product-sort" aria-label="Ordenar productos"><option value="default">Destacados</option><option value="az">Nombre A–Z</option><option value="za">Nombre Z–A</option><option value="category">Categoría</option></select></label><span class="counter" id="result-count" aria-live="polite"></span></div>
@@ -266,7 +349,36 @@ if(upgraded)setStored(STORE,products);
 cleanCart();renderAll()}
 function cleanCart(){const ids=new Set(products.map(p=>p.id));Object.keys(cart).forEach(k=>{if(!ids.has(k)||!cart[k]||!Number.isFinite(Number(cart[k].qty)))delete cart[k];else{cart[k]={qty:Math.max(1,Math.min(99,Math.floor(Number(cart[k].qty)))),note:String(cart[k].note||'').slice(0,180)}}});setStored(CART_STORE,cart)}
 function toast(s){const el=$('toast');el.textContent=s;el.classList.add('visible');clearTimeout(delayed);delayed=setTimeout(()=>el.classList.remove('visible'),2900)}
-function renderAll(){renderCatalog();renderCart();renderAdmin()}
+
+function renderAppShowcase(){
+ const groups=[
+   {id:'shop-featured-app-rail',preferred:['p1','p4','p10','p6'],offset:0},
+   {id:'shop-new-app-rail',preferred:['p7','p8','p5','p12'],offset:4}
+ ];
+ for(const group of groups){
+  const container=$(group.id);if(!container)continue;
+  const saved=container.scrollLeft;
+  const unique=group.preferred.map(id=>products.find(p=>p.id===id)).filter(Boolean);
+  if(unique.length<4){for(const product of products.slice(group.offset)){if(unique.length===4)break;if(!unique.some(p=>p.id===product.id))unique.push(product)}}
+  container.innerHTML=unique.map(p=>{
+   const photo=safeImg(p.image);
+   const placeholder=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
+   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3><div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-detail="'+esc(p.id)+'" aria-label="Ver detalles de '+esc(p.name)+'">Ver ↗</button></div></div></article>';
+  }).join('');
+  if(saved)container.scrollLeft=saved;
+  container.querySelectorAll('[data-shop-app-add]').forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.shopAppAdd)));
+  container.querySelectorAll('[data-shop-app-detail]').forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.shopAppDetail)));
+ }
+}
+function submitShopAppSearch(e){
+ e.preventDefault();
+ query=$('shop-search-app').value.trim();
+ $('product-search').value=query;filter='Todas';
+ all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));
+ renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'});
+}
+
+function renderAll(){renderCatalog();renderCart();renderAdmin();renderAppShowcase()}
 function renderCatalog(){
  const q=query.toLocaleLowerCase('es-AR');
  let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
@@ -364,6 +476,9 @@ let rawPrice=$('admin-price').value.trim(),p=normalize({id:editing||('p'+Date.no
 function exportJSON(){const data={format:'zenix-norte-demo-v1',products,exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download='norte-aberturas-catalogo-demo.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);toast('Se preparó el archivo de respaldo')}
 async function importJSON(e){const file=e.target.files?.[0];e.target.value='';if(!file)return;if(file.size>8*1024*1024)return toast('Archivo demasiado grande para la demo');try{const data=JSON.parse(await file.text());if(data?.format!=='zenix-norte-demo-v1'||!Array.isArray(data.products)||data.products.length>150)throw Error('Formato inválido');const next=data.products.map(normalize);if(next.some(x=>!x))throw Error('Hay datos inválidos');if(new Set(next.map(x=>x.id)).size!==next.length)throw Error('Hay identificadores duplicados');if(!confirm('¿Reemplazar el catálogo local con '+next.length+' productos del archivo?'))return;if(!setStored(STORE,next))return;products=next;cleanCart();renderAll();toast('Catálogo importado en este dispositivo')}catch(err){toast('No se pudo importar: '+err.message)}}
 async function promptInstall(){if(installPrompt){installPrompt.prompt();try{await installPrompt.userChoice}catch{}installPrompt=null}else toast('Para instalarla: menú del navegador → Agregar a pantalla de inicio')}
+$('shop-search-app-form').addEventListener('submit',submitShopAppSearch);
+all('[data-shop-app-cat]').forEach(b=>b.addEventListener('click',()=>{query='';filter=b.dataset.shopAppCat;$('product-search').value='';all('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.filter===filter)));renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'})}));
+all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(b.dataset.appShelf+'-rail');const item=rail?.querySelector('.shop-item');if(item)rail.scrollBy({left:Number(b.dataset.appDir)*(item.getBoundingClientRect().width+16),behavior:'smooth'})}));
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
 $('product-search').addEventListener('input',e=>{query=e.target.value.trim();renderCatalog()});$('product-sort').addEventListener('change',e=>{sortMode=e.target.value;renderCatalog()});
 $('reset-search').addEventListener('click',()=>{$('product-search').value='';query='';filter='Todas';sortMode='default';$('product-sort').value='default';all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));renderCatalog()});
