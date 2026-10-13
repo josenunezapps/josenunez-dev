@@ -398,6 +398,15 @@ body.site-menu-locked{overflow:hidden!important}
 .shop-static-link{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:41px;padding:9px 12px;border:1px solid #ceddcf;border-radius:4px;background:#214a36;color:#fff;text-decoration:none;font-weight:800;font-size:11px}
 .shop-static-link:hover{background:#38634c;color:#fff}
 .shop-item-actions:has(.shop-static-link),.shop-actions:has(.shop-static-link){display:block}
+
+/* Categorías visuales claras — fotos reales de aberturas y herrajes. */
+#categorias .catcard{background:#e4e8e1}
+#categorias .catcard>img{filter:saturate(.98) brightness(1.08)!important;object-fit:cover}
+#categorias .catcard:after{background:linear-gradient(180deg,transparent 42%,rgba(10,33,23,.16) 59%,rgba(10,33,23,.78) 100%)!important}
+#categorias .catcard:hover>img{filter:saturate(1.06) brightness(1.12)!important}
+#categorias .catcard .catinfo small,#categorias .catcard .pella-catcaption small{color:#fff5e6!important;text-shadow:0 1px 4px rgba(0,0,0,.42)}
+#categorias .catcard .catinfo b,#categorias .catcard .pella-catcaption strong{color:#fff!important;text-shadow:0 2px 7px rgba(0,0,0,.26)}
+@media (max-width:760px){#categorias .catcard>img{object-position:center center}}
 </style>
 </head>
 <body>
@@ -510,10 +519,10 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
 <section class="section" id="categorias"><div class="shell">
   <div class="sechead"><div><span class="eyebrow">ELEGÍ QUÉ ESTÁS BUSCANDO</span><h2 class="serif">Encontrá tu abertura ideal.</h2></div><p>Elegí un tipo de producto para ver únicamente sus modelos.</p></div>
   <div class="catgrid">
-    <button type="button" class="catcard" data-category="Puertas" aria-label="Ver catálogo de puertas"><img loading="lazy" src="https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&fit=crop&w=800&q=80" alt="Referencia de puertas e interiores"><span class="catinfo"><small>Tipos de ingreso e interior</small><b class="serif">Puertas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
-    <button type="button" class="catcard" data-category="Ventanas" aria-label="Ver catálogo de ventanas"><img loading="lazy" src="https://images.unsplash.com/photo-1755378402362-40cbb72abb63?auto=format&fit=crop&w=800&q=80" alt="Referencia de ventanas y aberturas"><span class="catinfo"><small>Luz y ventilación</small><b class="serif">Ventanas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
-    <button type="button" class="catcard" data-category="Accesorios" aria-label="Ver catálogo de accesorios"><img loading="lazy" src="https://images.pexels.com/photos/8276607/pexels-photo-8276607.jpeg?auto=compress&cs=tinysrgb&w=900&q=80" alt="Detalles de terminaciones y accesorios"><span class="catinfo"><small>Herrajes y terminaciones</small><b class="serif">Accesorios</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
-    <button type="button" class="catcard" data-category="A medida" aria-label="Ver productos a medida"><img loading="lazy" src="https://images.unsplash.com/photo-1764592119348-0aaeab50e2d0?auto=format&fit=crop&w=800&q=80" alt="Referencia de espacio interior con detalles a medida"><span class="catinfo"><small>Soluciones para proyectos</small><b class="serif">A medida</b><em class="type-count">10 referencias</em><span>↗</span></span></button>
+    <button type="button" class="catcard" data-category="Puertas" aria-label="Ver catálogo de puertas"><img loading="lazy" src="https://images.pexels.com/photos/36777846/pexels-photo-36777846.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Puerta de entrada moderna de madera instalada en vivienda contemporánea, fotografía de referencia"><span class="catinfo"><small>Entradas con diseño y presencia</small><b class="serif">Puertas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
+    <button type="button" class="catcard" data-category="Ventanas" aria-label="Ver catálogo de ventanas"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="catinfo"><small>Luz y ventilación para cada ambiente</small><b class="serif">Ventanas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
+    <button type="button" class="catcard" data-category="Accesorios" aria-label="Ver catálogo de accesorios"><img loading="lazy" src="https://images.pexels.com/photos/965878/pexels-photo-965878.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Picaporte metálico moderno en puerta blanca, fotografía de referencia"><span class="catinfo"><small>Herrajes y detalles de calidad</small><b class="serif">Accesorios</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
+    <button type="button" class="catcard" data-category="A medida" aria-label="Ver productos a medida"><img loading="lazy" src="https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Casa contemporánea con grandes ventanales y aberturas de piso a techo, fotografía de referencia"><span class="catinfo"><small>Soluciones para proyectos especiales</small><b class="serif">A medida</b><em class="type-count">10 referencias</em><span>↗</span></span></button>
   </div>
   <div class="intro-note"><span>Catálogo ilustrativo: las fotos y modelos reales se incorporan cuando los entregue el fabricante.</span><a href="#productos">Ver los productos ↗</a></div><div class="pella-help"><div><strong>¿Todavía no sabés qué modelo elegir?</strong><span>Prepará una consulta con el tipo de abertura y las medidas de tu proyecto.</span></div><a href="#amedida">Asesoramiento para tu obra ↗</a></div>
 </div></section>
