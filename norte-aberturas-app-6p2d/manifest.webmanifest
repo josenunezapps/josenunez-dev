@@ -1,0 +1,21 @@
+{
+  "name": "Norte Aberturas · Catálogo",
+  "short_name": "Norte Aberturas",
+  "description": "Demostración de app web para organizar y consultar aberturas",
+  "id": "/norte-aberturas-app-6p2d/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#17352b",
+  "lang": "es-AR",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
