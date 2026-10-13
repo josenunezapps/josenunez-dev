@@ -303,6 +303,8 @@ document.addEventListener('error',ev=>{
    ||host.querySelector('.item-category,.category')?.textContent?.trim()
    ||(host.classList.contains('detail-photo')?document.getElementById('detail-cat')?.textContent?.trim():null)
    ||(host.classList.contains('modalphoto')?document.getElementById('detail-category')?.textContent?.trim():null)
+   ||(host.classList.contains('cart-thumb')?host.closest('.cartitem')?.querySelector('.cartitem-info small')?.textContent?.split(' · ')[0]?.trim():null)
+   ||(host.classList.contains('qitemimage')?host.closest('.qitem')?.querySelector('.qitemmain small')?.textContent?.split(' · ')[0]?.trim():null)
    ||'A medida';
  target.dataset.norteFallback='yes';
  target.src=fallbackProductImage(category);
