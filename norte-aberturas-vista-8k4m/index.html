@@ -153,6 +153,13 @@ body{background:var(--bg)}
 }
 @media(max-width:390px){.shop-item{flex-basis:205px}.shop-heading h2{font-size:30px}}
 @media(prefers-reduced-motion:reduce){.shop-item-image img{transition:none}}
+
+@media(max-width:720px){
+ #categorias .catgrid{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;padding-bottom:7px}
+ #categorias .catgrid::-webkit-scrollbar{display:none}
+ #categorias .catcard{flex:0 0 clamp(148px,43vw,190px);height:142px;scroll-snap-align:start}
+ #categorias .sechead:after{content:"Deslizá para explorar categorías →";display:block;font-size:10px;font-weight:800;color:#698370;margin-top:10px}
+}
 </style>
 </head>
 <body>
