@@ -379,7 +379,7 @@ $('admin-form').addEventListener('submit',saveProduct);
 $('export-json').addEventListener('click',exportJSON);
 $('import-json').addEventListener('click',()=>$('import-file').click());
 $('import-file').addEventListener('change',importJSON);
-$('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 6 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;products=next;cart={};setStored(CART_STORE,cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
+$('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 12 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;products=next;cart={};setStored(CART_STORE,cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
 $('install-app').addEventListener('click',promptInstall);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 $('mobile-home').addEventListener('click',()=>{document.getElementById('inicio').scrollIntoView({behavior:'smooth'})});
@@ -387,6 +387,33 @@ $('mobile-catalog').addEventListener('click',()=>{document.getElementById('catal
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
 load();
 })();
+
+/* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
+function fallbackProductImage(category){
+ const cat=['Puertas','Ventanas','Accesorios','A medida'].includes(category)?category:'A medida';
+ const strokes={
+  'Puertas':'<rect x="165" y="91" width="370" height="480" rx="6"/><rect x="209" y="121" width="282" height="423" rx="4"/><path d="M232 149H470M232 440H470"/><circle cx="453" cy="348" r="13"/>',
+  'Ventanas':'<rect x="111" y="164" width="477" height="350" rx="6"/><path d="M349 164V514M111 339H588"/><path d="M154 481L309 250M383 473L540 246" opacity=".28"/>',
+  'Accesorios':'<rect x="213" y="154" width="270" height="409" rx="10" opacity=".14"/><rect x="321" y="203" width="59" height="300" rx="28"/><path d="M284 263H321M380 263H420M284 440H321M380 440H420"/>',
+  'A medida':'<rect x="152" y="164" width="390" height="397" rx="6"/><rect x="186" y="199" width="322" height="330"/><path d="M347 200V530M136 136H558M136 136l15 -12m-15 12l15 12M136 582H558M558 582l-15 -12m15 12l-15 12" />'
+ }[cat];
+ const source='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700"><rect width="700" height="700" fill="#e8eae1"/><rect x="56" y="50" width="588" height="600" rx="15" fill="#f4f3ec"/><g stroke="#456957" stroke-width="17" stroke-linecap="round" stroke-linejoin="round" fill="none">'+strokes+'</g><text x="350" y="621" text-anchor="middle" fill="#496e58" font-family="Arial,sans-serif" font-weight="bold" font-size="24" letter-spacing="2">'+cat.toUpperCase()+'</text></svg>';
+ return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(source);
+}
+document.addEventListener('error',ev=>{
+ const target=ev.target;
+ if(!target||target.tagName!=='IMG'||target.dataset.norteFallback==='yes')return;
+ const host=target.closest('.tile,.catcard,.detail-photo,.modalphoto,.cart-thumb,.qitemimage,.heroimg,.hero-photo');
+ if(!host)return;
+ const category=host.dataset.category
+   ||host.querySelector('.item-category,.category')?.textContent?.trim()
+   ||(host.classList.contains('detail-photo')?document.getElementById('detail-cat')?.textContent?.trim():null)
+   ||(host.classList.contains('modalphoto')?document.getElementById('detail-category')?.textContent?.trim():null)
+   ||'A medida';
+ target.dataset.norteFallback='yes';
+ target.src=fallbackProductImage(category);
+},true);
+
 </script>
 </body>
 </html>
