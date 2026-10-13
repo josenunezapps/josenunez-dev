@@ -518,9 +518,9 @@ function fallbackProductImage(category){
 document.addEventListener('error',ev=>{
  const target=ev.target;
  if(!target||target.tagName!=='IMG'||target.dataset.norteFallback==='yes')return;
- const host=target.closest('.tile,.catcard,.detail-photo,.modalphoto,.cart-thumb,.qitemimage,.heroimg,.hero-photo');
+ const host=target.closest('.tile,.catcard,.shop-cat,.shop-item,.detail-photo,.modalphoto,.cart-thumb,.qitemimage,.heroimg,.hero-photo');
  if(!host)return;
- const category=host.dataset.category
+ const category=host.dataset.category||host.dataset.shopAppCat
    ||host.querySelector('.item-category,.category')?.textContent?.trim()
    ||(host.classList.contains('detail-photo')?document.getElementById('detail-cat')?.textContent?.trim():null)
    ||(host.classList.contains('modalphoto')?document.getElementById('detail-category')?.textContent?.trim():null)
