@@ -539,6 +539,10 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
 <article class="shop-item" data-category="Accesorios"><div class="shop-item-image"><img loading="lazy" src="https://images.pexels.com/photos/7641991/pexels-photo-7641991.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;q=80" alt="Foto de referencia de Cerradura de embutir"><small>Accesorios</small></div><div class="shop-item-body"><small>FOTO DE REFERENCIA</small><h3>Cerradura de embutir</h3><div class="shop-item-price">Precio a consultar</div><div class="shop-item-actions"><a class="shop-item-detail shop-static-link" href="#productos">Ver catálogo ↗</a></div></div></article>
 <article class="shop-item" data-category="A medida"><div class="shop-item-image"><img loading="lazy" src="https://images.pexels.com/photos/36777839/pexels-photo-36777839.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;q=80" alt="Foto de referencia de Puerta doble a medida"><small>A medida</small></div><div class="shop-item-body"><small>FOTO DE REFERENCIA</small><h3>Puerta doble a medida</h3><div class="shop-item-price">Precio a consultar</div><div class="shop-item-actions"><a class="shop-item-detail shop-static-link" href="#productos">Ver catálogo ↗</a></div></div></article></div></div></section>
 <script>
+// Acceder al catálogo sin depender del inicializador de la tienda.
+document.addEventListener('click',function(event){
+ if(event.target.closest('a.shop-static-link'))document.body.classList.add('catalog-browsing');
+},true);
 // Las flechas siguen funcionando si el catálogo dinámico no termina de cargar.
 document.addEventListener('click',function(event){
  const arrow=event.target.closest('[data-shelf-dir]');
