@@ -731,8 +731,12 @@ function load(){const raw=getStored(STORE);if(raw!==null){try{const a=JSON.parse
 for(const p of products){
  const d=DEFAULTS.find(d=>d.id===p.id);
  if(d&&p.name===d.name&&LEGACY_DEMO_IMAGES[p.id]&&p.image===LEGACY_DEMO_IMAGES[p.id]){p.image=d.image;upgraded=true;}
- // Solo actualizar fotos anteriores sin cambios personalizados del usuario.
- if(d&&p.name===d.name&&/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(String(p.image||''))&&p.id>= 'p13' && /^p(?:1[3-9]|[2-5][0-9]|6[0-4])$/.test(p.id)){
+ // Migrar fotos de muestra antiguas sin sobrescribir imagenes personales.
+ // Versiones previas guardaban tanto la clave refsvg: como el SVG convertido en data:.
+ const oldPhoto=String(p.image||'');
+ const legacyDrawing=/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(oldPhoto)
+   || (oldPhoto.startsWith('data:image/svg+xml')&&oldPhoto.includes('IMAGEN%20ILUSTRATIVA'));
+ if(d&&/^p(?:1[3-9]|[2-5][0-9]|6[0-4])$/.test(p.id)&&legacyDrawing){
   p.image=d.image;upgraded=true;
  }
  if(d&&p.id==='p5'&&p.name===d.name&&p.image==='https://zenix.com.ar/norte-aberturas-recursos/barral-puerta.svg'){p.image=d.image;upgraded=true;}
@@ -781,7 +785,7 @@ function submitShopAppSearch(e){
  renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'});
 }
 
-function renderAll(){renderCatalog();renderCart();renderAdmin();renderAppShowcase()}
+function renderAll(){renderAppShowcase();renderCatalog();renderCart();renderAdmin()}
 
 
 let selectedViewKey='';
