@@ -938,8 +938,8 @@ all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
 $('product-search').addEventListener('input',e=>{query=e.target.value.trim();renderCatalog()});$('product-sort').addEventListener('change',e=>{sortMode=e.target.value;renderCatalog()});
 $('reset-search').addEventListener('click',()=>{$('product-search').value='';query='';filter='Todas';sortMode='default';$('product-sort').value='default';all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));renderCatalog()});
-['cart-open','hero-list','cta-list','mobile-list','sticky-cart-open'].forEach(id=>$(id).addEventListener('click',()=>showPanel('cart-drawer')));$('continue-shopping').addEventListener('click',()=>{hidePanels();$('catalogo').scrollIntoView({behavior:'smooth'})});
-['admin-open','mobile-admin'].forEach(id=>$(id).addEventListener('click',()=>{renderAdmin();showPanel('admin-modal')}));
+['cart-open','cta-list','mobile-list','sticky-cart-open'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>showPanel('cart-drawer'))});$('continue-shopping').addEventListener('click',()=>{hidePanels();$('catalogo').scrollIntoView({behavior:'smooth'})});
+['admin-open','mobile-admin'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>{renderAdmin();showPanel('admin-modal')})});
 ['cart-close','admin-close','detail-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePanels()});
 $('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
