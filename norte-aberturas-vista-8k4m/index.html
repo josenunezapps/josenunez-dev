@@ -67,6 +67,34 @@ body{background:var(--bg)}
 @media(max-width:1030px){.heroinner{min-height:580px}.herocopy{padding:55px 26px}.herocopy h1{font-size:clamp(49px,5.5vw,64px)}.heroimg{min-height:580px}}
 @media(max-width:720px){.logo-mark{width:38px;height:38px;font-size:23px}.logo-type strong{font-size:16px}.heroinner{grid-template-columns:1fr;min-height:0}.herocopy{padding:59px 23px 43px}.herocopy h1{font-size:clamp(49px,10.5vw,68px);line-height:1.07;margin:24px 0 21px}.herocopy>p{font-size:14px}.herochecks{margin-top:34px;gap:11px;padding-top:19px}.heroimg{min-height:355px;height:385px}.hero-eyecatch{top:16px;right:16px;font-size:8px}.heroimg .overlaycard{bottom:22px;left:21px}.overlaycard strong{font-size:29px}.heroactions .outlinebtn{color:#274536;border-color:#9eafa0}}
 @media(max-width:390px){.herocopy{padding:47px 18px 40px}.herocopy h1{font-size:49px}.heroactions{width:100%}.heroactions .btn{width:100%}.heroimg{height:335px;min-height:335px}}
+
+/* Carruseles móviles compactos: la grilla original se conserva en escritorio. */
+.mobile-catalog{display:none}
+@media(max-width:720px){
+  #product-grid{display:none}
+  .mobile-catalog{display:block;margin-top:8px}
+  .mobile-category{margin:0 0 27px}
+  .mobile-category-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 11px}
+  .mobile-category-head h3{font:500 27px/1.1 'Playfair Display',Georgia,serif;letter-spacing:-.035em;color:#244635;margin:0}
+  .mobile-category-controls{display:flex;align-items:center;gap:7px;min-width:0}
+  .mobile-swipe-hint{font-size:10px;font-weight:700;letter-spacing:.01em;color:#78877b;white-space:nowrap}
+  .mobile-slide-btn{border:1px solid #d3ded1;background:#fffdfa;color:#31523d;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:20px;line-height:1;flex-shrink:0;padding:0}
+  .mobile-slide-btn:hover:not(:disabled){background:#e5ede4}
+  .mobile-slide-btn:disabled{opacity:.28}
+  .mobile-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:1px;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 2px 9px}
+  .mobile-track::-webkit-scrollbar{display:none}
+  .mobile-track>.tile{flex:0 0 clamp(218px,69vw,272px);scroll-snap-align:start;min-width:0;border-radius:10px}
+  .mobile-track>.tile .tile-image{height:157px;aspect-ratio:auto}
+  .mobile-track>.tile .pin{font-size:8px;padding:7px 8px}
+  .mobile-track>.tile .tile-body{padding:13px;flex:1}
+  .mobile-track>.tile h3{font-size:23px;margin:6px 0 7px;line-height:1.02}
+  .mobile-track>.tile .tile-body p{font-size:11px;line-height:1.45;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:31px;margin-bottom:9px}
+  .mobile-track>.tile .pricehint{font-size:10px;margin-bottom:9px}
+  .mobile-track>.tile .tile-action{min-height:36px;padding:9px 10px;margin-bottom:7px}
+  .mobile-track>.tile .tile-add{min-height:41px;padding:10px;font-size:11px}
+  .mobile-track>.tile .tile-fav{width:31px;height:31px;font-size:20px}
+  .mobile-category:last-child{margin-bottom:0}
+}
 </style>
 </head>
 <body>
@@ -116,7 +144,7 @@ body{background:var(--bg)}
     <div class="catalog-right"><label class="searchbox"><b>⌕</b><input id="search" aria-label="Buscar productos" type="search" placeholder="Buscar puertas, ventanas..."></label><label class="sort-select">Ordenar <select id="sort" aria-label="Ordenar productos"><option value="default">Destacados</option><option value="az">Nombre A–Z</option><option value="za">Nombre Z–A</option><option value="category">Categoría</option></select></label></div>
   </div>
   <div class="catalog-status"><span id="filter-label">Mostrando todos los catálogos</span><span id="result-count" aria-live="polite"></span></div>
-  <div class="grid" id="product-grid"></div><div class="no-results" id="no-results" hidden><b>No encontramos resultados.</b>Probá otra palabra o elegí otra categoría.</div>
+  <div class="grid" id="product-grid"></div><div class="mobile-catalog" id="mobile-catalog" aria-label="Catálogo con desplazamiento horizontal por categorías"></div><div class="no-results" id="no-results" hidden><b>No encontramos resultados.</b>Probá otra palabra o elegí otra categoría.</div>
   <p class="disclaimer">* Los artículos de esta propuesta son ejemplos de categorías y posibles productos. Las imágenes son ilustrativas. No se informa stock, precio, medidas ni disponibilidad sin confirmación de Norte Aberturas. Los pedidos se coordinan por WhatsApp.</p>
 </div></section>
 <section class="project" id="amedida"><div class="shell projectgrid">
@@ -185,13 +213,44 @@ function clean(){for(const k of Object.keys(basket)){const x=basket[k];if(!find(
 function flash(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2800)}
 function filter(cat){current=cat;document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter===cat)));renderProducts()}
 function renderProducts(){
+const oldScroll={};
+$('mobile-catalog').querySelectorAll('[data-track]').forEach(t=>{oldScroll[t.dataset.track]=t.scrollLeft});
 const q=search.toLocaleLowerCase('es-AR');
 let found=P.filter(p=>(current==='Todos'||current==='Favoritos'&&favorites.has(p.id)||p.cat===current)&&[p.title,p.desc,p.tags,p.cat].some(x=>x.toLocaleLowerCase('es-AR').includes(q)));
 if(sortMode==='az')found.sort((a,b)=>a.title.localeCompare(b.title,'es-AR'));else if(sortMode==='za')found.sort((a,b)=>b.title.localeCompare(a.title,'es-AR'));else if(sortMode==='category')found.sort((a,b)=>a.cat.localeCompare(b.cat,'es-AR')||a.title.localeCompare(b.title,'es-AR'));
 $('result-count').textContent=found.length+' productos ilustrativos';$('filter-label').textContent=current==='Todos'?'Mostrando todos los catálogos':current==='Favoritos'?'Tus favoritos':'Catálogo de '+current.toLowerCase();$('no-results').hidden=found.length>0;
-$('product-grid').innerHTML=found.map(p=>'<article class="tile"><div class="tile-image"><img loading="lazy" src="'+pic(p,700)+'" alt="Imagen ilustrativa de '+safe(p.title)+'"><span class="pin">Imagen de referencia</span><button type="button" class="tile-fav" data-favorite="'+safe(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar favorito ':'Guardar favorito ')+safe(p.title)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tile-body"><span class="item-category">'+safe(p.cat)+'</span><h3>'+safe(p.title)+'</h3><p>'+safe(p.desc)+'</p><span class="pricehint">Precio a consultar</span><button type="button" class="tile-action" data-detail="'+safe(p.id)+'">Ver detalles <span>↗</span></button><button type="button" class="tile-add" data-add="'+safe(p.id)+'">🛒 Agregar al carrito</button></div></article>').join('');
-$('product-grid').querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>add(b.dataset.add)));$('product-grid').querySelectorAll('[data-detail]').forEach(b=>b.addEventListener('click',()=>detail(b.dataset.detail)));
-$('product-grid').querySelectorAll('[data-favorite]').forEach(b=>b.addEventListener('click',()=>{let id=b.dataset.favorite;favorites.has(id)?favorites.delete(id):favorites.add(id);try{localStorage.setItem(FAV_STORE,JSON.stringify([...favorites]))}catch{}renderProducts();flash(favorites.has(id)?'Agregado a favoritos':'Quitado de favoritos')}));
+const card=p=>'<article class="tile" data-product-id="'+safe(p.id)+'"><div class="tile-image"><img loading="lazy" src="'+pic(p,700)+'" alt="Imagen ilustrativa de '+safe(p.title)+'"><span class="pin">Imagen de referencia</span><button type="button" class="tile-fav" data-favorite="'+safe(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar favorito ':'Guardar favorito ')+safe(p.title)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tile-body"><span class="item-category">'+safe(p.cat)+'</span><h3>'+safe(p.title)+'</h3><p>'+safe(p.desc)+'</p><span class="pricehint">Precio a consultar</span><button type="button" class="tile-action" data-detail="'+safe(p.id)+'">Ver detalles <span>↗</span></button><button type="button" class="tile-add" data-add="'+safe(p.id)+'">🛒 Agregar al carrito</button></div></article>';
+$('product-grid').innerHTML=found.map(card).join('');
+const cats=['Puertas','Ventanas','Accesorios','A medida'];
+$('mobile-catalog').innerHTML=cats.filter(cat=>found.some(p=>p.cat===cat)).map((cat,index)=>{
+ const items=found.filter(p=>p.cat===cat),showArrows=items.length>1,trackId='norte-web-track-'+index;
+ return '<section class="mobile-category" aria-label="Catálogo '+safe(cat)+'"><div class="mobile-category-head"><h3>'+safe(cat)+'</h3>'+(showArrows?'<div class="mobile-category-controls"><span class="mobile-swipe-hint">Deslizá para ver más →</span><button type="button" class="mobile-slide-btn" data-slide="-1" data-target="'+trackId+'" aria-label="Ver productos anteriores de '+safe(cat)+'" disabled>‹</button><button type="button" class="mobile-slide-btn" data-slide="1" data-target="'+trackId+'" aria-label="Ver más productos de '+safe(cat)+'">›</button></div>':'')+'</div><div class="mobile-track" id="'+trackId+'" data-track="'+safe(cat)+'" role="region" aria-label="Productos de '+safe(cat)+'" tabindex="0">'+items.map(card).join('')+'</div></section>';
+}).join('');
+function wire(root){
+ root.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>add(b.dataset.add)));
+ root.querySelectorAll('[data-detail]').forEach(b=>b.addEventListener('click',()=>detail(b.dataset.detail)));
+ root.querySelectorAll('[data-favorite]').forEach(b=>b.addEventListener('click',()=>{
+  const id=b.dataset.favorite;favorites.has(id)?favorites.delete(id):favorites.add(id);
+  try{localStorage.setItem(FAV_STORE,JSON.stringify([...favorites]))}catch{}
+  renderProducts();flash(favorites.has(id)?'Agregado a favoritos':'Quitado de favoritos');
+ }));
+}
+wire($('product-grid'));wire($('mobile-catalog'));
+$('mobile-catalog').querySelectorAll('[data-track]').forEach(track=>{
+ const saved=oldScroll[track.dataset.track];if(saved)track.scrollLeft=saved;
+ const buttons=[...$('mobile-catalog').querySelectorAll('[data-target="'+track.id+'"]')];
+ const update=()=>{
+  const prev=buttons.find(b=>b.dataset.slide==='-1'),next=buttons.find(b=>b.dataset.slide==='1');
+  if(prev)prev.disabled=track.scrollLeft<=3;
+  if(next)next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-3;
+ };
+ track.addEventListener('scroll',update,{passive:true});
+ buttons.forEach(b=>b.addEventListener('click',()=>{
+  const tile=track.querySelector('.tile');
+  if(tile)track.scrollBy({left:Number(b.dataset.slide)*(tile.getBoundingClientRect().width+12),behavior:'smooth'});
+ }));
+ update();
+});
 }
 
 function add(id){if(!find(id))return;const b=basket[id]||{qty:0,note:''};b.qty=Math.min(99,Number(b.qty)+1);basket[id]=b;persist();renderBasket();flash('¡Producto agregado al carrito!');show('drawer')}
