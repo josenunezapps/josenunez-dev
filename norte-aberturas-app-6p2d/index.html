@@ -448,6 +448,15 @@ body.site-menu-locked{overflow:hidden!important}
 .shop-static-link{display:inline-flex;align-items:center;justify-content:center;width:100%;min-height:41px;padding:9px 12px;border:1px solid #ceddcf;border-radius:4px;background:#214a36;color:#fff;text-decoration:none;font-weight:800;font-size:11px}
 .shop-static-link:hover{background:#38634c;color:#fff}
 .shop-item-actions:has(.shop-static-link),.shop-actions:has(.shop-static-link){display:block}
+
+/* Categorías visuales claras — fotos reales de aberturas y herrajes. */
+#shop-categories-app .shop-cat{background:#e4e8e1}
+#shop-categories-app .shop-cat>img{filter:saturate(.98) brightness(1.08)!important;object-fit:cover}
+#shop-categories-app .shop-cat:after{background:linear-gradient(180deg,transparent 42%,rgba(10,33,23,.16) 59%,rgba(10,33,23,.78) 100%)!important}
+#shop-categories-app .shop-cat:hover>img{filter:saturate(1.06) brightness(1.12)!important}
+#shop-categories-app .shop-cat .catinfo small,#shop-categories-app .shop-cat .pella-catcaption small{color:#fff5e6!important;text-shadow:0 1px 4px rgba(0,0,0,.42)}
+#shop-categories-app .shop-cat .catinfo b,#shop-categories-app .shop-cat .pella-catcaption strong{color:#fff!important;text-shadow:0 2px 7px rgba(0,0,0,.26)}
+@media (max-width:760px){#shop-categories-app .shop-cat>img{object-position:center center}}
 </style>
 </head>
 <body>
@@ -560,10 +569,10 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
 <section class="shop-categories" id="shop-categories-app"><div class="shell">
 <div class="shop-heading"><div><span class="micro">ELEGÍ QUÉ ESTÁS BUSCANDO</span><h2>Encontrá tu abertura ideal.</h2><p>Elegí un tipo de producto y descubrí las opciones para tu obra.</p></div></div>
 <div class="shop-category-grid">
-<button type="button" data-shop-app-cat="Puertas" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&fit=crop&w=650&q=75" alt="Puerta de madera de referencia"><span class="pella-catcaption"><strong>Puertas</strong><small>Entradas e interiores · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
-<button type="button" data-shop-app-cat="Ventanas" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1755378402362-40cbb72abb63?auto=format&fit=crop&w=650&q=75" alt="Ventana de referencia"><span class="pella-catcaption"><strong>Ventanas</strong><small>Luz y ventilación · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
-<button type="button" data-shop-app-cat="Accesorios" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/8276607/pexels-photo-8276607.jpeg?auto=compress&cs=tinysrgb&w=900&q=80" alt="Barral de acero, ilustración de referencia"><span class="pella-catcaption"><strong>Accesorios</strong><small>Herrajes y terminaciones · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
-<button type="button" data-shop-app-cat="A medida" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1764592119348-0aaeab50e2d0?auto=format&fit=crop&w=650&q=75" alt="Puerta a medida, imagen de referencia"><span class="pella-catcaption"><strong>A medida</strong><small>Proyectos especiales · 10 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="Puertas" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/36777846/pexels-photo-36777846.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Puerta de entrada moderna de madera instalada en vivienda contemporánea, fotografía de referencia"><span class="pella-catcaption"><strong>Puertas</strong><small>Entradas con diseño y presencia · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="Ventanas" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="pella-catcaption"><strong>Ventanas</strong><small>Luz y ventilación para cada ambiente · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="Accesorios" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/965878/pexels-photo-965878.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Picaporte metálico moderno en puerta blanca, fotografía de referencia"><span class="pella-catcaption"><strong>Accesorios</strong><small>Herrajes y detalles de calidad · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="A medida" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Casa contemporánea con grandes ventanales y aberturas de piso a techo, fotografía de referencia"><span class="pella-catcaption"><strong>A medida</strong><small>Soluciones para proyectos especiales · 10 referencias</small><b aria-hidden="true">↗</b></span></button>
 </div></div></section>
 <section class="section" id="catalogo"><div class="shell">
   <div class="sectiontop"><div><span class="micro" style="color:#9c7b53">COLECCIONES DE NORTE</span><h2>Productos para tu proyecto.</h2></div><p>Elegí modelos de referencia, guardá tus favoritos y consultá medidas por WhatsApp.</p></div>
