@@ -333,12 +333,56 @@ body.catalog-browsing #productos{display:block}
 }
 @media(max-width:380px){.showroom-hero{padding-top:175px}.showroom-buttons{flex-direction:column;align-items:stretch}.showroom-buttons a{width:100%}}
 @media(prefers-reduced-motion:reduce){#categorias .catcard>img{transition:none}}
+
+/* Menú lateral premium con hamburguesa: identidad original de Norte */
+.site-menu-toggle{display:grid!important;align-items:center;justify-content:center;flex:0 0 46px;width:46px;height:46px;padding:0;border:1px solid #cfdacf;border-radius:5px;background:#f8f8f2;color:#244a36;cursor:pointer;position:relative;z-index:36}
+.site-menu-toggle:hover,.site-menu-toggle:focus-visible{background:#e6eee4;border-color:#8eaa94;outline-offset:2px}
+.site-menu-bars{display:flex;flex-direction:column;justify-content:space-between;width:23px;height:17px}
+.site-menu-bars i{height:2px;width:100%;border-radius:3px;background:#214833;display:block}
+.site-menu-bars i:nth-child(2){width:76%}
+.site-menu-toggle:hover .site-menu-bars i:nth-child(2){width:100%;transition:width .16s}
+.site-menu-backdrop{position:fixed;inset:0;background:#07190fd1;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s;z-index:1099}
+.site-menu-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.site-menu-panel{position:fixed;z-index:1100;top:0;left:0;bottom:0;width:min(365px,88vw);max-width:100vw;background:#f8f8f1;color:#284b37;box-shadow:15px 0 50px #07180c2d;display:flex;flex-direction:column;transform:translateX(-105%);visibility:hidden;transition:transform .27s ease,visibility .27s;overscroll-behavior:contain}
+.site-menu-panel.is-open{transform:translateX(0);visibility:visible}
+.site-menu-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 24px 20px;border-bottom:1px solid #dbe3d9;background:#f3f5ee}
+.site-menu-brand{display:flex;align-items:center;gap:12px;color:#244634;text-decoration:none}
+.site-menu-mark{width:41px;height:41px;display:grid;place-items:center;border:1.5px solid #244b35;border-radius:50%;font:500 27px/1 'Playfair Display',Georgia,serif}
+.site-menu-brand strong{font-size:17px;letter-spacing:.18em;display:block;line-height:1.1}
+.site-menu-brand small{display:block;font-size:8px;letter-spacing:.27em;margin-top:5px;font-weight:800}
+.site-menu-close{border:1px solid #cad8cc;background:transparent;color:#1f4931;border-radius:5px;width:39px;height:39px;line-height:1;font-size:28px;cursor:pointer}
+.site-menu-close:hover{background:#e1ebe0}
+.site-menu-scroll{padding:19px 20px 12px;overflow-y:auto;flex:1;overscroll-behavior:contain;scrollbar-width:thin}
+.site-menu-caption{font-size:10px;font-weight:900;letter-spacing:.17em;color:#a47a4c;padding:0 13px;margin:13px 0 9px}
+.site-menu-link{font:800 13px/1.3 Manrope,Arial,sans-serif;color:#31523d;background:transparent;display:flex;align-items:center;gap:12px;width:100%;min-height:45px;padding:12px 13px;border:0;border-radius:6px;text-align:left;text-decoration:none;cursor:pointer}
+.site-menu-link:hover,.site-menu-link:focus-visible{background:#e4ede4}
+.site-menu-category[aria-pressed="true"]{background:#dfeadf;color:#214834}
+.site-menu-icon{width:23px;display:grid;place-items:center;font-size:19px;flex:0 0 23px;font-weight:500}
+.site-menu-end{margin-left:auto;font-size:17px;color:#76917c;font-weight:500}
+.site-menu-count{margin-left:auto;font-size:11px;color:#758a76;min-width:24px;text-align:right}
+.site-menu-category .site-menu-end{margin-left:0}
+.site-menu-rule{height:1px;background:#d9e3d8;margin:16px 8px 20px}
+.site-menu-bottom{padding:15px 24px max(22px,env(safe-area-inset-bottom));background:#e8eee5;border-top:1px solid #cfddce}
+.site-menu-cart{border:0;background:#204734;color:#fff;display:flex;align-items:center;justify-content:space-between;min-height:48px;border-radius:5px;width:100%;padding:12px 15px;font-size:12px;font-weight:800;cursor:pointer}
+.site-menu-cart:hover{background:#326148}
+.site-menu-whatsapp{display:block;text-align:center;padding:13px;font-size:12px;font-weight:800;text-decoration:none;color:#295840}
+.site-menu-bottom p{font-size:9px;color:#6b816f;line-height:1.5;text-align:center;margin:5px 0 0}
+body.site-menu-locked{overflow:hidden!important}
+.mobiletoggle#menu{display:none!important}.headinner{gap:16px}
+@media(max-width:760px){
+ .headinner{gap:9px;height:74px}.logo{min-width:0;flex:1}.logo-mark{width:35px;height:35px;font-size:23px}.logo-type strong{font-size:15px}.logo-type small{font-size:7px}.headquote{min-height:40px;padding:0 10px;font-size:11px}.headquote .qt{display:none}
+ .site-menu-toggle{flex-basis:41px;width:41px;height:41px}
+ .site-menu-bars{width:21px;height:16px}
+ .site-menu-panel{width:min(350px,90vw)}
+}
+@media(prefers-reduced-motion:reduce){.site-menu-backdrop,.site-menu-panel,.site-menu-bars i:nth-child(2){transition:none}}
 </style>
 </head>
 <body>
 <div class="topbar"><span>FABRICANTES DE ABERTURAS</span><em>✦</em> VENTA MAYORISTA Y MINORISTA <em>✦</em> <span>ENVÍOS A TODO EL PAÍS</span></div>
 <div class="demo">VISTA PREVIA COMERCIAL CREADA POR ZENIX AR · CATÁLOGO ILUSTRATIVO · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS</div>
 <header class="head"><div class="shell headinner">
+  <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
   <a href="#inicio" class="logo" aria-label="Norte Aberturas, inicio"><span class="logo-mark">N</span><span class="logo-type"><strong>NORTE</strong><small>ABERTURAS</small></span></a>
   <nav class="nav" id="nav" aria-label="Secciones de la web"><a href="#categorias">Catálogos</a><div class="shop-dropdown header" data-dropdown-wrap="header"><button type="button" class="shop-dropdown-toggle" data-dropdown-trigger="header" aria-expanded="false" aria-controls="header-cat-panel" aria-haspopup="true"><span class="shop-dropdown-label">Productos</span><span class="shop-dropdown-current" data-current-category></span><span class="shop-dropdown-chevron" aria-hidden="true">⌄</span></button><div class="shop-dropdown-panel" id="header-cat-panel" hidden><div class="shop-dropdown-title">EXPLORAR CATÁLOGO</div><button type="button" class="drop-choice" data-drop-choice="Todos" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">▦</span><span>Todos los productos</span><small data-side-count="Todos">64</small></button>
 <button type="button" class="drop-choice" data-drop-choice="Puertas" aria-pressed="true"><span class="drop-choice-icon" aria-hidden="true">🚪</span><span>Puertas</span><small data-side-count="Puertas">18</small></button>
@@ -349,6 +393,30 @@ body.catalog-browsing #productos{display:block}
   <button type="button" class="btn darkbtn headquote" id="header-cart">🛒 Carrito <span class="qt" aria-hidden="true">↗</span><span class="count" id="cart-count">0</span></button>
   <button type="button" class="mobiletoggle" id="menu" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">☰</button>
 </div></header>
+<div id="site-menu-backdrop" class="site-menu-backdrop" aria-hidden="true"></div>
+ <aside id="site-menu-panel" class="site-menu-panel" role="dialog" aria-modal="true" aria-label="Menú de navegación de Norte Aberturas" aria-hidden="true" inert>
+ <div class="site-menu-top"><a class="site-menu-brand" href="#inicio" data-site-nav><span class="site-menu-mark">N</span><span><strong>NORTE</strong><small>ABERTURAS</small></span></a><button type="button" id="site-menu-close" class="site-menu-close" aria-label="Cerrar menú">×</button></div>
+ <div class="site-menu-scroll">
+ <div class="site-menu-caption">NAVEGACIÓN</div>
+ <a href="#inicio" class="site-menu-link" data-site-nav><span class="site-menu-icon">⌂</span>Inicio <span class="site-menu-end">↗</span></a>
+ <a href="#productos" class="site-menu-link" data-site-nav><span class="site-menu-icon">▦</span>Ver catálogo completo <span class="site-menu-end">↗</span></a>
+ <div class="site-menu-rule"></div>
+ <div class="site-menu-caption">EXPLORÁ POR CATEGORÍA</div>
+ <button type="button" class="site-menu-link site-menu-category" data-site-category="Puertas" aria-pressed="true"><span class="site-menu-icon">🚪</span>Puertas <span class="site-menu-count" data-site-count="Puertas">18</span><span class="site-menu-end">›</span></button>
+ <button type="button" class="site-menu-link site-menu-category" data-site-category="Ventanas" aria-pressed="false"><span class="site-menu-icon">▤</span>Ventanas <span class="site-menu-count" data-site-count="Ventanas">18</span><span class="site-menu-end">›</span></button>
+ <button type="button" class="site-menu-link site-menu-category" data-site-category="Accesorios" aria-pressed="false"><span class="site-menu-icon">⚙</span>Accesorios <span class="site-menu-count" data-site-count="Accesorios">18</span><span class="site-menu-end">›</span></button>
+ <button type="button" class="site-menu-link site-menu-category" data-site-category="A medida" aria-pressed="false"><span class="site-menu-icon">⌗</span>A medida <span class="site-menu-count" data-site-count="A medida">10</span><span class="site-menu-end">›</span></button>
+ <button type="button" class="site-menu-link site-menu-category" data-site-category="Favoritos" aria-pressed="false"><span class="site-menu-icon">♡</span>Mis favoritos <span class="site-menu-count" data-site-count="Favoritos">0</span><span class="site-menu-end">›</span></button>
+ <div class="site-menu-rule"></div>
+ <div class="site-menu-caption">AYUDA Y CONTACTO</div>
+ <a href="#consultas" class="site-menu-link" data-site-nav><span class="site-menu-icon">ⓘ</span>Cómo comprar<span class="site-menu-end">↗</span></a>
+ <a href="#contacto" class="site-menu-link" data-site-nav><span class="site-menu-icon">✉</span>Contacto <span class="site-menu-end">↗</span></a>
+ 
+ </div>
+ <div class="site-menu-bottom"><button type="button" class="site-menu-cart" data-site-action="cart"><span>🛒 &nbsp; Abrir mi carrito</span><span>↗</span></button>
+ <a href="https://wa.me/5493644326505?text=%C2%A1Hola!%20Vi%20el%20cat%C3%A1logo%20de%20Norte%20Aberturas%20y%20quisiera%20consultar%20por%20sus%20modelos%2C%20precios%20y%20opciones%20de%20env%C3%ADo.%20%C2%A1Gracias!" target="_blank" rel="noopener noreferrer" class="site-menu-whatsapp" data-site-nav>Consultar por WhatsApp ↗</a>
+ <p>Catálogo demostrativo · Productos ilustrativos</p></div>
+ </aside>
 <section class="shop-search-strip" aria-label="Búsqueda rápida de productos"><div class="shell shop-search-inner">
 <form id="shop-search-form" class="shop-search-form" role="search"><label for="shop-search-query" class="sr-only">Buscar en los catálogos</label><span aria-hidden="true">⌕</span><input id="shop-search-query" type="search" placeholder="¿Qué estás buscando? Puertas, ventanas, accesorios..." autocomplete="off"><button type="submit">Buscar <span aria-hidden="true">↗</span></button></form>
 <div class="shop-dropdown mobile" data-dropdown-wrap="mobile"><button type="button" class="shop-dropdown-toggle" data-dropdown-trigger="mobile" aria-expanded="false" aria-controls="mobile-cat-panel" aria-haspopup="true"><span class="shop-dropdown-label">Categorías</span><span class="shop-dropdown-current" data-current-category>Puertas</span><span class="shop-dropdown-chevron" aria-hidden="true">⌄</span></button><div class="shop-dropdown-panel" id="mobile-cat-panel" hidden><div class="shop-dropdown-title">EXPLORAR CATÁLOGO</div><button type="button" class="drop-choice" data-drop-choice="Todos" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">▦</span><span>Todos los productos</span><small data-side-count="Todos">64</small></button>
@@ -561,6 +629,11 @@ function syncCategorySidebar(){
   const active=current;
   const label=active==='Todos'?'Todos':active;
   document.querySelectorAll('[data-current-category]').forEach(t=>t.textContent=label);
+  document.querySelectorAll('[data-site-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.siteCategory===active)));
+  document.querySelectorAll('[data-site-count]').forEach(el=>{
+    const category=el.dataset.siteCount;
+    el.textContent=category==='Favoritos'?P.filter(p=>favorites.has(p.id)).length:P.filter(p=>p.cat===category).length;
+  });
   document.querySelectorAll('[data-drop-choice]').forEach(b=>{
     b.setAttribute('aria-pressed',String(b.dataset.dropChoice===active));
     const key=b.dataset.dropChoice;
@@ -576,6 +649,60 @@ function syncCatalogMore(count){
   button.hidden=count<=9;
   button.textContent=$('product-grid').classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
 }
+
+function initSiteSideMenu(){
+ const trigger=$('site-menu-toggle'),panel=$('site-menu-panel'),backdrop=$('site-menu-backdrop'),closeButton=$('site-menu-close');
+ let previousFocus=null;
+ function open(){
+   closeCategoryDropdown();
+   previousFocus=document.activeElement;
+   panel.inert=false;panel.setAttribute('aria-hidden','false');
+   panel.classList.add('is-open');backdrop.classList.add('is-open');
+   trigger.setAttribute('aria-expanded','true');
+   trigger.setAttribute('aria-label','Cerrar menú de navegación');
+   document.body.classList.add('site-menu-locked');
+   closeButton.focus();
+ }
+ function close(restoreFocus=false){
+   if(!panel.classList.contains('is-open'))return;
+   panel.classList.remove('is-open');backdrop.classList.remove('is-open');
+   panel.setAttribute('aria-hidden','true');panel.inert=true;
+   trigger.setAttribute('aria-expanded','false');
+   trigger.setAttribute('aria-label','Abrir menú de navegación');
+   document.body.classList.remove('site-menu-locked');
+   if(restoreFocus)(previousFocus||trigger).focus();
+ }
+ trigger.addEventListener('click',()=>panel.classList.contains('is-open')?close(true):open());
+ closeButton.addEventListener('click',()=>close(true));
+ backdrop.addEventListener('click',()=>close(true));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('is-open')){e.stopPropagation();close(true)}});
+ panel.addEventListener('keydown',e=>{
+  if(e.key!=='Tab')return;
+  const focusables=[...panel.querySelectorAll('a[href],button:not([disabled])')];
+  if(!focusables.length)return;
+  if(e.shiftKey&&document.activeElement===focusables[0]){e.preventDefault();focusables[focusables.length-1].focus()}
+  else if(!e.shiftKey&&document.activeElement===focusables[focusables.length-1]){e.preventDefault();focusables[0].focus()}
+ });
+ panel.querySelectorAll('[data-site-category]').forEach(button=>button.addEventListener('click',()=>{
+  const category=button.dataset.siteCategory;
+  document.body.classList.add('catalog-browsing');
+  $('search').value='';$('shop-search-query').value='';search='';filter(category);
+  close();
+  requestAnimationFrame(()=>$('productos').scrollIntoView({behavior:'smooth',block:'start'}));
+ }));
+ panel.querySelectorAll('[data-site-nav]').forEach(link=>link.addEventListener('click',()=>{
+   const hash=link.getAttribute('href');
+   if(hash==='#productos')document.body.classList.add('catalog-browsing');
+   close();
+ }));
+ panel.querySelectorAll('[data-site-action]').forEach(button=>button.addEventListener('click',()=>{
+   const action=button.dataset.siteAction;
+   close();
+   if(action==='cart')$('header-cart').click();
+   
+ }));
+}
+
 function initCategorySidebar(){
   document.querySelectorAll('[data-dropdown-trigger]').forEach(toggle=>toggle.addEventListener('click',()=>{
     const expanding=toggle.getAttribute('aria-expanded')!=='true';
@@ -699,7 +826,7 @@ $('close-drawer').addEventListener('click',closeAll);$('close-modal').addEventLi
 $('modal-add').addEventListener('click',()=>{if(detailId){add(detailId);show('drawer')}});
 $('modal-wa').addEventListener('click',()=>{let p=find(detailId);if(p)openWhatsApp('Hola, vi el catálogo digital de Norte Aberturas y quisiera consultar por '+p.title+'. ¿Me podrían enviar modelos, medidas y precios disponibles? ¡Gracias!')});
 $('send-cart').addEventListener('click',sendBasket);
-initCategorySidebar();clean();renderProducts();renderBasket();renderShopfront();
+initSiteSideMenu();initCategorySidebar();clean();renderProducts();renderBasket();renderShopfront();
 })();
 
 /* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
