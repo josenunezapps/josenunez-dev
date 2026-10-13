@@ -160,6 +160,68 @@ body{background:var(--bg)}
  #categorias .catcard{flex:0 0 clamp(148px,43vw,190px);height:142px;scroll-snap-align:start}
  #categorias .sechead:after{content:"Deslizá para explorar categorías →";display:block;font-size:10px;font-weight:800;color:#698370;margin-top:10px}
 }
+
+/* Navegación de catálogo por categorías: escritorio fijo, celular lateral y grillas cortas */
+.catalog-explore{position:relative}
+.category-intro{display:none}
+.category-columns{display:grid;grid-template-columns:218px minmax(0,1fr);align-items:start;gap:24px}
+.category-results{min-width:0}
+.category-sidebar{position:sticky;top:112px;max-height:calc(100vh - 125px);overflow:auto;scrollbar-width:thin;background:#fdfcf8;border:1px solid #d9e3d7;border-radius:10px;padding:19px 13px 16px;box-shadow:0 8px 25px #183a2610}
+.category-sidebar-heading{display:flex;align-items:center;justify-content:space-between;padding:0 9px 13px;border-bottom:1px solid #e3e7dd}
+.category-sidebar-heading strong{font:500 23px/1.15 'Playfair Display',Georgia,serif;color:#213f2f}
+.category-sidebar-heading small{color:#9b7854;font-size:10px;letter-spacing:.13em;font-weight:800}
+.category-sidebar-close{display:none;background:transparent;border:0;color:#254a35;font-size:27px;line-height:1;width:35px;height:35px}
+.category-sidebar-nav{display:flex;flex-direction:column;gap:5px;padding:14px 0}
+.category-side-btn{display:flex;align-items:center;gap:9px;min-height:45px;width:100%;padding:9px 10px;border:0;border-radius:5px;text-align:left;background:transparent;color:#3d5948;font:800 12px/1.2 Manrope,Arial,sans-serif}
+.category-side-btn .category-side-icon{font-size:17px;font-weight:500;width:21px;flex-shrink:0;text-align:center}
+.category-side-btn .category-side-label{flex:1}
+.category-side-btn .category-side-count{font-size:10px;font-weight:800;padding:5px 6px;background:#eef1e9;border-radius:20px;color:#51705a;min-width:25px;text-align:center}
+.category-side-btn:hover{background:#e9eee7}
+.category-side-btn[aria-pressed="true"]{background:#264b38;color:#fff}
+.category-side-btn[aria-pressed="true"] .category-side-count{background:#447158;color:#fff}
+.category-sidebar-hint{padding:13px 10px 2px;border-top:1px solid #e4e9de;color:#708070;font-size:11px;line-height:1.7}
+.category-sidebar-hint b{color:#395641}
+.category-results .filterline,.category-results .filters{display:none!important}
+.category-results .catcontrols{justify-content:flex-end;margin-top:0}
+.category-results .toolbox{margin-top:0}
+.category-results #product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.category-results #catalog{grid-template-columns:repeat(3,minmax(0,1fr))}
+.category-results #product-grid:not(.catalog-expanded)>.tile:nth-child(n+10){display:none}
+.category-results #catalog:not(.catalog-expanded)>.tile:nth-child(n+10){display:none}
+.catalog-show-more{display:block;min-height:44px;margin:19px auto 0;padding:12px 28px;border:1px solid #c8d9cb;border-radius:5px;background:#fbfcf7;color:#2d513a;font-size:12px;font-weight:800}
+.catalog-show-more:hover{background:#e6eee4}
+.catalog-show-more[hidden]{display:none}
+.category-overlay[hidden]{display:none}
+#productos,#catalogo{scroll-margin-top:100px}
+@media(max-width:1030px) and (min-width:761px){
+ .category-columns{grid-template-columns:186px minmax(0,1fr);gap:14px}
+ .category-sidebar{padding:13px 8px}
+ .category-results #product-grid,.category-results #catalog{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .category-results .catalog-right{flex-wrap:wrap}
+}
+@media(max-width:760px){
+ .category-intro{display:flex;position:relative;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:52px;margin:0 0 16px;padding:11px 14px;background:#214a37;color:#fff;border:0;border-radius:6px;box-shadow:0 6px 20px #12351f20;text-align:left}
+ .category-intro-main{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800}
+ .category-intro-main span{font-size:20px}
+ .category-intro-active{font-size:11px;color:#e4c49c;margin-left:auto;white-space:nowrap}
+ .category-intro-arrow{font-size:22px;line-height:1}
+ .category-columns{display:block}
+ .category-sidebar{position:fixed;top:0;left:0;bottom:0;width:min(84vw,338px);max-height:none;z-index:351;padding:25px 17px;background:#fdfcf8;border-radius:0 12px 12px 0;border:0;box-shadow:8px 0 35px #0820184a;transform:translateX(-104%);visibility:hidden;transition:transform .25s ease,visibility .25s ease;overscroll-behavior:contain;overflow-y:auto}
+ .category-sidebar.is-open{transform:translateX(0);visibility:visible}
+ .category-sidebar-close{display:block}
+ .category-sidebar-heading{padding-top:12px}
+ .category-sidebar-nav{gap:9px;padding-top:19px}
+ .category-side-btn{min-height:53px;font-size:14px;padding:12px}
+ .category-side-btn .category-side-icon{font-size:20px}
+ .category-overlay:not([hidden]){display:block;position:fixed;inset:0;background:#05180bb0;z-index:350}
+ body.category-menu-lock{overflow:hidden}
+ .category-results .catalog-right{width:100%}
+ .category-results .toolbox{margin-top:0}
+ .category-results #product-grid,.category-results #catalog{display:none}
+ .catalog-show-more{display:none!important}
+ #shop-new,#shop-new-app{display:none}
+}
+@media(prefers-reduced-motion:reduce){.category-sidebar{transition:none}}
 </style>
 </head>
 <body>
@@ -214,13 +276,21 @@ body{background:var(--bg)}
 <div class="shop-product-rail" id="shop-new-rail" tabindex="0" role="region" aria-label="Productos de Para descubrir"></div></div></section>
 <section class="catalog" id="productos"><div class="shell">
   <div class="catalog-top"><div><span class="eyebrow">02 / Biblioteca de productos</span><h2 class="serif">Nuestros catálogos.</h2><p>Elegí una categoría, mirá los artículos y sumá los que te interesan a una solicitud de presupuesto.</p></div><div class="quotehint"><b>¿Necesitás varios productos?</b>Agregalos a una lista y enviá un solo mensaje con cantidades y medidas por WhatsApp.</div></div>
-  <div class="catcontrols">
+  <div class="catalog-explore"><button type="button" id="category-open" class="category-intro" aria-expanded="false" aria-controls="category-sidebar"><span class="category-intro-main"><span aria-hidden="true">☷</span> Ver categorías</span><span class="category-intro-active" id="category-current">Puertas</span><span class="category-intro-arrow" aria-hidden="true">›</span></button>
+ <div class="category-columns"><aside class="category-sidebar" id="category-sidebar" aria-label="Elegir categoría de productos"><div class="category-sidebar-heading"><div><small>EXPLORAR</small><strong>Categorías</strong></div><button type="button" class="category-sidebar-close" id="category-close" aria-label="Cerrar categorías">×</button></div>
+ <nav class="category-sidebar-nav" aria-label="Categorías y favoritos"><button type="button" class="category-side-btn" data-side-category="Todos" aria-pressed="false"><span class="category-side-icon" aria-hidden="true">▦</span><span class="category-side-label">Todos los productos</span><span class="category-side-count" data-side-count="Todos">0</span></button>
+<button type="button" class="category-side-btn" data-side-category="Puertas" aria-pressed="true"><span class="category-side-icon" aria-hidden="true">🚪</span><span class="category-side-label">Puertas</span><span class="category-side-count" data-side-count="Puertas">0</span></button>
+<button type="button" class="category-side-btn" data-side-category="Ventanas" aria-pressed="false"><span class="category-side-icon" aria-hidden="true">▦</span><span class="category-side-label">Ventanas</span><span class="category-side-count" data-side-count="Ventanas">0</span></button>
+<button type="button" class="category-side-btn" data-side-category="Accesorios" aria-pressed="false"><span class="category-side-icon" aria-hidden="true">⚙</span><span class="category-side-label">Accesorios</span><span class="category-side-count" data-side-count="Accesorios">0</span></button>
+<button type="button" class="category-side-btn" data-side-category="A medida" aria-pressed="false"><span class="category-side-icon" aria-hidden="true">⌗</span><span class="category-side-label">A medida</span><span class="category-side-count" data-side-count="A medida">0</span></button>
+<button type="button" class="category-side-btn" data-side-category="Favoritos" aria-pressed="false"><span class="category-side-icon" aria-hidden="true">♡</span><span class="category-side-label">Mis favoritos</span><span class="category-side-count" data-side-count="Favoritos">0</span></button></nav><div class="category-sidebar-hint"><b>Elegí lo que buscás.</b> Verás solo esa categoría. Para cotizar, sumá productos al carrito.</div></aside><div class="category-results"><div class="catcontrols">
     <div class="filterline" role="group" aria-label="Filtrar productos"><button class="chip" data-filter="Todos" aria-pressed="true">Todos</button><button class="chip" data-filter="Puertas" aria-pressed="false">Puertas</button><button class="chip" data-filter="Ventanas" aria-pressed="false">Ventanas</button><button class="chip" data-filter="Accesorios" aria-pressed="false">Accesorios</button><button class="chip" data-filter="A medida" aria-pressed="false">A medida</button><button class="chip" data-filter="Favoritos" aria-pressed="false">♡ Favoritos</button></div>
     <div class="catalog-right"><label class="searchbox"><b>⌕</b><input id="search" aria-label="Buscar productos" type="search" placeholder="Buscar puertas, ventanas..."></label><label class="sort-select">Ordenar <select id="sort" aria-label="Ordenar productos"><option value="default">Destacados</option><option value="az">Nombre A–Z</option><option value="za">Nombre Z–A</option><option value="category">Categoría</option></select></label></div>
   </div>
   <div class="catalog-status"><span id="filter-label">Mostrando todos los catálogos</span><span id="result-count" aria-live="polite"></span></div>
-  <div class="grid" id="product-grid"></div><div class="mobile-catalog" id="mobile-catalog" aria-label="Catálogo con desplazamiento horizontal por categorías"></div><div class="no-results" id="no-results" hidden><b>No encontramos resultados.</b>Probá otra palabra o elegí otra categoría.</div>
+  <div class="grid" id="product-grid"></div><button type="button" id="catalog-show-more" class="catalog-show-more" hidden>Ver más productos ↓</button><div class="mobile-catalog" id="mobile-catalog" aria-label="Catálogo con desplazamiento horizontal por categorías"></div><div class="no-results" id="no-results" hidden><b>No encontramos resultados.</b>Probá otra palabra o elegí otra categoría.</div>
   <p class="disclaimer">* Los artículos de esta propuesta son ejemplos de categorías y posibles productos. Las imágenes son ilustrativas. No se informa stock, precio, medidas ni disponibilidad sin confirmación de Norte Aberturas. Los pedidos se coordinan por WhatsApp.</p>
+</div></div></div><div class="category-overlay" id="category-overlay" hidden></div>
 </div></section>
 <section class="project" id="amedida"><div class="shell projectgrid">
  <div><span class="eyebrow">03 / Para cada proyecto</span><h2 class="serif">¿Buscás algo con medidas especiales?</h2><p>Obra nueva, renovación o equipamiento para reventa: podés preparar una consulta con el tipo de abertura, medidas aproximadas y provincia de destino para que el equipo pueda orientarte.</p><button type="button" class="btn rustbtn" id="custom-quote">Pedir presupuesto a medida ↗</button></div>
@@ -359,18 +429,73 @@ const safe=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'
 const pic=(p,size=800)=>String(p.image||'').startsWith('refsvg:')?referenceArt(p.image):/^https:\/\//.test(p.image)?p.image:img+p.image+'?auto=format&fit=crop&w='+size+'&q=80';
 const find=id=>P.find(x=>x.id===id);
 const safeLoad=()=>{try{const j=JSON.parse(localStorage.getItem(STORAGE)||'{}');if(j&&typeof j==='object'&&!Array.isArray(j))return j}catch{}return {}};
-let basket=safeLoad(),current='Todos',search='',detailId=null,toastTimer,sortMode='default';const FAV_STORE='zenix_norte_web_favorites_v1';let favorites=new Set();try{const loaded=JSON.parse(localStorage.getItem(FAV_STORE)||'[]');if(Array.isArray(loaded))favorites=new Set(loaded.filter(id=>P.some(p=>p.id===id)))}catch{}
+let basket=safeLoad(),current='Puertas',search='',detailId=null,toastTimer,sortMode='default';const FAV_STORE='zenix_norte_web_favorites_v1';let favorites=new Set();try{const loaded=JSON.parse(localStorage.getItem(FAV_STORE)||'[]');if(Array.isArray(loaded))favorites=new Set(loaded.filter(id=>P.some(p=>p.id===id)))}catch{}
 function persist(){try{localStorage.setItem(STORAGE,JSON.stringify(basket))}catch{flash('El navegador no pudo guardar la lista.')}};
 function clean(){for(const k of Object.keys(basket)){const x=basket[k];if(!find(k)||!x||!Number.isFinite(Number(x.qty)))delete basket[k];else basket[k]={qty:Math.max(1,Math.min(99,Math.floor(Number(x.qty)))),note:String(x.note||'').slice(0,180)}}persist()}
 function flash(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2800)}
 function filter(cat){current=cat;document.querySelectorAll('[data-filter]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.filter===cat)));renderProducts()}
+
+let selectedViewKey='';
+function closeCategorySidebar(returnFocus=false){
+ $('category-sidebar').classList.remove('is-open');
+ $('category-overlay').hidden=true;
+ $('category-open').setAttribute('aria-expanded','false');
+ document.body.classList.remove('category-menu-lock');
+ if(returnFocus&&window.matchMedia('(max-width:760px)').matches)$('category-open').focus();
+}
+function openCategorySidebar(){
+ $('category-sidebar').classList.add('is-open');
+ $('category-overlay').hidden=false;
+ $('category-open').setAttribute('aria-expanded','true');
+ document.body.classList.add('category-menu-lock');
+ $('category-close').focus();
+}
+function syncCategorySidebar(){
+ const active=current;
+ const categoryCount=P.length;
+ const text={Puertas:'Puertas',Ventanas:'Ventanas',Accesorios:'Accesorios','A medida':'A medida',Favoritos:'Favoritos'}[active]||'Todos';
+ $('category-current').textContent=text;
+ document.querySelectorAll('[data-side-category]').forEach(b=>{
+   const key=b.dataset.sideCategory;
+   b.setAttribute('aria-pressed',String(key===active));
+   let qty=key==='Todos'?categoryCount:key==='Favoritos'?P.filter(x=>favorites.has(x.id)).length:P.filter(x=>x.cat===key).length;
+   const tag=b.querySelector('[data-side-count]');if(tag)tag.textContent=qty;
+ });
+ document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter===active)));
+ const view=active+'|'+search+'|'+sortMode;
+ if(selectedViewKey!==view){$('product-grid').classList.remove('catalog-expanded');selectedViewKey=view}
+}
+function syncCatalogMore(count){
+ const button=$('catalog-show-more');
+ button.hidden=count<=9;
+ button.textContent=$('product-grid').classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
+}
+function initCategorySidebar(){
+ $('category-open').addEventListener('click',openCategorySidebar);
+ $('category-close').addEventListener('click',()=>closeCategorySidebar(true));
+ $('category-overlay').addEventListener('click',()=>closeCategorySidebar(true));
+ document.querySelectorAll('[data-side-category]').forEach(b=>b.addEventListener('click',()=>{
+   const category=b.dataset.sideCategory;
+   $('search').value='';$('shop-search-query').value='';search='';filter(category);
+   closeCategorySidebar(false);
+   $('productos').scrollIntoView({behavior:'smooth',block:'start'});
+ }));
+ $('catalog-show-more').addEventListener('click',()=>{
+   const grid=$('product-grid');grid.classList.toggle('catalog-expanded');
+   $('catalog-show-more').textContent=grid.classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
+   if(!grid.classList.contains('catalog-expanded'))$('productos').scrollIntoView({behavior:'smooth'});
+ });
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('category-sidebar').classList.contains('is-open'))closeCategorySidebar(true)});
+ window.addEventListener('resize',()=>{if(window.innerWidth>760&&$('category-sidebar').classList.contains('is-open'))closeCategorySidebar()});
+}
+
 function renderProducts(){
 const oldScroll={};
 $('mobile-catalog').querySelectorAll('[data-track]').forEach(t=>{oldScroll[t.dataset.track]=t.scrollLeft});
 const q=search.toLocaleLowerCase('es-AR');
 let found=P.filter(p=>(current==='Todos'||current==='Favoritos'&&favorites.has(p.id)||p.cat===current)&&[p.title,p.desc,p.tags,p.cat].some(x=>x.toLocaleLowerCase('es-AR').includes(q)));
 if(sortMode==='az')found.sort((a,b)=>a.title.localeCompare(b.title,'es-AR'));else if(sortMode==='za')found.sort((a,b)=>b.title.localeCompare(a.title,'es-AR'));else if(sortMode==='category')found.sort((a,b)=>a.cat.localeCompare(b.cat,'es-AR')||a.title.localeCompare(b.title,'es-AR'));
-$('result-count').textContent=found.length+' productos ilustrativos';$('filter-label').textContent=current==='Todos'?'Mostrando todos los catálogos':current==='Favoritos'?'Tus favoritos':'Catálogo de '+current.toLowerCase();$('no-results').hidden=found.length>0;
+syncCategorySidebar();syncCatalogMore(found.length);$('result-count').textContent=found.length+' productos ilustrativos';$('filter-label').textContent=current==='Todos'?'Mostrando todos los catálogos':current==='Favoritos'?'Tus favoritos':'Catálogo de '+current.toLowerCase();$('no-results').hidden=found.length>0;
 const card=p=>'<article class="tile" data-product-id="'+safe(p.id)+'"><div class="tile-image"><img loading="lazy" src="'+pic(p,700)+'" alt="Imagen ilustrativa de '+safe(p.title)+'"><span class="pin">Imagen de referencia</span><button type="button" class="tile-fav" data-favorite="'+safe(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar favorito ':'Guardar favorito ')+safe(p.title)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tile-body"><span class="item-category">'+safe(p.cat)+'</span><h3>'+safe(p.title)+'</h3><p>'+safe(p.desc)+'</p><span class="pricehint">Precio a consultar</span><button type="button" class="tile-action" data-detail="'+safe(p.id)+'">Ver detalles <span>↗</span></button><button type="button" class="tile-add" data-add="'+safe(p.id)+'">🛒 Agregar al carrito</button></div></article>';
 $('product-grid').innerHTML=found.map(card).join('');
 const cats=['Puertas','Ventanas','Accesorios','A medida'];
@@ -458,7 +583,7 @@ $('close-drawer').addEventListener('click',closeAll);$('close-modal').addEventLi
 $('modal-add').addEventListener('click',()=>{if(detailId){add(detailId);show('drawer')}});
 $('modal-wa').addEventListener('click',()=>{let p=find(detailId);if(p)openWhatsApp('Hola, vi el catálogo digital de Norte Aberturas y quisiera consultar por '+p.title+'. ¿Me podrían enviar modelos, medidas y precios disponibles? ¡Gracias!')});
 $('send-cart').addEventListener('click',sendBasket);
-clean();renderProducts();renderBasket();renderShopfront();
+initCategorySidebar();clean();renderProducts();renderBasket();renderShopfront();
 })();
 
 /* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
