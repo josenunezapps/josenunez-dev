@@ -827,7 +827,7 @@ $('close-drawer').addEventListener('click',closeAll);$('close-modal').addEventLi
 $('modal-add').addEventListener('click',()=>{if(detailId){add(detailId);show('drawer')}});
 $('modal-wa').addEventListener('click',()=>{let p=find(detailId);if(p)openWhatsApp('Hola, vi el catálogo digital de Norte Aberturas y quisiera consultar por '+p.title+'. ¿Me podrían enviar modelos, medidas y precios disponibles? ¡Gracias!')});
 $('send-cart').addEventListener('click',sendBasket);
-initCategorySidebar();clean();renderProducts();renderBasket();renderShopfront();
+initCategorySidebar();clean();renderShopfront();renderProducts();renderBasket();
 })();
 
 /* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
