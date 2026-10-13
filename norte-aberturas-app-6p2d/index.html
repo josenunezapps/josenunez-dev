@@ -314,6 +314,75 @@ body{background:#f7f5ef}
  #catalogo.section{padding:33px 0 42px}
  #shop-featured-app.shop-shelf{padding:30px 0 34px}
 }
+
+/* Norte Aberturas: showroom editorial, fotografía de portada a pantalla completa */
+.showroom-hero{position:relative;isolation:isolate;overflow:hidden;min-height:530px;background:#879b8b}
+.showroom-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 57%;z-index:-2;filter:saturate(.82)}
+.showroom-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0f261536 0%,#12281808 58%,#19332629 100%),linear-gradient(0deg,#0e20162a,transparent 62%);z-index:-1}
+.showroom-content{display:flex;align-items:center;min-height:530px;padding-top:36px;padding-bottom:37px}
+.showroom-paper{background:#f7f6eff2;backdrop-filter:blur(4px);box-shadow:0 22px 64px #132a2345;border:1px solid #fffdf2;max-width:580px;padding:39px 44px 32px;position:relative}
+.showroom-paper:before{content:"";position:absolute;top:0;left:0;width:88px;height:4px;background:#bc8d56}
+.showroom-kicker{display:flex;align-items:center;gap:9px;color:#486e56;letter-spacing:.15em;font-size:10px;font-weight:900}
+.showroom-dot{width:7px;height:7px;display:inline-block;border-radius:50%;background:#ac8958;flex:none}
+.showroom-sep{color:#b99e7b}
+.showroom-paper h1{font:500 clamp(52px,5.7vw,82px)/1.015 'Playfair Display',Georgia,serif;letter-spacing:-.047em;color:#1b3828;margin:23px 0 21px;max-width:520px}
+.showroom-paper h1 em{font-weight:500;color:#538268;font-style:italic}
+.showroom-paper p{font-size:13px;line-height:1.8;color:#597263;max-width:470px;margin:0}
+.showroom-buttons{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:24px 0 0}
+.showroom-buttons a{display:inline-flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 17px;text-decoration:none;border-radius:3px;min-height:46px;font-size:11px;font-weight:800}
+.showroom-primary{background:#214935;color:#fff}.showroom-primary:hover{background:#386b4e}
+.showroom-secondary{border:1px solid #afc3af;color:#2b4e39;background:#ffffffb6}.showroom-secondary:hover{background:#fff}
+.showroom-mini{border-top:1px solid #c9d6c9;margin-top:25px;padding-top:14px;display:flex;gap:19px;flex-wrap:wrap;color:#6c846e;font-size:10px;font-weight:800}
+.showroom-mini span:before{content:"✓";color:#a98653;margin-right:7px}
+.showroom-signature{position:absolute;right:clamp(16px,4vw,65px);bottom:19px;letter-spacing:.14em;font-weight:900;color:#fff;font-size:10px;text-shadow:0 2px 7px #101f16bb}
+#shop-categories-app .shop-category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+#shop-categories-app .shop-cat{min-height:286px;height:286px;display:block;position:relative;overflow:hidden;box-shadow:none;background:#b4bdad;border-radius:7px;padding:0;text-align:left;border:0;color:#fff}
+#shop-categories-app .shop-cat img{position:absolute;inset:0;width:100%;height:100%;min-height:100%;object-fit:cover;filter:saturate(.8);transition:transform .45s ease}
+#shop-categories-app .shop-cat:after{content:"";display:block;position:absolute;inset:0;background:linear-gradient(180deg,transparent 26%,#0a281da8 100%);pointer-events:none;z-index:1}
+#shop-categories-app .shop-cat:hover img{transform:scale(1.045)}
+#shop-categories-app .pella-catcaption{position:absolute;inset:auto 0 0 0;bottom:0;left:0;right:0;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:end;gap:5px;min-height:0;background:transparent;color:#fff;padding:20px!important}
+#shop-categories-app .pella-catcaption strong{font:500 29px/1.08 'Playfair Display',Georgia,serif;color:#fff;margin:3px 0}
+#shop-categories-app .pella-catcaption small{color:#f1e1c9;font-size:10px;font-weight:700;letter-spacing:.02em}
+#shop-categories-app .pella-catcaption small{color:#f2e7d2;font-size:10px}
+#shop-categories-app .type-count{font-size:10px;color:#f2e7d2;margin:2px 0}
+#shop-categories-app .catinfo>span{color:#f5d3a0}
+#shop-categories-app .pella-catcaption b{color:#f5d3a0}
+#shop-categories-app .catcard .catinfo,#shop-categories-app .shop-cat .pella-catcaption{background:transparent}
+#shop-categories-app .catcard,#shop-categories-app .shop-cat{height:286px;min-height:286px;border:none;box-shadow:none}
+#shop-categories-app .catcard>img,#shop-categories-app .shop-cat img{height:100%;min-height:100%;position:absolute;inset:0}
+body:not(.catalog-browsing) #catalogo{display:none!important}
+body.catalog-browsing #catalogo{display:block}
+#shop-categories-app{scroll-margin-top:100px}
+@media(max-width:1080px) and (min-width:761px){
+ #shop-categories-app .shop-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #shop-categories-app .shop-cat,#shop-categories-app .catcard,#shop-categories-app .shop-cat{height:250px;min-height:250px}
+ .showroom-hero,.showroom-content{min-height:500px}
+}
+@media(max-width:760px){
+ .showroom-hero{min-height:0;height:auto;padding-top:195px}
+ .showroom-background{object-position:64% 48%}
+ .showroom-shade{background:linear-gradient(0deg,#142a20a3,transparent 72%)}
+ .showroom-content{min-height:0;padding:0 0 17px;display:block}
+ .showroom-paper{margin:0 auto;background:#f8f7f0fa;padding:22px 19px 20px;max-width:100%;box-shadow:0 12px 35px #142e2847}
+ .showroom-paper h1{font-size:clamp(42px,10vw,61px);margin:13px 0 14px}
+ .showroom-paper p{font-size:12px;line-height:1.65}
+ .showroom-kicker{font-size:8px;letter-spacing:.09em}
+ .showroom-buttons{margin-top:17px;gap:7px}
+ .showroom-buttons a{font-size:10px;min-height:43px;padding:11px}
+ .showroom-mini{margin-top:16px;padding-top:12px;font-size:9px;gap:10px}
+ .showroom-signature{display:none}
+ #shop-categories-app .shop-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;overflow:visible}
+ #shop-categories-app .shop-cat,#shop-categories-app .catcard,#shop-categories-app .shop-cat{height:178px;min-height:178px;flex:none}
+ #shop-categories-app .shop-cat img,#shop-categories-app .catcard>img,#shop-categories-app .shop-cat img{height:100%;min-height:100%}
+ #shop-categories-app .pella-catcaption{padding:13px!important}
+ #shop-categories-app .pella-catcaption strong{font-size:23px}
+ #shop-categories-app .pella-catcaption small,#shop-categories-app .pella-catcaption small{font-size:9px}
+ #shop-categories-app .catinfo b,#shop-categories-app .pella-catcaption strong{font-size:23px}
+ #shop-categories-app .sechead:after{display:none}
+ #shop-categories-app .shop-heading:after{display:none}
+}
+@media(max-width:380px){.showroom-hero{padding-top:175px}.showroom-buttons{flex-direction:column;align-items:stretch}.showroom-buttons a{width:100%}}
+@media(prefers-reduced-motion:reduce){#shop-categories-app .shop-cat img{transition:none}}
 </style>
 </head>
 <body>
@@ -340,20 +409,20 @@ body{background:#f7f5ef}
 <button type="button" class="drop-choice" data-drop-choice="Favoritos" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">♡</span><span>Mis favoritos</span><small data-side-count="Favoritos">0</small></button></div></div>
 </div></section>
 <main>
-<section class="hero" id="inicio"><div class="shell hero-grid">
-  <div class="hero-copy">
-    <span class="micro">Puertas · Ventanas · Diseño a medida</span>
-    <h1>Cada entrada cuenta una <em>historia.</em></h1>
-    <p>Explorá puertas, ventanas y accesorios que hacen la diferencia. Guardá tus favoritos, agregá productos al carrito y consultá tus medidas por WhatsApp.</p>
-    <div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a><button class="btn btn-outline" id="hero-list" type="button">🛒 Mi carrito</button></div>
-    <div class="hero-foot"><span>Venta mayorista y minorista</span><span>Envíos a todo el país</span></div>
+<section class="showroom-hero" id="inicio" aria-label="Bienvenida a Norte Aberturas">
+ <img class="showroom-background" src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85" fetchpriority="high" alt="Espacio arquitectónico moderno, foto ilustrativa de referencia">
+ <div class="showroom-shade"></div>
+ <div class="shell showroom-content">
+  <div class="showroom-paper">
+   <div class="showroom-kicker"><span class="showroom-dot"></span> NORTE ABERTURAS <span class="showroom-sep">/</span> CATÁLOGO DIGITAL</div>
+   <h1>Una nueva forma de <em>abrir espacios.</em></h1>
+   <p>Explorá puertas, ventanas y accesorios, elegí tus favoritos y prepará un pedido para consultar por WhatsApp.</p>
+   <div class="showroom-buttons"><a class="showroom-primary" href="#shop-categories-app">Descubrir colecciones <span>↗</span></a><a class="showroom-secondary" href="#catalogo">Ver productos <span>→</span></a></div>
+   <div class="showroom-mini"><span>Venta mayorista y minorista</span><span>Envíos a todo el país</span></div>
   </div>
-  <div class="hero-photo" aria-label="Inspiración de arquitectura y aberturas">
-    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85" alt="Ambiente arquitectónico elegante iluminado de manera natural, fotografía de referencia" fetchpriority="high">
-    <div class="hero-photo-pill">NORTE · ABERTURAS</div>
-    <div class="hero-photo-caption"><small>DISEÑO QUE SE SIENTE</small><strong>Tu espacio, tu estilo.</strong></div>
-  </div>
-</div></section>
+ </div>
+ <div class="showroom-signature">DISEÑO · CALIDAD · PERSONALIDAD</div>
+</section>
 <div class="shell tagrow"><span>✓ Catálogo por categorías</span><span>✓ Armá tu pedido</span><span>✓ Consultá por WhatsApp</span></div>
 <section class="features"><div class="shell feature-grid">
   <div class="feature"><div class="feature-icon">▧</div><div><strong>Elegí y compará</strong><small>Todo organizado en un catálogo fácil de recorrer.</small></div></div>
@@ -788,6 +857,17 @@ document.addEventListener('error',ev=>{
  target.src=fallbackProductImage(category);
 },true);
 
+
+// The storefront stays short until a visitor chooses a category or requests products.
+function showCatalogForBrowsing(){
+ document.body.classList.add('catalog-browsing');
+}
+document.addEventListener('click',e=>{
+ if(e.target.closest('[data-shop-app-cat],[data-drop-choice],a[href="#catalogo"]'))showCatalogForBrowsing();
+},true);
+document.getElementById('shop-search-app-form').addEventListener('submit',showCatalogForBrowsing,true);
+if(location.hash==='#catalogo')showCatalogForBrowsing();
+window.addEventListener('hashchange',()=>{if(location.hash==='#catalogo')showCatalogForBrowsing()});
 </script>
 </body>
 </html>
