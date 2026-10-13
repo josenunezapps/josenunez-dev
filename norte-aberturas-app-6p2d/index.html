@@ -73,6 +73,46 @@ body{background:var(--bg)}
 .detail-modal{top:46%;max-height:82vh}.detail-layout{display:block}.detail-photo{height:240px}.detail-copy{padding:19px}.detail-copy h2{font-size:35px}.sticky-cart:not([hidden]){display:block;position:fixed;z-index:29;bottom:70px;left:12px;width:calc(100% - 24px)}.toast{bottom:136px}}
 @media(max-width:400px){.toolbox .sort-select{flex:1 1 100%}.detail-photo{height:210px}}
 
+
+/* Estilo editorial premium coherente con la web-catálogo */
+:root{--bg:#f7f5ef;--card:#fffefa;--ink:#1e362b;--dark:#193a2e;--forest:#315d49;--mint:#e6ece3;--muted:#5f7466;--gold:#b28a5c;--line:#dfe5db}
+body{background:#f7f5ef}
+.sitehead{background:rgba(250,249,244,.97);border-bottom:1px solid #dce2d9}
+.mark{background:transparent;border:1.5px solid #254639;border-radius:50%;color:#234536;font:500 28px/1 'Playfair Display',Georgia,serif}
+.brand strong{font:800 18px/1.1 Manrope,Arial,sans-serif;letter-spacing:.16em;color:#203c2e}
+.brand small{color:#637c6a;letter-spacing:.31em}.mainnav a{color:#36574a}
+.headtools .btn-primary{background:#17382e;color:#fff}
+.hero{background:transparent;padding:24px 0 16px}
+.hero-grid{grid-template-columns:52% 48%;gap:0;min-height:590px}
+.hero-copy{background:#e6ece3;color:#1a392b;padding:66px 48px;align-items:flex-start;overflow:hidden}
+.hero-copy:before{content:"";width:465px;height:465px;border:1px solid #cbdaca;border-radius:50%;position:absolute;left:-323px;right:auto;top:auto;bottom:-330px;background:none;pointer-events:none;font-size:0}
+.hero-copy .micro{color:#567263;font-size:10px;letter-spacing:.19em}
+.hero-copy .micro:before{content:"";width:25px;height:1px;display:inline-block;vertical-align:middle;margin-right:11px;background:#b58d59}
+.hero-copy h1{font:500 clamp(47px,5.1vw,70px)/1.08 'Playfair Display',Georgia,serif;text-transform:none;letter-spacing:-.041em;margin:27px 0 21px;max-width:560px;color:#1f362b}
+.hero-copy h1 em{font-style:italic;font-weight:500;color:#457c5d}
+.hero-copy>p{font-size:15px;line-height:1.9;color:#556e5e;max-width:480px;margin:0 0 27px}
+.hero-actions{gap:11px}
+.hero-actions .btn-primary{background:#1b3b2f;color:#fff;min-height:51px}
+.hero-actions .btn-primary:hover{background:#2b6047}
+.hero-actions .btn-outline{border:1px solid #8da48f;color:#284c39;background:transparent;min-height:51px}
+.hero-actions .btn-outline:hover{background:#f5f8f0}
+.hero-foot{margin-top:43px;padding-top:23px;border-top:1px solid #c9dacb;gap:22px;color:#40634e;font-size:11px}
+.hero-foot span:before{color:#b78a58}
+.hero-photo{position:relative;min-height:590px;overflow:hidden;background:#b3c4b2}
+.hero-photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.89) brightness(1.03)}
+.hero-photo:after{content:"";pointer-events:none;position:absolute;inset:0;background:linear-gradient(0deg,#103426a8,transparent 47%),linear-gradient(90deg,#10251929,transparent 35%)}
+.hero-photo-pill{position:absolute;z-index:2;right:25px;top:25px;border:1px solid #ffffffb0;background:#1f443358;backdrop-filter:blur(7px);color:#fff;padding:13px 14px;font-size:9px;font-weight:800;letter-spacing:.17em}
+.hero-photo-caption{position:absolute;z-index:2;left:31px;bottom:32px;color:#fff}
+.hero-photo-caption small{color:#e8d1aa;font-size:10px;letter-spacing:.18em;font-weight:800;display:block;margin-bottom:9px}
+.hero-photo-caption strong{font:500 clamp(27px,3vw,40px)/1.14 'Playfair Display',Georgia,serif;letter-spacing:-.01em}
+.tagrow{margin-top:16px}.tagrow span{background:#fdfdf7;border-color:#e0e7db;color:#4c6856}
+.features{padding:21px 0 43px}.feature-icon{background:#e8eee6;color:#416c4f}
+.sectiontop h2{font:500 clamp(42px,4.6vw,59px)/1.1 'Playfair Display',Georgia,serif;letter-spacing:-.039em;text-transform:none}
+.how h2,.cta h2{font-family:'Playfair Display',Georgia,serif;text-transform:none;font-weight:500;line-height:1.1;font-size:clamp(39px,4vw,57px)}
+.howstep strong{font-family:'Playfair Display',Georgia,serif;font-weight:500}
+@media(max-width:1090px){.hero-grid{min-height:560px}.hero-copy{padding:50px 30px}.hero-copy h1{font-size:clamp(46px,5.15vw,62px)}.hero-photo{min-height:560px}}
+@media(max-width:760px){.mark{width:39px;height:39px;font-size:25px}.brand strong{font-size:15px}.hero{padding:17px 0 15px}.hero-grid{grid-template-columns:1fr;gap:0;min-height:0}.hero-copy{min-height:0;padding:51px 24px 36px}.hero-copy h1{font-size:clamp(45px,10.4vw,63px);margin:24px 0 18px}.hero-copy>p{font-size:14px;line-height:1.8}.hero-foot{margin-top:31px;padding-top:20px;gap:13px}.hero-photo{height:330px;min-height:330px}.hero-photo-pill{right:14px;top:15px;font-size:8px}.hero-photo-caption{left:19px;bottom:21px}.hero-photo-caption strong{font-size:28px}.sectiontop h2{font-size:43px}.how h2,.cta h2{font-size:41px}}
+@media(max-width:400px){.hero-copy{padding:43px 18px 33px}.hero-copy h1{font-size:45px}.hero-actions{width:100%;flex-direction:column}.hero-actions .btn{width:100%}.hero-photo{height:290px;min-height:290px}}
 </style>
 </head>
 <body>
@@ -87,16 +127,16 @@ body{background:var(--bg)}
 <main>
 <section class="hero" id="inicio"><div class="shell hero-grid">
   <div class="hero-copy">
-    <span class="micro">Puertas · Ventanas · Accesorios</span>
-    <h1>Tu obra.<br>Tu entrada.<br><em>Tu estilo.</em></h1>
-    <p>Una tienda-catálogo pensada para elegir más fácil. Explorá modelos, guardá favoritos, agregá al carrito y consultá tus medidas por WhatsApp.</p>
-    <div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a><button class="btn btn-outline" id="hero-list" type="button">🛒 Ver carrito</button></div>
-    <div class="hero-foot"><span>Envíos a todo el país</span><span>Venta mayorista y minorista</span></div>
+    <span class="micro">Puertas · Ventanas · Diseño a medida</span>
+    <h1>Cada entrada cuenta una <em>historia.</em></h1>
+    <p>Explorá puertas, ventanas y accesorios que hacen la diferencia. Guardá tus favoritos, agregá productos al carrito y consultá tus medidas por WhatsApp.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar catálogo <span aria-hidden="true">↗</span></a><button class="btn btn-outline" id="hero-list" type="button">🛒 Mi carrito</button></div>
+    <div class="hero-foot"><span>Venta mayorista y minorista</span><span>Envíos a todo el país</span></div>
   </div>
-  <div class="hero-photos" aria-label="Inspiración de ambientes">
-    <div class="photo"><img src="https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&fit=crop&w=930&q=85" alt="Ambiente ilustrativo con carpintería interior"><div class="photo-label"><small>Primera impresión</small><b>Puertas</b></div></div>
-    <div class="photo"><img src="https://images.unsplash.com/photo-1552602989-715150494024?auto=format&fit=crop&w=650&q=85" alt="Espacio contemporáneo luminoso, imagen ilustrativa"><div class="photo-label"><small>Luz natural</small><b>Ventanas</b></div></div>
-    <div class="photo"><img src="https://images.unsplash.com/photo-1542354642-233af003db87?auto=format&fit=crop&w=650&q=85" alt="Ambiente interior con detalles de diseño, imagen ilustrativa"><div class="photo-label"><small>Cada detalle</small><b>A medida</b></div></div>
+  <div class="hero-photo" aria-label="Inspiración de arquitectura y aberturas">
+    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85" alt="Ambiente arquitectónico elegante iluminado de manera natural, fotografía de referencia" fetchpriority="high">
+    <div class="hero-photo-pill">NORTE · ABERTURAS</div>
+    <div class="hero-photo-caption"><small>DISEÑO QUE SE SIENTE</small><strong>Tu espacio, tu estilo.</strong></div>
   </div>
 </div></section>
 <div class="shell tagrow"><span>✓ Catálogo por categorías</span><span>✓ Armá tu pedido</span><span>✓ Consultá por WhatsApp</span></div>
