@@ -242,7 +242,7 @@ $('mobile-catalog').querySelectorAll('[data-track]').forEach(track=>{
  const update=()=>{
   const prev=buttons.find(b=>b.dataset.slide==='-1'),next=buttons.find(b=>b.dataset.slide==='1');
   if(prev)prev.disabled=track.scrollLeft<=3;
-  if(next)next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-3;
+  if(next)next.disabled=track.clientWidth>0&&track.scrollLeft+track.clientWidth>=track.scrollWidth-3;
  };
  track.addEventListener('scroll',update,{passive:true});
  buttons.forEach(b=>b.addEventListener('click',()=>{
