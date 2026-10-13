@@ -766,11 +766,11 @@ function initSiteSideMenu(){
  function close(restoreFocus=false){
    if(!panel.classList.contains('is-open'))return;
    panel.classList.remove('is-open');backdrop.classList.remove('is-open');
+   if(restoreFocus||panel.contains(document.activeElement))(previousFocus||trigger).focus();
    panel.setAttribute('aria-hidden','true');panel.inert=true;
    trigger.setAttribute('aria-expanded','false');
    trigger.setAttribute('aria-label','Abrir menú de navegación');
    document.body.classList.remove('site-menu-locked');
-   if(restoreFocus)(previousFocus||trigger).focus();
  }
  trigger.addEventListener('click',()=>panel.classList.contains('is-open')?close(true):open());
  closeButton.addEventListener('click',()=>close(true));
