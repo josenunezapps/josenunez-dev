@@ -426,6 +426,23 @@ body.site-menu-locked{overflow:hidden!important}
  .site-menu-panel{width:min(350px,90vw)}
 }
 @media(prefers-reduced-motion:reduce){.site-menu-backdrop,.site-menu-panel,.site-menu-bars i:nth-child(2){transition:none}}
+
+/* Navegación única: buscador integrado junto al logo y al carrito */
+.headin{gap:15px}
+.header-search{flex:1;min-width:170px;max-width:700px;margin-left:auto}
+.header-search .shop-search-form{width:100%;min-width:0;min-height:44px;margin:0;background:#fff}
+.header-search .shop-search-form input{font-size:12px}
+.header-search .shop-search-form button{white-space:nowrap}
+.headtools{flex-shrink:0}
+@media(max-width:760px){
+ .sitehead{height:auto;min-height:69px}.headin{height:auto;min-height:69px;padding-top:9px;padding-bottom:9px;flex-wrap:wrap;row-gap:8px}
+ .header-search{order:10;flex:0 0 100%;max-width:none;min-width:0;margin:0}
+ .header-search .shop-search-form{width:100%;min-height:40px}
+ .header-search .shop-search-form input{font-size:11px}
+ .header-search .shop-search-form button{min-height:33px;padding:8px 12px}
+ .brand{margin-right:auto}
+}
+@media(min-width:761px) and (max-width:1020px){.header-search{min-width:145px;max-width:none}}
 </style>
 </head>
 <body>
@@ -434,13 +451,9 @@ body.site-menu-locked{overflow:hidden!important}
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
     <a class="brand" href="#inicio" aria-label="Norte Aberturas, inicio"><span class="mark">N</span><span><strong>NORTE</strong><small>ABERTURAS</small></span></a>
-    <nav class="mainnav" aria-label="Navegación principal"><div class="shop-dropdown header" data-dropdown-wrap="header"><button type="button" class="shop-dropdown-toggle" data-dropdown-trigger="header" aria-expanded="false" aria-controls="header-cat-panel" aria-haspopup="true"><span class="shop-dropdown-label">Productos</span><span class="shop-dropdown-current" data-current-category></span><span class="shop-dropdown-chevron" aria-hidden="true">⌄</span></button><div class="shop-dropdown-panel" id="header-cat-panel" hidden><div class="shop-dropdown-title">EXPLORAR CATÁLOGO</div><button type="button" class="drop-choice" data-drop-choice="Todas" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">▦</span><span>Todos los productos</span><small data-side-count="Todas">64</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Puertas" aria-pressed="true"><span class="drop-choice-icon" aria-hidden="true">🚪</span><span>Puertas</span><small data-side-count="Puertas">18</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Ventanas" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">▤</span><span>Ventanas</span><small data-side-count="Ventanas">18</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Accesorios" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">⚙</span><span>Accesorios</span><small data-side-count="Accesorios">18</small></button>
-<button type="button" class="drop-choice" data-drop-choice="A medida" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">⌗</span><span>A medida</span><small data-side-count="A medida">10</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Favoritos" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">♡</span><span>Mis favoritos</span><small data-side-count="Favoritos">0</small></button></div></div><a href="#como-funciona">Cómo funciona</a><a href="#informacion">Información</a><a href="https://zenix.com.ar/norte-aberturas-vista-8k4m/" target="_blank" rel="noopener noreferrer">Ver página web ↗</a></nav>
-    <div class="headtools"><button type="button" class="btn btn-outline header-admin" id="admin-open">⚙ Panel demo</button><button type="button" class="btn btn-primary" id="cart-open">🛒 <span class="cart-label">Carrito</span><span class="cartnum" id="cart-count">0</span></button></div>
+    
+    <div class="header-search"><form id="shop-search-app-form" class="shop-search-form" role="search"><label for="shop-search-app" class="shop-hidden">Buscar en el catálogo</label><span aria-hidden="true">⌕</span><input id="shop-search-app" type="search" placeholder="¿Qué estás buscando? Puertas, ventanas, accesorios..." autocomplete="off"><button type="submit">Buscar ↗</button></form></div>
+<div class="headtools"><button type="button" class="btn btn-outline header-admin" id="admin-open">⚙ Panel demo</button><button type="button" class="btn btn-primary" id="cart-open">🛒 <span class="cart-label">Carrito</span><span class="cartnum" id="cart-count">0</span></button></div>
   </div>
 </header>
 <div id="site-menu-backdrop" class="site-menu-backdrop" aria-hidden="true"></div>
@@ -467,15 +480,57 @@ body.site-menu-locked{overflow:hidden!important}
  <a href="https://wa.me/5493644326505?text=%C2%A1Hola!%20Vi%20el%20cat%C3%A1logo%20de%20Norte%20Aberturas%20y%20quisiera%20consultar%20por%20sus%20modelos%2C%20precios%20y%20opciones%20de%20env%C3%ADo.%20%C2%A1Gracias!" target="_blank" rel="noopener noreferrer" class="site-menu-whatsapp" data-site-nav>Consultar por WhatsApp ↗</a>
  <p>Catálogo demostrativo · Productos ilustrativos</p></div>
  </aside>
-<section class="shop-search-strip" aria-label="Búsqueda rápida"><div class="shell shop-search-inner">
-<form id="shop-search-app-form" class="shop-search-form" role="search"><label for="shop-search-app" class="shop-hidden">Buscar en el catálogo</label><span aria-hidden="true">⌕</span><input id="shop-search-app" type="search" placeholder="¿Qué estás buscando? Puertas, ventanas, accesorios..." autocomplete="off"><button type="submit">Buscar ↗</button></form>
-<div class="shop-dropdown mobile" data-dropdown-wrap="mobile"><button type="button" class="shop-dropdown-toggle" data-dropdown-trigger="mobile" aria-expanded="false" aria-controls="mobile-cat-panel" aria-haspopup="true"><span class="shop-dropdown-label">Categorías</span><span class="shop-dropdown-current" data-current-category>Puertas</span><span class="shop-dropdown-chevron" aria-hidden="true">⌄</span></button><div class="shop-dropdown-panel" id="mobile-cat-panel" hidden><div class="shop-dropdown-title">EXPLORAR CATÁLOGO</div><button type="button" class="drop-choice" data-drop-choice="Todas" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">▦</span><span>Todos los productos</span><small data-side-count="Todas">64</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Puertas" aria-pressed="true"><span class="drop-choice-icon" aria-hidden="true">🚪</span><span>Puertas</span><small data-side-count="Puertas">18</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Ventanas" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">▤</span><span>Ventanas</span><small data-side-count="Ventanas">18</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Accesorios" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">⚙</span><span>Accesorios</span><small data-side-count="Accesorios">18</small></button>
-<button type="button" class="drop-choice" data-drop-choice="A medida" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">⌗</span><span>A medida</span><small data-side-count="A medida">10</small></button>
-<button type="button" class="drop-choice" data-drop-choice="Favoritos" aria-pressed="false"><span class="drop-choice-icon" aria-hidden="true">♡</span><span>Mis favoritos</span><small data-side-count="Favoritos">0</small></button></div></div>
-</div></section>
+
+<script>
+(function(){
+'use strict';
+const button=document.getElementById('site-menu-toggle'),panel=document.getElementById('site-menu-panel'),backdrop=document.getElementById('site-menu-backdrop'),closeButton=document.getElementById('site-menu-close');
+if(!button||!panel||!backdrop||!closeButton)return;
+let priorFocus=null;
+const isOpen=()=>panel.classList.contains('is-open');
+function close(restore){
+ if(!isOpen())return;
+ if(restore||panel.contains(document.activeElement))(priorFocus?.isConnected?priorFocus:button).focus();
+ panel.classList.remove('is-open');backdrop.classList.remove('is-open');
+ panel.inert=true;panel.setAttribute('inert','');panel.setAttribute('aria-hidden','true');
+ button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Abrir menú de navegación');
+ document.body.classList.remove('site-menu-locked');
+}
+function open(){
+ priorFocus=document.activeElement;
+ panel.inert=false;panel.removeAttribute('inert');panel.setAttribute('aria-hidden','false');
+ panel.classList.add('is-open');backdrop.classList.add('is-open');
+ button.setAttribute('aria-expanded','true');button.setAttribute('aria-label','Cerrar menú de navegación');
+ document.body.classList.add('site-menu-locked');closeButton.focus();
+}
+button.addEventListener('click',()=>isOpen()?close(true):open());
+closeButton.addEventListener('click',()=>close(true));
+backdrop.addEventListener('click',()=>close(true));
+document.addEventListener('keydown',e=>{
+ if(!isOpen())return;
+ if(e.key==='Escape'){e.preventDefault();close(true)}
+ else if(e.key==='Tab'){
+  const focusable=[...panel.querySelectorAll('a[href],button:not([disabled])')];
+  if(e.shiftKey&&document.activeElement===focusable[0]){e.preventDefault();focusable[focusable.length-1].focus()}
+  else if(!e.shiftKey&&document.activeElement===focusable[focusable.length-1]){e.preventDefault();focusable[0].focus()}
+ }
+});
+panel.querySelectorAll('[data-site-nav]').forEach(link=>link.addEventListener('click',()=>{
+ if(link.getAttribute('href')==='#catalogo')document.body.classList.add('catalog-browsing');
+ close(false);
+}));
+panel.querySelectorAll('[data-site-category]').forEach(el=>el.addEventListener('click',()=>{
+ const cat=el.dataset.siteCategory;close(false);
+ if(typeof window.norteSelectCategory==='function')window.norteSelectCategory(cat);
+ else{document.body.classList.add('catalog-browsing');location.hash='catalogo'}
+}));
+panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('click',()=>{
+ const act=el.dataset.siteAction;close(false);
+ document.getElementById(act==='cart'?'cart-open':act==='admin'?'admin-open':'')?.click();
+}));
+})();
+</script>
+
 <main>
 <section class="showroom-hero" id="inicio" aria-label="Bienvenida a Norte Aberturas">
  <img class="showroom-background" src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85" fetchpriority="high" alt="Espacio arquitectónico moderno, foto ilustrativa de referencia">
@@ -750,59 +805,7 @@ function syncCatalogMore(count){
   button.textContent=$('catalog').classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
 }
 
-function initSiteSideMenu(){
- const trigger=$('site-menu-toggle'),panel=$('site-menu-panel'),backdrop=$('site-menu-backdrop'),closeButton=$('site-menu-close');
- let previousFocus=null;
- function open(){
-   closeCategoryDropdown();
-   previousFocus=document.activeElement;
-   panel.inert=false;panel.setAttribute('aria-hidden','false');
-   panel.classList.add('is-open');backdrop.classList.add('is-open');
-   trigger.setAttribute('aria-expanded','true');
-   trigger.setAttribute('aria-label','Cerrar menú de navegación');
-   document.body.classList.add('site-menu-locked');
-   closeButton.focus();
- }
- function close(restoreFocus=false){
-   if(!panel.classList.contains('is-open'))return;
-   panel.classList.remove('is-open');backdrop.classList.remove('is-open');
-   if(restoreFocus||panel.contains(document.activeElement))(previousFocus||trigger).focus();
-   panel.setAttribute('aria-hidden','true');panel.inert=true;
-   trigger.setAttribute('aria-expanded','false');
-   trigger.setAttribute('aria-label','Abrir menú de navegación');
-   document.body.classList.remove('site-menu-locked');
- }
- trigger.addEventListener('click',()=>panel.classList.contains('is-open')?close(true):open());
- closeButton.addEventListener('click',()=>close(true));
- backdrop.addEventListener('click',()=>close(true));
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panel.classList.contains('is-open')){e.stopPropagation();close(true)}});
- panel.addEventListener('keydown',e=>{
-  if(e.key!=='Tab')return;
-  const focusables=[...panel.querySelectorAll('a[href],button:not([disabled])')];
-  if(!focusables.length)return;
-  if(e.shiftKey&&document.activeElement===focusables[0]){e.preventDefault();focusables[focusables.length-1].focus()}
-  else if(!e.shiftKey&&document.activeElement===focusables[focusables.length-1]){e.preventDefault();focusables[0].focus()}
- });
- panel.querySelectorAll('[data-site-category]').forEach(button=>button.addEventListener('click',()=>{
-  const category=button.dataset.siteCategory;
-  document.body.classList.add('catalog-browsing');
-  $('product-search').value='';$('shop-search-app').value='';query='';filter=category;renderCatalog();
-  close();
-  requestAnimationFrame(()=>$('catalogo').scrollIntoView({behavior:'smooth',block:'start'}));
- }));
- panel.querySelectorAll('[data-site-nav]').forEach(link=>link.addEventListener('click',()=>{
-   const hash=link.getAttribute('href');
-   if(hash==='#catalogo')document.body.classList.add('catalog-browsing');
-   close();
- }));
- panel.querySelectorAll('[data-site-action]').forEach(button=>button.addEventListener('click',()=>{
-   const action=button.dataset.siteAction;
-   close();
-   if(action==='cart')$('cart-open').click();
-   if(action==='admin')$('admin-open').click();
- }));
-}
-
+window.norteSelectCategory=category=>{document.body.classList.add('catalog-browsing');$('product-search').value='';$('shop-search-app').value='';query='';filter=category;renderCatalog();requestAnimationFrame(()=>$('catalogo').scrollIntoView({behavior:'smooth',block:'start'}))};
 function initCategorySidebar(){
   document.querySelectorAll('[data-dropdown-trigger]').forEach(toggle=>toggle.addEventListener('click',()=>{
     const expanding=toggle.getAttribute('aria-expanded')!=='true';
@@ -953,7 +956,7 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installProm
 $('mobile-home').addEventListener('click',()=>{document.getElementById('inicio').scrollIntoView({behavior:'smooth'})});
 $('mobile-catalog').addEventListener('click',()=>{document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})});
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
-initSiteSideMenu();initCategorySidebar();load();
+initCategorySidebar();load();
 })();
 
 /* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
