@@ -207,6 +207,14 @@ body{background:#f7f5ef}
 }
 @media(max-width:400px){.shop-item{flex-basis:205px}.shop-heading h2{font-size:29px}.shop-cat{height:127px}}
 @media(prefers-reduced-motion:reduce){.shop-cat img{transition:none}}
+
+@media(max-width:760px){
+ .shop-category-grid{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;padding-bottom:8px}
+ .shop-category-grid::-webkit-scrollbar{display:none}
+ .shop-cat{flex:0 0 clamp(148px,43vw,190px);height:140px;scroll-snap-align:start}
+ .shop-categories .shop-heading:after{content:"Deslizá para explorar →";font-size:10px;font-weight:800;color:#6b856f;white-space:nowrap}
+}
+@media(max-width:390px){.shop-categories .shop-heading:after{font-size:9px}}
 </style>
 </head>
 <body>
