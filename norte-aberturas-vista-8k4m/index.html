@@ -259,6 +259,31 @@ body{background:var(--bg)}
 <a class="floating" id="floating-wa" href="https://wa.me/5493644326505" target="_blank" rel="noopener noreferrer" aria-label="Consultar por WhatsApp" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.85 11.85 0 0 0 12.05 0C5.46 0 .1 5.35.1 11.94c0 2.1.55 4.17 1.6 6L0 24l6.24-1.64a11.9 11.9 0 0 0 5.8 1.48h.01C18.64 23.84 24 18.48 24 11.9c0-3.19-1.24-6.19-3.48-8.42ZM12.05 21.8a9.84 9.84 0 0 1-5.02-1.37l-.36-.21-3.73.98.99-3.64-.23-.37a9.86 9.86 0 0 1-1.52-5.25 9.88 9.88 0 0 1 9.87-9.87 9.81 9.81 0 0 1 6.98 2.89 9.81 9.81 0 0 1 2.9 6.98c-.01 5.44-4.44 9.86-9.88 9.86Zm5.42-7.39c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.19.29-.77.96-.95 1.15-.17.19-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.49-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.18.2-.3.3-.5.09-.2.05-.37-.03-.52-.07-.15-.67-1.62-.92-2.22-.24-.59-.48-.51-.67-.52h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.11 3.22 5.12 4.52.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.08 1.76-.72 2.01-1.42.25-.69.25-1.29.17-1.42-.08-.12-.28-.2-.58-.35Z"/></svg></a>
 <div class="toast" id="toast" aria-live="polite"></div>
 <script>
+
+function referenceArt(key){
+ const match=/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.exec(String(key||''));if(!match)return '';
+ const kind=match[1],variant=Number(match[2]),j=variant%5;
+ const shades=[['#e9eee8','#99795c','#3f6652'],['#e6ede9','#927561','#4f6e65'],['#efeee7','#776c5e','#30564a'],['#e6eae2','#ac8e6b','#48645a']][variant%4];
+ const [bg,wood,metal]=shades;
+ let shape='';
+ if(kind==='door'){
+ let detail=j===0?'<rect x="262" y="134" width="233" height="323" fill="#b8d5d2" stroke="#466a5d" stroke-width="11"/><path d="M379 133V458M262 295H495" stroke="#466a5d" stroke-width="10"/>':j===1?'<path d="M247 177H504M247 252H504M247 327H504M247 402H504" stroke="#e1c6a3" stroke-opacity=".55" stroke-width="12"/>':j===2?'<rect x="250" y="130" width="258" height="133" fill="#bfd9d4" stroke="#456b5f" stroke-width="9"/><rect x="250" y="303" width="258" height="120" fill="none" stroke="#d4b896" stroke-width="7"/>':j===3?'<path d="M375 94V497" stroke="#41594a" stroke-width="10"/><rect x="252" y="132" width="95" height="308" fill="none" stroke="#e9d9bc" stroke-width="8"/><rect x="402" y="132" width="95" height="308" fill="none" stroke="#e9d9bc" stroke-width="8"/>':'<rect x="255" y="126" width="246" height="316" fill="none" stroke="#e7d0b0" stroke-width="9"/><path d="M280 194H472M280 275H472M280 353H472" stroke="#e9d5b2" stroke-width="7"/>';
+ shape='<rect x="183" y="77" width="398" height="456" fill="#dcded4" stroke="#abb9ab" stroke-width="14"/><rect x="223" y="96" width="320" height="405" fill="'+wood+'" stroke="'+metal+'" stroke-width="13"/>'+detail+'<rect x="519" y="307" width="8" height="53" rx="3" fill="#e2d2b8"/>';
+ }else if(kind==='window'){
+ const lines=j===0?'<path d="M380 121V467M196 297H558"/>':j===1?'<path d="M314 122V468M440 122V468"/>':j===2?'<path d="M197 300H562"/>':j===3?'<path d="M378 122V468"/>':'<path d="M195 226H565M195 367H565M380 120V467"/>';
+ shape='<rect x="153" y="101" width="452" height="415" fill="#b8d3cf" stroke="'+metal+'" stroke-width="18"/><path d="M175 470L554 147" stroke="#f7fff7" stroke-opacity=".5" stroke-width="27"/><g fill="none" stroke="'+metal+'" stroke-width="13">'+lines+'</g><rect x="151" y="517" width="456" height="18" rx="2" fill="#a3aba1"/>';
+ }else if(kind==='hardware'){
+ const shapes=j===0?'<rect x="347" y="164" width="65" height="324" rx="28"/><path d="M321 211H438M321 433H438"/>':j===1?'<rect x="321" y="186" width="92" height="140" rx="15"/><path d="M369 330V437H473"/><circle cx="367" cy="247" r="16"/>':j===2?'<path d="M224 284H539M289 236V333M470 236V333"/><circle cx="289" cy="284" r="25"/><circle cx="470" cy="284" r="25"/>':j===3?'<rect x="301" y="181" width="151" height="252" rx="13"/><rect x="339" y="212" width="79" height="69" rx="5"/><circle cx="380" cy="367" r="24"/>':'<path d="M285 194V427M452 194V427M285 194H452M285 427H452"/><circle cx="285" cy="193" r="22"/><circle cx="451" cy="427" r="22"/>';
+ shape='<rect x="185" y="97" width="395" height="427" rx="11" fill="'+wood+'" fill-opacity=".23"/><g fill="#becdc3" stroke="'+metal+'" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">'+shapes+'</g>';
+ }else{
+ shape='<rect x="162" y="110" width="430" height="407" fill="#f4f6ef" stroke="'+metal+'" stroke-width="12"/><rect x="199" y="151" width="357" height="320" fill="#bbd9d0" stroke="'+metal+'" stroke-width="10"/><path d="M377 151V471" stroke="'+metal+'" stroke-width="12"/><g stroke="#a58558" stroke-width="5" stroke-dasharray="9 8" fill="none"><path d="M127 85H628M128 88V535M629 85V534M127 557H629"/></g><g stroke="#a58558" stroke-width="5"><path d="M127 85l16 -12m-16 12l16 12m485 -12l-16 -12m16 12l-16 12M127 557l16 -12m-16 12l16 12M628 557l-16 -12m16 12l-16 12"/></g>';
+ }
+ const category={door:'PUERTAS',window:'VENTANAS',hardware:'ACCESORIOS',custom:'A MEDIDA'}[kind];
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 660"><rect width="760" height="660" fill="'+bg+'"/><rect x="65" y="49" width="631" height="550" rx="11" fill="#ffffff" fill-opacity=".5"/><ellipse cx="379" cy="555" rx="248" ry="21" fill="#394d3b" fill-opacity=".08"/>'+shape+'<rect x="58" y="575" width="644" height="64" fill="#234938"/><text x="380" y="614" text-anchor="middle" fill="#fff9ef" font-family="Arial,sans-serif" font-weight="bold" font-size="18" letter-spacing="3">'+category+' - IMAGEN ILUSTRATIVA</text></svg>';
+ return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+}
+
+
 (()=>{
 'use strict';
 const PHONE='5493644326505';const STORAGE='zenix_norte_catalogo_web_cart_v2',CATS=['Puertas','Ventanas','Accesorios','A medida'];
@@ -275,11 +300,63 @@ const P=[
 {id:'p9',cat:'Accesorios',title:'Manijones',desc:'Herrajes para completar las puertas con estilo.',image:'photo-1776417091038-df7f71687a1e',tags:'Manijones'},
 {id:'p10',cat:'Accesorios',title:'Herrajes y terminaciones',desc:'Opciones de accesorios para complementar distintos modelos.',image:'photo-1623632623717-f8038fb66228',tags:'Detalles'},
 {id:'p11',cat:'A medida',title:'Puertas a medida',desc:'Prepará una consulta indicando medidas, estilo y destino del proyecto.',image:'photo-1764592119348-0aaeab50e2d0',tags:'Diseño personalizado'},
-{id:'p12',cat:'A medida',title:'Aberturas especiales',desc:'Proyectos con dimensiones o características que requieren cotización personalizada.',image:'photo-1502136371444-b5c22f9c70d4',tags:'Cotización personalizada'}
+{id:'p12',cat:'A medida',title:'Aberturas especiales',desc:'Proyectos con dimensiones o características que requieren cotización personalizada.',image:'photo-1502136371444-b5c22f9c70d4',tags:'Cotización personalizada'},
+{id:"p13",cat:"Puertas",title:"Puerta pivotante",desc:"Ejemplo de diseño de puerta pivotante. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-1",tags:"Puerta pivotante"},
+{id:"p14",cat:"Puertas",title:"Portón de dos hojas",desc:"Ejemplo de diseño de portón de dos hojas. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-2",tags:"Portón de dos hojas"},
+{id:"p15",cat:"Puertas",title:"Puerta exterior de madera",desc:"Ejemplo de diseño de puerta exterior de madera. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-3",tags:"Puerta exterior de madera"},
+{id:"p16",cat:"Puertas",title:"Puerta de chapa lisa",desc:"Ejemplo de diseño de puerta de chapa lisa. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-4",tags:"Puerta de chapa lisa"},
+{id:"p17",cat:"Puertas",title:"Puerta de aluminio",desc:"Ejemplo de diseño de puerta de aluminio. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-5",tags:"Puerta de aluminio"},
+{id:"p18",cat:"Puertas",title:"Puerta con paño fijo",desc:"Ejemplo de diseño de puerta con paño fijo. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-6",tags:"Puerta con paño fijo"},
+{id:"p19",cat:"Puertas",title:"Puerta con vidrio lateral",desc:"Ejemplo de diseño de puerta con vidrio lateral. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-7",tags:"Puerta con vidrio lateral"},
+{id:"p20",cat:"Puertas",title:"Puerta corrediza interior",desc:"Ejemplo de diseño de puerta corrediza interior. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-8",tags:"Puerta corrediza interior"},
+{id:"p21",cat:"Puertas",title:"Puerta plegadiza",desc:"Ejemplo de diseño de puerta plegadiza. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-9",tags:"Puerta plegadiza"},
+{id:"p22",cat:"Puertas",title:"Puerta de galería",desc:"Ejemplo de diseño de puerta de galería. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-10",tags:"Puerta de galería"},
+{id:"p23",cat:"Puertas",title:"Puerta de estilo moderno",desc:"Ejemplo de diseño de puerta de estilo moderno. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-11",tags:"Puerta de estilo moderno"},
+{id:"p24",cat:"Puertas",title:"Puerta con molduras",desc:"Ejemplo de diseño de puerta con molduras. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-12",tags:"Puerta con molduras"},
+{id:"p25",cat:"Puertas",title:"Puerta de acceso reforzada",desc:"Ejemplo de diseño de puerta de acceso reforzada. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-13",tags:"Puerta de acceso reforzada"},
+{id:"p26",cat:"Puertas",title:"Puerta interior vidriada",desc:"Ejemplo de diseño de puerta interior vidriada. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:door-14",tags:"Puerta interior vidriada"},
+{id:"p27",cat:"Ventanas",title:"Ventana de dos hojas",desc:"Referencia ilustrativa de ventana de dos hojas. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-1",tags:"Ventana de dos hojas"},
+{id:"p28",cat:"Ventanas",title:"Ventana de abrir",desc:"Referencia ilustrativa de ventana de abrir. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-2",tags:"Ventana de abrir"},
+{id:"p29",cat:"Ventanas",title:"Ventana oscilobatiente",desc:"Referencia ilustrativa de ventana oscilobatiente. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-3",tags:"Ventana oscilobatiente"},
+{id:"p30",cat:"Ventanas",title:"Ventana tipo banderola",desc:"Referencia ilustrativa de ventana tipo banderola. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-4",tags:"Ventana tipo banderola"},
+{id:"p31",cat:"Ventanas",title:"Ventana proyectante",desc:"Referencia ilustrativa de ventana proyectante. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-5",tags:"Ventana proyectante"},
+{id:"p32",cat:"Ventanas",title:"Ventana guillotina",desc:"Referencia ilustrativa de ventana guillotina. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-6",tags:"Ventana guillotina"},
+{id:"p33",cat:"Ventanas",title:"Ventana de paño fijo",desc:"Referencia ilustrativa de ventana de paño fijo. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-7",tags:"Ventana de paño fijo"},
+{id:"p34",cat:"Ventanas",title:"Ventana panorámica",desc:"Referencia ilustrativa de ventana panorámica. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-8",tags:"Ventana panorámica"},
+{id:"p35",cat:"Ventanas",title:"Ventana esquinera",desc:"Referencia ilustrativa de ventana esquinera. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-9",tags:"Ventana esquinera"},
+{id:"p36",cat:"Ventanas",title:"Ventana para baño",desc:"Referencia ilustrativa de ventana para baño. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-10",tags:"Ventana para baño"},
+{id:"p37",cat:"Ventanas",title:"Ventana para cocina",desc:"Referencia ilustrativa de ventana para cocina. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-11",tags:"Ventana para cocina"},
+{id:"p38",cat:"Ventanas",title:"Ventana para dormitorio",desc:"Referencia ilustrativa de ventana para dormitorio. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-12",tags:"Ventana para dormitorio"},
+{id:"p39",cat:"Ventanas",title:"Ventanal para patio",desc:"Referencia ilustrativa de ventanal para patio. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-13",tags:"Ventanal para patio"},
+{id:"p40",cat:"Ventanas",title:"Ventana con postigos",desc:"Referencia ilustrativa de ventana con postigos. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-14",tags:"Ventana con postigos"},
+{id:"p41",cat:"Ventanas",title:"Ventana de aluminio",desc:"Referencia ilustrativa de ventana de aluminio. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:window-15",tags:"Ventana de aluminio"},
+{id:"p42",cat:"Accesorios",title:"Cerradura de embutir",desc:"Ejemplo de accesorio: cerradura de embutir. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-1",tags:"Cerradura de embutir"},
+{id:"p43",cat:"Accesorios",title:"Bisagras reforzadas",desc:"Ejemplo de accesorio: bisagras reforzadas. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-2",tags:"Bisagras reforzadas"},
+{id:"p44",cat:"Accesorios",title:"Picaporte recto",desc:"Ejemplo de accesorio: picaporte recto. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-3",tags:"Picaporte recto"},
+{id:"p45",cat:"Accesorios",title:"Manija curva",desc:"Ejemplo de accesorio: manija curva. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-4",tags:"Manija curva"},
+{id:"p46",cat:"Accesorios",title:"Tirador minimalista",desc:"Ejemplo de accesorio: tirador minimalista. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-5",tags:"Tirador minimalista"},
+{id:"p47",cat:"Accesorios",title:"Tirador doble",desc:"Ejemplo de accesorio: tirador doble. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-6",tags:"Tirador doble"},
+{id:"p48",cat:"Accesorios",title:"Cerrojo de seguridad",desc:"Ejemplo de accesorio: cerrojo de seguridad. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-7",tags:"Cerrojo de seguridad"},
+{id:"p49",cat:"Accesorios",title:"Mirilla para puerta",desc:"Ejemplo de accesorio: mirilla para puerta. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-8",tags:"Mirilla para puerta"},
+{id:"p50",cat:"Accesorios",title:"Pestillo para ventana",desc:"Ejemplo de accesorio: pestillo para ventana. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-9",tags:"Pestillo para ventana"},
+{id:"p51",cat:"Accesorios",title:"Falleba para postigo",desc:"Ejemplo de accesorio: falleba para postigo. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-10",tags:"Falleba para postigo"},
+{id:"p52",cat:"Accesorios",title:"Burletes de sellado",desc:"Ejemplo de accesorio: burletes de sellado. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-11",tags:"Burletes de sellado"},
+{id:"p53",cat:"Accesorios",title:"Umbral de puerta",desc:"Ejemplo de accesorio: umbral de puerta. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-12",tags:"Umbral de puerta"},
+{id:"p54",cat:"Accesorios",title:"Tope de puerta",desc:"Ejemplo de accesorio: tope de puerta. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-13",tags:"Tope de puerta"},
+{id:"p55",cat:"Accesorios",title:"Pasador de acero",desc:"Ejemplo de accesorio: pasador de acero. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-14",tags:"Pasador de acero"},
+{id:"p56",cat:"Accesorios",title:"Herrajes para corrediza",desc:"Ejemplo de accesorio: herrajes para corrediza. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:hardware-15",tags:"Herrajes para corrediza"},
+{id:"p57",cat:"A medida",title:"Puerta doble a medida",desc:"Idea para consultar medidas y terminaciones de puerta doble a medida. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-1",tags:"Puerta doble a medida"},
+{id:"p58",cat:"A medida",title:"Puerta con lateral vidriado",desc:"Idea para consultar medidas y terminaciones de puerta con lateral vidriado. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-2",tags:"Puerta con lateral vidriado"},
+{id:"p59",cat:"A medida",title:"Ventanal grande a medida",desc:"Idea para consultar medidas y terminaciones de ventanal grande a medida. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-3",tags:"Ventanal grande a medida"},
+{id:"p60",cat:"A medida",title:"Abertura para galería",desc:"Idea para consultar medidas y terminaciones de abertura para galería. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-4",tags:"Abertura para galería"},
+{id:"p61",cat:"A medida",title:"Abertura para comercio",desc:"Idea para consultar medidas y terminaciones de abertura para comercio. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-5",tags:"Abertura para comercio"},
+{id:"p62",cat:"A medida",title:"Abertura para reforma",desc:"Idea para consultar medidas y terminaciones de abertura para reforma. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-6",tags:"Abertura para reforma"},
+{id:"p63",cat:"A medida",title:"Marco de medida especial",desc:"Idea para consultar medidas y terminaciones de marco de medida especial. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-7",tags:"Marco de medida especial"},
+{id:"p64",cat:"A medida",title:"Conjunto puerta y paño fijo",desc:"Idea para consultar medidas y terminaciones de conjunto puerta y paño fijo. Consultá modelos y disponibilidad con Norte Aberturas.",image:"refsvg:custom-8",tags:"Conjunto puerta y paño fijo"},
 ];
 const $=id=>document.getElementById(id);
 const safe=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const pic=(p,size=800)=>/^https:\/\//.test(p.image)?p.image:img+p.image+'?auto=format&fit=crop&w='+size+'&q=80';
+const pic=(p,size=800)=>String(p.image||'').startsWith('refsvg:')?referenceArt(p.image):/^https:\/\//.test(p.image)?p.image:img+p.image+'?auto=format&fit=crop&w='+size+'&q=80';
 const find=id=>P.find(x=>x.id===id);
 const safeLoad=()=>{try{const j=JSON.parse(localStorage.getItem(STORAGE)||'{}');if(j&&typeof j==='object'&&!Array.isArray(j))return j}catch{}return {}};
 let basket=safeLoad(),current='Todos',search='',detailId=null,toastTimer,sortMode='default';const FAV_STORE='zenix_norte_web_favorites_v1';let favorites=new Set();try{const loaded=JSON.parse(localStorage.getItem(FAV_STORE)||'[]');if(Array.isArray(loaded))favorites=new Set(loaded.filter(id=>P.some(p=>p.id===id)))}catch{}
