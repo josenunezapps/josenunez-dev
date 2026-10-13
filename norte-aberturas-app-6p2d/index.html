@@ -164,7 +164,7 @@ body{background:var(--bg)}
 <script>
 (()=>{
 'use strict';
-const PHONE='5493644326505',STORE='zenix_norte_app_demo_products_v1',CART_STORE='zenix_norte_app_demo_cart_v1',CATEGORIES=['Puertas','Ventanas','Accesorios','A medida'];
+const PHONE='5493644326505',STORE='zenix_norte_app_demo_products_v1',CART_STORE='zenix_norte_app_demo_cart_v1',FAV_STORE='zenix_norte_app_demo_favorites_v1',CATEGORIES=['Puertas','Ventanas','Accesorios','A medida'];
 const DEFAULTS=[
 {id:'p1',name:'Puertas de entrada',category:'Puertas',description:'Opciones de entrada para sumar carácter y personalidad a tus espacios.',price:null,image:'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80'},
 {id:'p2',name:'Puertas estilo colonial',category:'Puertas',description:'Inspiración en aberturas clásicas con detalles y terminaciones cálidas.',price:null,image:'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=80'},
@@ -177,22 +177,35 @@ const $=id=>document.getElementById(id),all=(s,root=document)=>Array.from(root.q
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImg=s=>{let u=String(s||'').trim();if(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/i.test(u))return u;try{let p=new URL(u);return p.protocol==='https:'?p.href:''}catch{return ''}};
 const formatPrice=x=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(x);
-const fresh=()=>DEFAULTS.map(x=>({...x}));let products=fresh(),cart={},filter='Todas',query='',editing=null,uploaded=null,delayed=null,installPrompt=null;
+const fresh=()=>DEFAULTS.map(x=>({...x}));let products=fresh(),cart={},filter='Todas',query='',sortMode='default',favorites=new Set(),detailId=null,editing=null,uploaded=null,delayed=null,installPrompt=null;
 function normalize(x){if(!x||typeof x!=='object')return null;const name=String(x.name||'').trim().slice(0,100);if(!name)return null;let val=x.price==null||x.price===''?null:Number(x.price);if(val!==null&&(!Number.isFinite(val)||val<0||val>999999999))val=null;return{id:String(x.id||('p'+Date.now()+Math.random())).slice(0,90),name,category:CATEGORIES.includes(x.category)?x.category:'Puertas',description:String(x.description||'').slice(0,350),price:val===null?null:Math.round(val),image:safeImg(x.image)}}
 function getStored(k){try{return localStorage.getItem(k)}catch{return null}}
 function setStored(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{toast('No se pudo guardar: almacenamiento lleno o bloqueado.');return false}}
-function load(){const raw=getStored(STORE);if(raw!==null){try{const a=JSON.parse(raw);if(Array.isArray(a)&&a.length<=150){products=a.map(normalize).filter(Boolean)}}catch{}}const c=getStored(CART_STORE);if(c){try{const t=JSON.parse(c);if(t&&typeof t==='object'&&!Array.isArray(t)){cart=t}}catch{}}cleanCart();renderAll()}
+function load(){const raw=getStored(STORE);if(raw!==null){try{const a=JSON.parse(raw);if(Array.isArray(a)&&a.length<=150){products=a.map(normalize).filter(Boolean)}}catch{}}const c=getStored(CART_STORE);if(c){try{const t=JSON.parse(c);if(t&&typeof t==='object'&&!Array.isArray(t)){cart=t}}catch{}}const storedFav=getStored(FAV_STORE);if(storedFav){try{const f=JSON.parse(storedFav);if(Array.isArray(f))favorites=new Set(f.filter(id=>products.some(p=>p.id===id)))}catch{}}cleanCart();renderAll()}
 function cleanCart(){const ids=new Set(products.map(p=>p.id));Object.keys(cart).forEach(k=>{if(!ids.has(k)||!cart[k]||!Number.isFinite(Number(cart[k].qty)))delete cart[k];else{cart[k]={qty:Math.max(1,Math.min(99,Math.floor(Number(cart[k].qty)))),note:String(cart[k].note||'').slice(0,180)}}});setStored(CART_STORE,cart)}
 function toast(s){const el=$('toast');el.textContent=s;el.classList.add('visible');clearTimeout(delayed);delayed=setTimeout(()=>el.classList.remove('visible'),2900)}
 function renderAll(){renderCatalog();renderCart();renderAdmin()}
-function renderCatalog(){const q=query.toLocaleLowerCase('es-AR');const visible=products.filter(p=>(filter==='Todas'||p.category===filter)&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
-$('result-count').textContent=visible.length+' '+(visible.length===1?'producto':'productos');
-$('empty-search').hidden=visible.length!==0;$('catalog').innerHTML=visible.map(p=>{const image=safeImg(p.image);return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen ilustrativa de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">🚪</div>')+'<span class="demo-tag">Referencia</span></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3><p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="btn btn-primary" type="button" data-add="'+esc(p.id)+'">+ Agregar a mi lista</button></div></article>'}).join('');
-all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
+function renderCatalog(){
+ const q=query.toLocaleLowerCase('es-AR');
+ let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
+ if(sortMode==='az')visible.sort((a,b)=>a.name.localeCompare(b.name,'es-AR'));
+ else if(sortMode==='za')visible.sort((a,b)=>b.name.localeCompare(a.name,'es-AR'));
+ else if(sortMode==='category')visible.sort((a,b)=>a.category.localeCompare(b.category,'es-AR')||a.name.localeCompare(b.name,'es-AR'));
+ $('result-count').textContent=visible.length+' '+(visible.length===1?'producto':'productos');
+ $('empty-search').hidden=visible.length!==0;
+ $('catalog').innerHTML=visible.map(p=>{
+ const image=safeImg(p.image);
+ const label=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
+ return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3><p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
+ }).join('');
+ all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
+ all('[data-detail]',$('catalog')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
+ all('[data-favorite]',$('catalog')).forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.favorite;if(favorites.has(id))favorites.delete(id);else favorites.add(id);setStored(FAV_STORE,[...favorites]);renderCatalog();toast(favorites.has(id)?'Guardado en favoritos':'Quitado de favoritos')}));
 }
-function addToCart(id){if(!products.some(p=>p.id===id))return;const item=cart[id]||{qty:0,note:''};item.qty=Math.min(99,item.qty+1);cart[id]=item;setStored(CART_STORE,cart);renderCart();toast('Agregado a tu lista de consulta');}
-function renderCart(){let items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);let sum=items.reduce((n,x)=>n+x.item.qty,0);$('cart-count').textContent=sum;$('cart-form').hidden=items.length===0;
-$('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong><small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu lista está vacía.</b>Sumá productos del catálogo para preparar un presupuesto.</div>';
+
+function addToCart(id){if(!products.some(p=>p.id===id))return;const item=cart[id]||{qty:0,note:''};item.qty=Math.min(99,item.qty+1);cart[id]=item;setStored(CART_STORE,cart);renderCart();toast('¡Producto agregado al carrito!');showPanel('cart-drawer')}
+function renderCart(){let items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);let sum=items.reduce((n,x)=>n+x.item.qty,0);$('cart-count').textContent=sum;$('sticky-cart-count').textContent=sum+(sum===1?' producto':' productos');$('sticky-cart').hidden=sum===0;$('cart-form').hidden=items.length===0;
+$('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong><small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu carrito está vacío.</b>Explorá productos y agregalos para preparar tu pedido.</div>';
 const valued=items.filter(x=>x.p.price!==null);const total=valued.reduce((s,x)=>s+x.p.price*x.item.qty,0);
 $('cart-estimate').textContent=valued.length===0?'A consultar':formatPrice(total)+(valued.length<items.length?' + a consultar':'');
 $('send-quote').disabled=items.length===0;
@@ -202,8 +215,20 @@ all('[data-note]',$('cart-items')).forEach(b=>b.addEventListener('input',()=>{if
 }
 function openWhatsApp(message){const a=document.createElement('a');a.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(message);a.target='_blank';a.rel='noopener noreferrer';document.body.append(a);a.click();a.remove()}
 function submitQuote(){const items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);if(!items.length)return toast('Primero agregá al menos un producto.');let name=$('customer-name').value.trim().slice(0,80),city=$('customer-location').value.trim().slice(0,100);let text='¡Hola! 👋 Estuve viendo el catálogo de Norte Aberturas y quisiera consultar por los siguientes productos:\n\n'+items.map(({p,item},i)=>(i+1)+'. '+p.name+' — cantidad: '+item.qty+(item.note?'\n   Medidas/detalles: '+item.note:'')).join('\n')+'\n\n';if(name)text+='Nombre: '+name+'\n';if(city)text+='Ciudad/provincia: '+city+'\n';text+='¿Podrían confirmarme disponibilidad, opciones y presupuesto? ¡Muchas gracias!';openWhatsApp(text)}
-function hidePanels(){$('overlay').hidden=true;$('cart-drawer').hidden=true;$('admin-modal').hidden=true;document.body.style.overflow=''}
+function hidePanels(){$('overlay').hidden=true;$('cart-drawer').hidden=true;$('admin-modal').hidden=true;$('detail-modal').hidden=true;document.body.style.overflow=''}
 function showPanel(which){hidePanels();$('overlay').hidden=false;$(which).hidden=false;document.body.style.overflow='hidden';$(which).querySelector('button')?.focus()}
+function openDetail(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ detailId=id;const image=safeImg(p.image);
+ $('detail-photo').innerHTML=image?'<img src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="detail-placeholder">'+(p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':'🔩')+'</div>';
+ $('detail-cat').textContent=p.category;$('detail-title').textContent=p.name;
+ $('detail-desc').textContent=(p.description||'Consultá por modelos, medidas y terminaciones disponibles.')+' Los productos reales se confirman con Norte Aberturas.';
+ $('detail-price').textContent=p.price===null?'A consultar':formatPrice(p.price);
+ const related=products.filter(x=>x.category===p.category&&x.id!==id).slice(0,3);
+ $('detail-related').innerHTML=related.length?'<strong>También te puede interesar</strong>'+related.map(x=>'<button type="button" data-related="'+esc(x.id)+'">'+esc(x.name)+' ↗</button>').join(''):'';
+ all('[data-related]',$('detail-related')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.related)));
+ showPanel('detail-modal');
+}
 function renderAdmin(){const box=$('admin-list');box.innerHTML=products.length?products.map(p=>'<div class="admin-row"><div class="admin-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:27px">🚪</div>')+'</div><div class="admin-title"><b>'+esc(p.name)+'</b><small>'+esc(p.category)+' · '+(p.price===null?'Sin precio':formatPrice(p.price))+'</small></div><button class="smallbtn" type="button" data-edit="'+esc(p.id)+'">Editar</button><button class="smallbtn danger" type="button" data-delete="'+esc(p.id)+'">Quitar</button></div>').join(''):'<div class="emptystate"><b>Catálogo vacío</b><p>Agregá tu primer producto desde el panel.</p></div>';
 all('[data-edit]',box).forEach(b=>b.addEventListener('click',()=>editProduct(b.dataset.edit)));
 all('[data-delete]',box).forEach(b=>b.addEventListener('click',()=>deleteProduct(b.dataset.delete)));
@@ -217,13 +242,13 @@ function exportJSON(){const data={format:'zenix-norte-demo-v1',products,exported
 async function importJSON(e){const file=e.target.files?.[0];e.target.value='';if(!file)return;if(file.size>8*1024*1024)return toast('Archivo demasiado grande para la demo');try{const data=JSON.parse(await file.text());if(data?.format!=='zenix-norte-demo-v1'||!Array.isArray(data.products)||data.products.length>150)throw Error('Formato inválido');const next=data.products.map(normalize);if(next.some(x=>!x))throw Error('Hay datos inválidos');if(new Set(next.map(x=>x.id)).size!==next.length)throw Error('Hay identificadores duplicados');if(!confirm('¿Reemplazar el catálogo local con '+next.length+' productos del archivo?'))return;if(!setStored(STORE,next))return;products=next;cleanCart();renderAll();toast('Catálogo importado en este dispositivo')}catch(err){toast('No se pudo importar: '+err.message)}}
 async function promptInstall(){if(installPrompt){installPrompt.prompt();try{await installPrompt.userChoice}catch{}installPrompt=null}else toast('Para instalarla: menú del navegador → Agregar a pantalla de inicio')}
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
-$('product-search').addEventListener('input',e=>{query=e.target.value.trim();renderCatalog()});
-$('reset-search').addEventListener('click',()=>{$('product-search').value='';query='';filter='Todas';all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));renderCatalog()});
-['cart-open','hero-list','cta-list','mobile-list'].forEach(id=>$(id).addEventListener('click',()=>showPanel('cart-drawer')));
+$('product-search').addEventListener('input',e=>{query=e.target.value.trim();renderCatalog()});$('product-sort').addEventListener('change',e=>{sortMode=e.target.value;renderCatalog()});
+$('reset-search').addEventListener('click',()=>{$('product-search').value='';query='';filter='Todas';sortMode='default';$('product-sort').value='default';all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));renderCatalog()});
+['cart-open','hero-list','cta-list','mobile-list','sticky-cart-open'].forEach(id=>$(id).addEventListener('click',()=>showPanel('cart-drawer')));$('continue-shopping').addEventListener('click',()=>{hidePanels();$('catalogo').scrollIntoView({behavior:'smooth'})});
 ['admin-open','mobile-admin'].forEach(id=>$(id).addEventListener('click',()=>{renderAdmin();showPanel('admin-modal')}));
-['cart-close','admin-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
+['cart-close','admin-close','detail-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePanels()});
-$('send-quote').addEventListener('click',submitQuote);
+$('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
 $('add-new').addEventListener('click',()=>editProduct(null));
 $('cancel-edit').addEventListener('click',()=>{$('admin-form').hidden=true;editing=null;uploaded=null});
 $('admin-upload').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{uploaded=await photoToDataURL(file);toast('Foto optimizada: guardala con el producto')}catch(err){uploaded=null;toast(err.message)}});
