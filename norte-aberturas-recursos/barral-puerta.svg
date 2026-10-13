@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 780" role="img" aria-labelledby="title desc">
+<title id="title">Barral tirador vertical para puerta</title><desc id="desc">Ilustración arquitectónica de un barral de acero satinado montado en una puerta de madera moderna.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#eeede5"/><stop offset="1" stop-color="#c7cec6"/></linearGradient>
+ <linearGradient id="wood" x2="1"><stop stop-color="#645045"/><stop offset=".32" stop-color="#806652"/><stop offset=".68" stop-color="#92735a"/><stop offset="1" stop-color="#60483d"/></linearGradient>
+ <linearGradient id="steel" x2="1"><stop stop-color="#343f3d"/><stop offset=".11" stop-color="#a4adab"/><stop offset=".31" stop-color="#fbfefd"/><stop offset=".55" stop-color="#9ba8a6"/><stop offset=".8" stop-color="#4b5352"/><stop offset="1" stop-color="#272f2c"/></linearGradient>
+ <linearGradient id="mount" x2="1"><stop stop-color="#525e5b"/><stop offset=".47" stop-color="#d3dad5"/><stop offset="1" stop-color="#45514f"/></linearGradient>
+ <linearGradient id="shade" x2="1"><stop stop-color="#000" stop-opacity=".22"/><stop offset=".16" stop-color="#000" stop-opacity="0"/><stop offset=".78" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".23"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="17"/></filter>
+ <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2"/></filter>
+</defs>
+<rect width="780" height="780" fill="url(#bg)"/>
+<rect y="653" width="780" height="127" fill="#cacac0"/>
+<path d="M0 653H780" stroke="#a9b0a6" stroke-width="6"/>
+<rect x="99" y="58" width="590" height="665" rx="5" fill="#473b35" opacity=".22" filter="url(#shadow)"/>
+<rect x="91" y="43" width="595" height="658" rx="3" fill="#d9d8cf" stroke="#b6b6ae" stroke-width="16"/>
+<rect x="114" y="65" width="548" height="615" rx="2" fill="url(#wood)"/>
+<path d="M177 65v615M260 65v615M343 65v615M426 65v615M509 65v615M592 65v615" stroke="#f8d8a0" stroke-opacity=".1" stroke-width="8"/>
+<path d="M143 93H635M143 653H635" stroke="#6f5747" stroke-width="5" opacity=".6"/>
+<rect x="114" y="65" width="548" height="615" fill="url(#shade)"/>
+<!-- mounts and high-contrast brushed stainless vertical pull bar -->
+<rect x="453" y="166" width="70" height="431" rx="29" fill="#192720" opacity=".35" filter="url(#shadow)"/>
+<rect x="469" y="201" width="111" height="34" rx="13" fill="url(#mount)" stroke="#44514c" stroke-width="2"/>
+<rect x="469" y="526" width="111" height="34" rx="13" fill="url(#mount)" stroke="#44514c" stroke-width="2"/>
+<rect x="516" y="147" width="62" height="455" rx="29" fill="url(#steel)" stroke="#50605b" stroke-width="3"/>
+<rect x="532" y="163" width="8" height="420" rx="4" fill="#fff" opacity=".45" filter="url(#glow)"/>
+<path d="M548 173v403" stroke="#283831" stroke-width="2" opacity=".25"/>
+<ellipse cx="548" cy="160" rx="22" ry="8" fill="#e3e7e4" opacity=".75"/>
+<ellipse cx="548" cy="591" rx="22" ry="8" fill="#58635f" opacity=".7"/>
+<rect x="83" y="705" width="612" height="7" rx="3" fill="#7e8d82" opacity=".28"/>
+</svg>
