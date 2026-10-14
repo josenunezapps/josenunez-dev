@@ -771,7 +771,9 @@ function initCategorySidebar(){
   });
 }
 
+let catalogHasRendered=false;
 function renderProducts(){
+catalogHasRendered=true;
 const oldScroll={};
 $('mobile-catalog').querySelectorAll('[data-track]').forEach(t=>{oldScroll[t.dataset.track]=t.scrollLeft});
 const q=search.toLocaleLowerCase('es-AR');
@@ -817,6 +819,11 @@ $('mobile-catalog').querySelectorAll('[data-track]').forEach(track=>{
 }
 
 
+// El catálogo permanece liviano al iniciar, pero debe pintarse al solicitarlo.
+window.norteEnsureCatalog=()=>{
+ document.body.classList.add('catalog-browsing');
+ if(!catalogHasRendered)renderProducts();
+};
 function renderShopfront(){
  const groups=[
   {rail:'shop-featured-rail',items:['p1','p5','p9','p11','p13','p27','p42','p57']},
@@ -904,12 +911,16 @@ document.addEventListener('error',ev=>{
 
 // The storefront stays short until a visitor chooses a category or requests products.
 function showCatalogForBrowsing(){
- document.body.classList.add('catalog-browsing');
+ if(typeof window.norteEnsureCatalog==='function')window.norteEnsureCatalog();
+ else document.body.classList.add('catalog-browsing');
 }
 document.addEventListener('click',e=>{
- if(e.target.closest('[data-category],[data-drop-choice],[data-shop-category],a[href="#productos"]'))showCatalogForBrowsing();
+ // Los enlaces directos necesitan activar la primera carga del catálogo.
+ if(e.target.closest('a[href="#productos"]'))showCatalogForBrowsing();
+ // Las categorías llaman después a filter(), que ya vuelve a dibujar productos.
+ else if(e.target.closest('[data-category],[data-drop-choice],[data-shop-category]'))document.body.classList.add('catalog-browsing');
 },true);
-document.getElementById('shop-search-form').addEventListener('submit',showCatalogForBrowsing,true);
+document.getElementById('shop-search-form').addEventListener('submit',()=>document.body.classList.add('catalog-browsing'),true);
 if(location.hash==='#productos')showCatalogForBrowsing();
 window.addEventListener('hashchange',()=>{if(location.hash==='#productos')showCatalogForBrowsing()});
 </script>
