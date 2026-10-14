@@ -780,12 +780,6 @@ if(sortMode==='az')found.sort((a,b)=>a.title.localeCompare(b.title,'es-AR'));els
 syncCategorySidebar();syncCatalogMore(found.length);$('result-count').textContent=found.length+' productos ilustrativos';$('filter-label').textContent=current==='Todos'?'Mostrando todos los catálogos':current==='Favoritos'?'Tus favoritos':'Catálogo de '+current.toLowerCase();$('no-results').hidden=found.length>0;
 const card=p=>'<article class="tile" data-product-id="'+safe(p.id)+'"><div class="tile-image"><img loading="lazy" src="'+pic(p,700)+'" alt="Imagen ilustrativa de '+safe(p.title)+'"><span class="pin">Imagen de referencia</span><button type="button" class="tile-fav" data-favorite="'+safe(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar favorito ':'Guardar favorito ')+safe(p.title)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tile-body"><span class="item-category">'+safe(p.cat)+'</span><h3>'+safe(p.title)+'</h3><p>'+safe(p.desc)+'</p><span class="pricehint">Precio a consultar</span><button type="button" class="tile-action" data-detail="'+safe(p.id)+'">Ver detalles <span>↗</span></button><button type="button" class="tile-add" data-add="'+safe(p.id)+'">🛒 Agregar al carrito</button></div></article>';
 $('product-grid').innerHTML=found.map(card).join('');
-const cats=['Puertas','Ventanas','Accesorios','A medida'];
-if(window.matchMedia('(max-width:720px)').matches){
-$('mobile-catalog').innerHTML=cats.filter(cat=>found.some(p=>p.cat===cat)).map((cat,index)=>{
- const items=found.filter(p=>p.cat===cat),showArrows=items.length>1,trackId='norte-web-track-'+index;
- return '<section class="mobile-category" aria-label="Catálogo '+safe(cat)+'"><div class="mobile-category-head"><h3>'+safe(cat)+'</h3>'+(showArrows?'<div class="mobile-category-controls"><span class="mobile-swipe-hint">Deslizá para ver más →</span><button type="button" class="mobile-slide-btn" data-slide="-1" data-target="'+trackId+'" aria-label="Ver productos anteriores de '+safe(cat)+'" disabled>‹</button><button type="button" class="mobile-slide-btn" data-slide="1" data-target="'+trackId+'" aria-label="Ver más productos de '+safe(cat)+'">›</button></div>':'')+'</div><div class="mobile-track" id="'+trackId+'" data-track="'+safe(cat)+'" role="region" aria-label="Productos de '+safe(cat)+'" tabindex="0">'+items.map(card).join('')+'</div></section>';
-}).join('');
 function wire(root){
  root.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>add(b.dataset.add)));
  root.querySelectorAll('[data-detail]').forEach(b=>b.addEventListener('click',()=>detail(b.dataset.detail)));
@@ -795,7 +789,15 @@ function wire(root){
   renderProducts();flash(favorites.has(id)?'Agregado a favoritos':'Quitado de favoritos');
  }));
 }
-wire($('product-grid'));wire($('mobile-catalog'));
+
+wire($('product-grid'));
+const cats=['Puertas','Ventanas','Accesorios','A medida'];
+if(window.matchMedia('(max-width:720px)').matches){
+$('mobile-catalog').innerHTML=cats.filter(cat=>found.some(p=>p.cat===cat)).map((cat,index)=>{
+ const items=found.filter(p=>p.cat===cat),showArrows=items.length>1,trackId='norte-web-track-'+index;
+ return '<section class="mobile-category" aria-label="Catálogo '+safe(cat)+'"><div class="mobile-category-head"><h3>'+safe(cat)+'</h3>'+(showArrows?'<div class="mobile-category-controls"><span class="mobile-swipe-hint">Deslizá para ver más →</span><button type="button" class="mobile-slide-btn" data-slide="-1" data-target="'+trackId+'" aria-label="Ver productos anteriores de '+safe(cat)+'" disabled>‹</button><button type="button" class="mobile-slide-btn" data-slide="1" data-target="'+trackId+'" aria-label="Ver más productos de '+safe(cat)+'">›</button></div>':'')+'</div><div class="mobile-track" id="'+trackId+'" data-track="'+safe(cat)+'" role="region" aria-label="Productos de '+safe(cat)+'" tabindex="0">'+items.map(card).join('')+'</div></section>';
+}).join('');
+wire($('mobile-catalog'));
 $('mobile-catalog').querySelectorAll('[data-track]').forEach(track=>{
  const saved=oldScroll[track.dataset.track];if(saved)track.scrollLeft=saved;
  const buttons=[...$('mobile-catalog').querySelectorAll('[data-target="'+track.id+'"]')];
