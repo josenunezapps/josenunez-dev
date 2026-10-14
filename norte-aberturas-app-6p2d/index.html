@@ -568,6 +568,10 @@ body:has(#cart-drawer:not([hidden])) .site-menu-panel{visibility:hidden!importan
 
 /* Norte Aberturas: acciones del catálogo sin cortes de texto */
 .shop-actions .shop-detail[data-shop-app-category]{white-space:normal;text-align:center;min-width:84px;padding-inline:9px}
+
+/* El buscador y la navegación del catálogo no deben provocar saltos de pantalla. */
+#catalogo{overflow-anchor:none}
+@media(max-width:760px){html{scroll-padding-top:145px}}
 </style>
 </head>
 <body>
@@ -992,10 +996,20 @@ function submitShopAppSearch(e){
  e.preventDefault();
  document.body.classList.add('catalog-browsing');
  query=$('shop-search-app').value.trim();
- $('product-search').value=query;filter='Todas';
+ $('product-search').value=query;
+ filter='Todas';
  all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));
- renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'});
+ renderCatalog();
+ $('shop-search-app').blur();
+ window.norteScrollCatalog();
 }
+
+window.norteScrollCatalog=()=>{
+ requestAnimationFrame(()=>{
+  const target=$('catalogo');
+  if(target&&!target.hidden)target.scrollIntoView({behavior:'instant',block:'start'});
+ });
+};
 
 window.norteEnsureCatalog=()=>{
  document.body.classList.add('catalog-browsing');
@@ -1051,7 +1065,15 @@ function syncCatalogMore(count){
   button.textContent=$('catalog').classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
 }
 
-window.norteSelectCategory=category=>{document.body.classList.add('catalog-browsing');$('product-search').value='';$('shop-search-app').value='';query='';filter=category;renderCatalog();requestAnimationFrame(()=>$('catalogo').scrollIntoView({behavior:'smooth',block:'start'}))};
+window.norteSelectCategory=category=>{
+ document.body.classList.add('catalog-browsing');
+ $('product-search').value='';
+ $('shop-search-app').value='';
+ query='';
+ filter=(CATEGORIES.includes(category)||category==='Todas'||category==='Favoritos')?category:'Todas';
+ renderCatalog();
+ window.norteScrollCatalog();
+};
 function initCategorySidebar(){
   document.querySelectorAll('[data-dropdown-trigger]').forEach(toggle=>toggle.addEventListener('click',()=>{
     const expanding=toggle.getAttribute('aria-expanded')!=='true';
@@ -1066,7 +1088,7 @@ function initCategorySidebar(){
     const category=b.dataset.dropChoice;
     $('product-search').value='';$('shop-search-app').value='';query='';filter=category;renderCatalog();
     closeCategoryDropdown();
-    $('catalogo').scrollIntoView({behavior:'smooth',block:'start'});
+    window.norteScrollCatalog();
   }));
   document.addEventListener('click',e=>{
     if(!e.target.closest('.shop-dropdown'))closeCategoryDropdown();
@@ -1077,7 +1099,7 @@ function initCategorySidebar(){
   $('catalog-show-more').addEventListener('click',()=>{
     const g=$('catalog');g.classList.toggle('catalog-expanded');
     $('catalog-show-more').textContent=g.classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
-    if(!g.classList.contains('catalog-expanded'))$('catalogo').scrollIntoView({behavior:'smooth'});
+    if(!g.classList.contains('catalog-expanded'))window.norteScrollCatalog();
   });
 }
 
@@ -1292,12 +1314,12 @@ async function importJSON(e){
 }
 async function promptInstall(){if(installPrompt){installPrompt.prompt();try{await installPrompt.userChoice}catch{}installPrompt=null}else toast('Para instalarla: menú del navegador → Agregar a pantalla de inicio')}
 $('shop-search-app-form').addEventListener('submit',submitShopAppSearch);
-all('[data-shop-app-cat]').forEach(b=>b.addEventListener('click',()=>{query='';filter=b.dataset.shopAppCat;$('product-search').value='';all('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c.dataset.filter===filter)));renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'})}));
+all('[data-shop-app-cat]').forEach(b=>b.addEventListener('click',()=>window.norteSelectCategory(b.dataset.shopAppCat)));
 all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(b.dataset.appShelf+'-rail');const item=rail?.querySelector('.shop-item');if(item)rail.scrollBy({left:Number(b.dataset.appDir)*(item.getBoundingClientRect().width+16),behavior:'smooth'})}));
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
 $('product-search').addEventListener('input',e=>{query=e.target.value.trim();renderCatalog()});$('product-sort').addEventListener('change',e=>{sortMode=e.target.value;renderCatalog()});
 $('reset-search').addEventListener('click',()=>{$('product-search').value='';query='';filter='Todas';sortMode='default';$('product-sort').value='default';all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));renderCatalog()});
-['cart-open','mobile-list','sticky-cart-open'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>showPanel('cart-drawer'))});$('continue-shopping').addEventListener('click',()=>{hidePanels();$('catalogo').scrollIntoView({behavior:'smooth'})});
+['cart-open','mobile-list','sticky-cart-open'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>showPanel('cart-drawer'))});$('continue-shopping').addEventListener('click',()=>{hidePanels();window.norteEnsureCatalog();window.norteScrollCatalog()});
 ['admin-open','mobile-admin'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>{renderAdmin();showPanel('admin-modal')})});
 $('cta-list').addEventListener('click',()=>{showPanel('consulta-modal');$('consulta-name').focus()});
 $('consulta-form').addEventListener('submit',sendGeneralInquiry);
@@ -1349,7 +1371,7 @@ $('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los
 $('install-app').addEventListener('click',promptInstall);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 $('mobile-home').addEventListener('click',()=>{document.getElementById('inicio').scrollIntoView({behavior:'smooth'})});
-$('mobile-catalog').addEventListener('click',()=>{document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})});
+$('mobile-catalog').addEventListener('click',()=>{window.norteEnsureCatalog();window.norteScrollCatalog()});
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
 initCategorySidebar();load();
 })();
@@ -1384,18 +1406,26 @@ document.addEventListener('error',ev=>{
 },true);
 
 
-// The storefront stays short until a visitor chooses a category or requests products.
+// A single catalog initializer and a single, immediate scroll per navigation.
 function showCatalogForBrowsing(){
  if(typeof window.norteEnsureCatalog==='function')window.norteEnsureCatalog();
  else document.body.classList.add('catalog-browsing');
 }
 document.addEventListener('click',e=>{
- if(e.target.closest('a[href="#catalogo"]'))showCatalogForBrowsing();
- else if(e.target.closest('[data-shop-app-cat],[data-drop-choice]'))document.body.classList.add('catalog-browsing');
+ const catalogLink=e.target.closest('a[href="#catalogo"]');
+ if(catalogLink){
+  e.preventDefault();
+  showCatalogForBrowsing();
+  if(location.hash!=='#catalogo'&&window.history?.replaceState)window.history.replaceState(null,'','#catalogo');
+  window.norteScrollCatalog?.();
+ } else if(e.target.closest('[data-shop-app-cat],[data-drop-choice]')){
+  document.body.classList.add('catalog-browsing');
+ }
 },true);
-document.getElementById('shop-search-app-form').addEventListener('submit',()=>document.body.classList.add('catalog-browsing'),true);
-if(location.hash==='#catalogo'){showCatalogForBrowsing();requestAnimationFrame(()=>document.getElementById('catalogo').scrollIntoView({block:'start'}))}
-window.addEventListener('hashchange',()=>{if(location.hash==='#catalogo')showCatalogForBrowsing()});
+if(location.hash==='#catalogo'){showCatalogForBrowsing();window.norteScrollCatalog?.()}
+window.addEventListener('hashchange',()=>{
+ if(location.hash==='#catalogo'){showCatalogForBrowsing();window.norteScrollCatalog?.()}
+});
 </script>
 </body>
 </html>
