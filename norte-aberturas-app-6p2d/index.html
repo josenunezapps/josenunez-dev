@@ -1381,7 +1381,7 @@ $('install-app').addEventListener('click',promptInstall);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 $('mobile-home').addEventListener('click',()=>{document.getElementById('inicio').scrollIntoView({behavior:'smooth'})});
 $('mobile-catalog').addEventListener('click',()=>{window.norteEnsureCatalog();window.norteScrollCatalog()});
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
 initCategorySidebar();load();
 })();
 
