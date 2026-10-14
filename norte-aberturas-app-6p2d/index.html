@@ -548,6 +548,23 @@ body.site-menu-locked{overflow:hidden!important}
 body:has(#cart-drawer:not([hidden])) .header-search{visibility:hidden!important;pointer-events:none!important;}
 body:has(#cart-drawer:not([hidden])) .site-menu-panel{visibility:hidden!important;pointer-events:none!important;}
 @media(max-width:540px){#cart-drawer.drawer:not([hidden]){left:0!important;width:100vw!important;max-width:100vw!important;height:100dvh!important;}}
+
+/* Norte Aberturas · formulario independiente para consultas 2026-10-14 */
+#consulta-modal.norte-consulta:not([hidden]){position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4020;width:min(570px,calc(100vw - 28px));max-height:calc(100dvh - 30px);overflow-y:auto;overscroll-behavior:contain;background:#fdfcf7;border:1px solid #dce5da;border-radius:10px;box-shadow:0 22px 75px #0e261f77;color:#1d3b2d;}
+.norte-consulta .consulta-head{position:sticky;top:0;z-index:2;background:#fdfcf7;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:1px solid #e0e7dc;padding:24px 27px 18px}
+.norte-consulta .consulta-head h2{font:500 clamp(28px,4vw,40px)/1.08 'Playfair Display',Georgia,serif;margin:6px 0 0;color:#1d3b2d}
+.norte-consulta .consulta-head button{flex:0 0 40px;min-height:40px;border-radius:6px}
+.norte-consulta .consulta-body{padding:22px 27px 27px}
+.norte-consulta .consulta-intro{color:#65796b;font-size:13px;line-height:1.7;margin:0 0 19px}
+.norte-consulta .consulta-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.norte-consulta .consulta-field{display:flex;flex-direction:column;gap:7px;min-width:0;font-size:12px;font-weight:700;color:#365944}
+.norte-consulta .consulta-field.full{grid-column:1/-1}
+.norte-consulta .consulta-field input,.norte-consulta .consulta-field select,.norte-consulta .consulta-field textarea{width:100%;max-width:100%;min-width:0;border:1px solid #cfdbd0;border-radius:5px;background:white;color:#1d3b2d;padding:12px 13px;min-height:44px;font:500 13px/1.5 'DM Sans',Arial,sans-serif}
+.norte-consulta .consulta-field textarea{resize:vertical;min-height:98px}
+.norte-consulta .consulta-field input:focus,.norte-consulta .consulta-field select:focus,.norte-consulta .consulta-field textarea:focus{border-color:#3b7758;outline:2px solid #cce4d4;outline-offset:1px}
+.norte-consulta .consulta-send{display:block;width:100%;margin-top:21px;min-height:49px}
+.norte-consulta .consulta-footnote{font-size:11px;line-height:1.55;color:#78867a;text-align:center;margin:11px 0 0}
+@media(max-width:540px){#consulta-modal.norte-consulta:not([hidden]){width:calc(100vw - 20px);max-height:calc(100dvh - 20px)}.norte-consulta .consulta-head{padding:19px 17px 14px}.norte-consulta .consulta-body{padding:17px}.norte-consulta .consulta-grid{grid-template-columns:1fr;gap:12px}.norte-consulta .consulta-field.full{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -720,6 +737,28 @@ document.addEventListener('click',function(event){
   <div class="drawer-content"><p class="drawer-intro">Revisá las aberturas, cantidades y medidas. Norte Aberturas confirmará precios, disponibilidad y envío por WhatsApp.</p><div id="cart-items"></div><div id="cart-form" hidden><div class="estimate"><span>Importe orientativo*</span><b id="cart-estimate">A consultar</b></div><p class="fine">* Solo se suman artículos con precio cargado. Norte Aberturas confirmará el importe final con tu consulta.</p><label class="formlabel" for="customer-name">Tu nombre (opcional)</label><input class="inpt" id="customer-name" maxlength="80" placeholder="¿Cómo te llamás?"><label class="formlabel" for="customer-location">Ciudad o provincia (opcional)</label><input class="inpt" id="customer-location" maxlength="100" placeholder="¿De dónde nos escribís?"></div></div>
   <div class="drawer-footer"><button class="btn btn-primary" id="send-quote" type="button">Enviar carrito por WhatsApp ↗</button><button id="continue-shopping" type="button" class="continue-shopping">← Seguir comprando</button><p class="fine" style="text-align:center;margin:10px 0 0">No se cobra desde la demo. WhatsApp abrirá con el carrito completo para cotizar; vos confirmás el envío.</p></div>
 </aside>
+
+<section class="norte-consulta" id="consulta-modal" role="dialog" aria-modal="true" aria-labelledby="consulta-title" aria-describedby="consulta-description" hidden>
+  <div class="consulta-head">
+    <div><span class="micro" style="color:#a17649">NORTE ABERTURAS · ASESORAMIENTO</span><h2 id="consulta-title">Contanos qué necesitás</h2></div>
+    <button type="button" class="drawer-close" id="consulta-close" aria-label="Cerrar formulario de consulta">×</button>
+  </div>
+  <div class="consulta-body">
+    <p class="consulta-intro" id="consulta-description">Completá los datos de tu proyecto. Prepararemos un mensaje para consultar medidas, modelos y presupuesto directamente por WhatsApp, sin agregar productos al carrito.</p>
+    <form id="consulta-form">
+      <div class="consulta-grid">
+        <label class="consulta-field">Tu nombre <span style="font-weight:400">(opcional)</span><input id="consulta-name" name="nombre" type="text" maxlength="80" autocomplete="name" placeholder="¿Cómo te llamás?"></label>
+        <label class="consulta-field">Ciudad o provincia <span style="font-weight:400">(opcional)</span><input id="consulta-location" name="localidad" type="text" maxlength="100" autocomplete="address-level2" placeholder="¿Desde dónde consultás?"></label>
+        <label class="consulta-field">Tipo de abertura<select id="consulta-category" name="categoria" required><option value="" selected disabled>Seleccioná una opción</option><option value="Puertas">Puertas</option><option value="Ventanas">Ventanas</option><option value="Accesorios y herrajes">Accesorios y herrajes</option><option value="Aberturas a medida">Aberturas a medida</option><option value="Otro producto">Otro producto</option></select></label>
+        <label class="consulta-field">Cantidad <span style="font-weight:400">(aproximada)</span><input id="consulta-quantity" name="cantidad" type="number" inputmode="numeric" min="1" max="999" step="1" value="1" required></label>
+        <label class="consulta-field full">Medidas aproximadas <span style="font-weight:400">(opcional)</span><input id="consulta-measures" name="medidas" type="text" maxlength="120" placeholder="Ej.: 80 × 200 cm"></label>
+        <label class="consulta-field full">Detalles de tu consulta<textarea id="consulta-details" name="detalles" rows="3" maxlength="650" required placeholder="Describí el modelo, material, color o terminación que buscás."></textarea></label>
+      </div>
+      <button class="btn btn-primary consulta-send" type="submit">Enviar consulta por WhatsApp ↗</button>
+      <p class="consulta-footnote">Se abrirá WhatsApp con tu mensaje preparado. Vos decidís si lo enviás.</p>
+    </form>
+  </div>
+</section>
 <section class="detail-modal" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title" hidden>
 <div class="detail-head"><span class="micro">FICHA DE PRODUCTO · DEMOSTRACIÓN</span><button type="button" class="drawer-close" id="detail-close" aria-label="Cerrar ficha">×</button></div>
 <div class="detail-layout"><div id="detail-photo" class="detail-photo"></div><div class="detail-copy"><span class="micro" id="detail-cat"></span><h2 id="detail-title"></h2><p id="detail-desc"></p><div class="detail-specs"><div><b>Precio</b><span id="detail-price">A consultar</span></div><div><b>Medidas</b><span>Según modelo</span></div><div><b>Disponibilidad</b><span>A confirmar</span></div></div><button type="button" class="btn btn-primary" id="detail-add">🛒 Agregar al carrito</button><button type="button" class="btn btn-outline" id="detail-wa">Consultar este producto ↗</button><div class="related-products" id="detail-related"></div><p class="fine">Las imágenes y modelos son ilustrativos, sujetos a confirmación del fabricante.</p></div></div>
@@ -1112,7 +1151,34 @@ all('[data-note]',$('cart-items')).forEach(b=>b.addEventListener('input',()=>{if
 }
 function openWhatsApp(message){const a=document.createElement('a');a.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(message);a.target='_blank';a.rel='noopener noreferrer';document.body.append(a);a.click();a.remove()}
 function submitQuote(){const items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);if(!items.length)return toast('Primero agregá al menos un producto.');let name=$('customer-name').value.trim().slice(0,80),city=$('customer-location').value.trim().slice(0,100);let text='¡Hola! 👋 Estuve viendo el catálogo de Norte Aberturas y quisiera consultar por los siguientes productos:\n\n'+items.map(({p,item},i)=>(i+1)+'. '+p.name+' — cantidad: '+item.qty+(item.note?'\n   Medidas/detalles: '+item.note:'')).join('\n')+'\n\n';if(name)text+='Nombre: '+name+'\n';if(city)text+='Ciudad/provincia: '+city+'\n';text+='¿Podrían confirmarme disponibilidad, opciones y presupuesto? ¡Muchas gracias!';openWhatsApp(text)}
-function hidePanels(){$('overlay').hidden=true;$('cart-drawer').hidden=true;$('admin-modal').hidden=true;$('detail-modal').hidden=true;document.body.style.overflow=''}
+function sendGeneralInquiry(event){
+ event.preventDefault();
+ const form=$('consulta-form');
+ if(!form.reportValidity())return;
+ const name=$('consulta-name').value.trim().slice(0,80);
+ const city=$('consulta-location').value.trim().slice(0,100);
+ const category=$('consulta-category').value.trim();
+ const qty=$('consulta-quantity').value.trim();
+ const measures=$('consulta-measures').value.trim().slice(0,120);
+ const details=$('consulta-details').value.trim().slice(0,650);
+ if(!category||!details||!/^\\d+$/.test(qty)||Number(qty)<1||Number(qty)>999){
+   toast('Completá el producto, la cantidad y los detalles de tu consulta.');
+   return;
+ }
+ const parts=[
+   '¡Hola! 👋 Vi la app de Norte Aberturas y quisiera consultar por un proyecto.',
+   '',
+   'Tipo de abertura: '+category,
+   'Cantidad aproximada: '+qty
+ ];
+ if(measures)parts.push('Medidas aproximadas: '+measures);
+ parts.push('Detalles: '+details);
+ if(name)parts.push('Nombre: '+name);
+ if(city)parts.push('Ciudad/provincia: '+city);
+ parts.push('', '¿Podrían asesorarme sobre modelos, disponibilidad, precios y envío? ¡Gracias!');
+ openWhatsApp(parts.join('\\n'));
+}
+function hidePanels(){$('overlay').hidden=true;$('cart-drawer').hidden=true;$('admin-modal').hidden=true;$('detail-modal').hidden=true;$('consulta-modal').hidden=true;document.body.style.overflow=''}
 function showPanel(which){hidePanels();$('overlay').hidden=false;$(which).hidden=false;document.body.style.overflow='hidden';$(which).querySelector('button')?.focus()}
 function openDetail(id){
  const p=products.find(x=>x.id===id);if(!p)return;
@@ -1226,9 +1292,11 @@ all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
 $('product-search').addEventListener('input',e=>{query=e.target.value.trim();renderCatalog()});$('product-sort').addEventListener('change',e=>{sortMode=e.target.value;renderCatalog()});
 $('reset-search').addEventListener('click',()=>{$('product-search').value='';query='';filter='Todas';sortMode='default';$('product-sort').value='default';all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));renderCatalog()});
-['cart-open','cta-list','mobile-list','sticky-cart-open'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>showPanel('cart-drawer'))});$('continue-shopping').addEventListener('click',()=>{hidePanels();$('catalogo').scrollIntoView({behavior:'smooth'})});
+['cart-open','mobile-list','sticky-cart-open'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>showPanel('cart-drawer'))});$('continue-shopping').addEventListener('click',()=>{hidePanels();$('catalogo').scrollIntoView({behavior:'smooth'})});
 ['admin-open','mobile-admin'].forEach(id=>{const button=$(id);if(button)button.addEventListener('click',()=>{renderAdmin();showPanel('admin-modal')})});
-['cart-close','admin-close','detail-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
+$('cta-list').addEventListener('click',()=>{showPanel('consulta-modal');$('consulta-name').focus()});
+$('consulta-form').addEventListener('submit',sendGeneralInquiry);
+['cart-close','admin-close','detail-close','consulta-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePanels()});
 $('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
 $('add-new').addEventListener('click',()=>editProduct(null));
