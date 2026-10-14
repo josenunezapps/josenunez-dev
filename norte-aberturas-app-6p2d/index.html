@@ -640,7 +640,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r46</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r47</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -850,7 +850,7 @@ document.addEventListener('click',function(event){
  <div class="modalhead"><div><span class="micro" style="color:#987245">Demostración · Autogestión</span><h2 id="admin-title">Panel de catálogo</h2></div><button type="button" class="drawer-close" id="admin-close" aria-label="Cerrar panel">×</button></div>
  <div class="modalbody">
    <div class="notice"><b>Modo de demostración:</b> podés agregar, editar y quitar productos para probar el panel, pero los cambios se guardan <b>solo en este navegador</b>. No se publican para otros clientes. La versión definitiva necesita una base de datos compartida y un acceso de administración seguro.</div>
-   <div class="admin-actions"><button type="button" class="smallbtn strong" id="add-new">+ Nuevo producto</button><button type="button" class="smallbtn" id="add-category">＋ Crear apartado</button><button type="button" class="smallbtn" id="export-json">↓ Guardar copia JSON</button><button type="button" class="smallbtn" id="import-json">↑ Importar copia JSON</button><button type="button" class="smallbtn" id="install-app">▣ Instalar app</button><button type="button" class="smallbtn danger" id="restore-defaults">Restaurar demo</button><input class="hidden-input" id="import-file" type="file" accept=".json,application/json"></div>
+   <div class="admin-actions"><button type="button" class="smallbtn strong" id="add-new">+ Nuevo producto</button><button type="button" class="smallbtn" id="add-category">＋ Crear apartado</button><button type="button" class="smallbtn" id="export-json">↓ Guardar copia JSON</button><button type="button" class="smallbtn" id="export-pdf" title="Descargar el catálogo completo en PDF para administración">↓ Descargar PDF</button><button type="button" class="smallbtn" id="import-json">↑ Importar copia JSON</button><button type="button" class="smallbtn" id="install-app">▣ Instalar app</button><button type="button" class="smallbtn danger" id="restore-defaults">Restaurar demo</button><input class="hidden-input" id="import-file" type="file" accept=".json,application/json"></div>
    <form class="admin-new-category" id="admin-category-form" hidden>
      <label for="admin-category-name">Nombre del nuevo apartado</label>
      <div class="admin-category-formline"><input type="text" id="admin-category-name" maxlength="45" placeholder="Ej.: Portones, Mamparas, Rejas..." autocomplete="off" required><button type="submit" class="smallbtn strong">Crear apartado</button><button type="button" class="smallbtn" id="cancel-category">Cancelar</button></div>
@@ -1412,6 +1412,182 @@ if(code&&products.some(p=>p.id!==editing&&normalizeProductCode(p.code)===code)){
 const before=products.find(x=>x.id===editing);let image=$('admin-image').value.trim();if(image&&!safeImg(image))return toast('La foto debe tener una URL HTTPS válida');if(uploaded)image=uploaded;else if(before&&before.image.startsWith('data:')&&!image)image=before.image;else if(before&&!image)image=before.image;
 if(!CATEGORIES.includes($('admin-category').value))return toast('Elegí un apartado válido');
 let rawPrice=$('admin-price').value.trim(),p=normalize({id:editing||('p'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),name:nm,code,category:$('admin-category').value,description:$('admin-description').value.trim(),price:rawPrice===''?null:Number(rawPrice),image});if(!p)return;const next=editing?products.map(x=>x.id===editing?p:x):[p,...products];if(!setStored(STORE,next))return;products=next;$('admin-form').hidden=true;editing=null;uploaded=null;renderAll();toast('Producto guardado en este dispositivo')}
+
+/* PDF de respaldo administrativo: genera un archivo legible sin alterar datos locales. */
+let nortePdfLibraryPromise=null;
+function norteLoadPdfLibrary(){
+ if(window.jspdf&&window.jspdf.jsPDF)return Promise.resolve(window.jspdf.jsPDF);
+ if(nortePdfLibraryPromise)return nortePdfLibraryPromise;
+ nortePdfLibraryPromise=new Promise((resolve,reject)=>{
+  const script=document.createElement('script');
+  script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
+  script.async=true;
+  script.onload=()=>window.jspdf?.jsPDF?resolve(window.jspdf.jsPDF):reject(Error('La biblioteca de PDF no se pudo iniciar'));
+  script.onerror=()=>reject(Error('No se pudo cargar el generador de PDF. Revisá la conexión a Internet.'));
+  document.head.appendChild(script);
+ }).catch(err=>{nortePdfLibraryPromise=null;throw err;});
+ return nortePdfLibraryPromise;
+}
+function nortePdfText(value){
+ return String(value??'').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/[\u2012-\u2015]/g,'-').replace(/[\u2018\u2019]/g,"'").replace(/[\u201c\u201d]/g,'"').replace(/[\u2022\u2026]/g,' ').replace(/[\ud800-\udfff]/g,'').trim();
+}
+async function nortePdfPhoto(src){
+ if(!src||!(/^(https:\/\/|data:image\/)/i.test(src)))return null;
+ return new Promise(resolve=>{
+  const image=new Image();
+  let finished=false;
+  const finish=data=>{if(finished)return;finished=true;clearTimeout(timeout);image.onload=null;image.onerror=null;resolve(data);};
+  const timeout=setTimeout(()=>finish(null),3200);
+  image.crossOrigin='anonymous';
+  image.onload=()=>{
+   try{
+    const canvas=document.createElement('canvas');
+    const scale=Math.min(1,420/Math.max(image.naturalWidth||image.width,image.naturalHeight||image.height));
+    canvas.width=Math.max(1,Math.round((image.naturalWidth||image.width)*scale));
+    canvas.height=Math.max(1,Math.round((image.naturalHeight||image.height)*scale));
+    canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+    finish({data:canvas.toDataURL('image/jpeg',.64),width:canvas.width,height:canvas.height});
+   }catch{finish(null);}
+  };
+  image.onerror=()=>finish(null);
+  image.src=src;
+ });
+}
+async function nortePreparePdfPhotos(items){
+ const photos=new Map();
+ const entries=items.map(p=>[p.id,safeImg(p.image)]).filter(([,url])=>!!url);
+ let next=0;
+ await Promise.all(Array.from({length:Math.min(6,entries.length)},async()=>{
+  while(next<entries.length){
+   const [id,url]=entries[next++];
+   photos.set(id,await nortePdfPhoto(url));
+  }
+ }));
+ return photos;
+}
+async function exportPDF(){
+ const button=$('export-pdf');
+ if(button.disabled)return;
+ const label=button.textContent;
+ button.disabled=true;
+ button.textContent='Preparando PDF…';
+ try{
+  const JsPDF=await norteLoadPdfLibrary();
+  const reportProducts=products.map(p=>({...p}));
+  const reportCategories=CATEGORIES.slice();
+  const photos=await nortePreparePdfPhotos(reportProducts);
+  const pdf=new JsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true,putOnlyUsedFonts:true});
+  pdf.setProperties({title:'Norte Aberturas - Catálogo administrativo',subject:'Respaldo legible del catálogo de productos',author:'Norte Aberturas'});
+  const W=210,H=297,M=17,R=W-M;
+  const dark=[22,54,41],forest=[42,83,61],gold=[183,136,80],mute=[91,109,96];
+  const rgb=c=>pdf.setTextColor(...c);
+  const fill=c=>pdf.setFillColor(...c);
+  const rule=(y)=>{pdf.setDrawColor(220,226,216);pdf.setLineWidth(.25);pdf.line(M,y,R,y);};
+  const tx=(val,x,y,size=10,font='helvetica',weight='normal',color=dark)=>{
+   pdf.setFont(font,weight);pdf.setFontSize(size);rgb(color);pdf.text(nortePdfText(val),x,y);
+  };
+  function pageHeader(category,index){
+   fill(dark);pdf.rect(0,0,W,19,'F');
+   tx('NORTE ABERTURAS',M,12,10,'helvetica','bold',[255,253,247]);
+   tx('COPIA ADMINISTRATIVA · '+(index+1).toString().padStart(2,'0'),R,12,8,'helvetica','normal',[225,211,190]);
+   pdf.setFont('times','normal');pdf.setFontSize(27);rgb(dark);
+   const catLines=pdf.splitTextToSize(nortePdfText(category),175);
+   pdf.text(catLines,M,37);
+   const bottom=37+(catLines.length-1)*9;
+   fill(gold);pdf.rect(M,bottom+4,19,1,'F');
+   tx('FICHAS DE PRODUCTOS',M,bottom+12,8,'helvetica','bold',mute);
+   return bottom+19;
+  }
+  // Carátula del informe.
+  fill(dark);pdf.rect(0,0,W,78,'F');
+  fill(gold);pdf.rect(M,19,25,1.1,'F');
+  tx('NORTE ABERTURAS',M,31,12,'helvetica','bold',[255,253,247]);
+  tx('CATÁLOGO',M,48,32,'times','normal',[255,253,247]);
+  tx('ADMINISTRATIVO',M,62,22,'times','normal',[231,212,180]);
+  tx('Documento de respaldo · Uso interno',M,72,9,'helvetica','normal',[226,229,217]);
+  const when=new Date().toLocaleString('es-AR',{dateStyle:'medium',timeStyle:'short'});
+  tx('Generado: '+when,M,91,9,'helvetica','normal',mute);
+  rule(96);
+  fill([240,245,237]);pdf.roundedRect(M,105,84,26,2,2,'F');
+  fill([246,242,235]);pdf.roundedRect(M+92,105,84,26,2,2,'F');
+  tx(String(reportCategories.length),M+9,118,19,'times','normal',dark);
+  tx('APARTADOS',M+29,118,9,'helvetica','bold',mute);
+  tx(String(reportProducts.length),M+101,118,19,'times','normal',dark);
+  tx('PRODUCTOS',M+121,118,9,'helvetica','bold',mute);
+  tx('ÍNDICE DE CATEGORÍAS',M,149,11,'helvetica','bold',dark);
+  let indexY=160;
+  reportCategories.forEach((cat,i)=>{
+   if(indexY>264){pdf.addPage();indexY=35;tx('ÍNDICE DE CATEGORÍAS (CONTINUACIÓN)',M,22,11,'helvetica','bold',dark);}
+   tx((i+1).toString().padStart(2,'0'),M,indexY,10,'helvetica','bold',gold);
+   const category=pdf.splitTextToSize(nortePdfText(cat),112);
+   tx(category[0]||cat,M+17,indexY,10,'helvetica','normal',dark);
+   tx(String(reportProducts.filter(p=>p.category===cat).length)+' productos',R,indexY,9,'helvetica','normal',mute);
+   rule(indexY+3);indexY+=8;
+  });
+  // Fichas agrupadas, incluyendo categorías vacías.
+  reportCategories.forEach((category,categoryIndex)=>{
+   pdf.addPage();
+   let y=pageHeader(category,categoryIndex);
+   const group=reportProducts.filter(p=>p.category===category);
+   if(!group.length){tx('Este apartado todavía no tiene productos cargados.',M,y+13,10,'helvetica','normal',mute);return;}
+   group.forEach((product,i)=>{
+    const titleLines=pdf.splitTextToSize(nortePdfText(product.name)||'Sin nombre',113);
+    const description=String(product.description||'').trim();
+    const descLines=pdf.splitTextToSize(nortePdfText(description)||'Sin descripción cargada',108);
+    const photo=photos.get(product.id);
+    const hasLink=/^https:\/\//i.test(String(product.image||''));
+    const cardHeight=Math.max(79,32+titleLines.length*6+descLines.length*4.25+(hasLink?8:0));
+    if(y+cardHeight>H-22){pdf.addPage();y=pageHeader(category,categoryIndex);}
+    fill([250,251,247]);pdf.setDrawColor(217,227,216);pdf.setLineWidth(.3);
+    pdf.roundedRect(M,y,R-M,cardHeight-5,2,2,'FD');
+    fill(gold);pdf.rect(M+6,y+9,14,.8,'F');
+    const imageX=M+7,imageY=y+16,imageW=45,imageH=42;
+    fill([231,237,229]);pdf.roundedRect(imageX,imageY,imageW,imageH,1,1,'F');
+    if(photo?.data){
+     try{
+      const ratio=photo.width/photo.height;let dw=imageW,dh=dw/ratio;
+      if(dh>imageH){dh=imageH;dw=dh*ratio;}
+      pdf.addImage(photo.data,'JPEG',imageX+(imageW-dw)/2,imageY+(imageH-dh)/2,dw,dh,undefined,'FAST');
+     }catch{tx('IMAGEN',imageX+9,imageY+22,9,'helvetica','bold',mute);}
+    }else{
+     tx(product.image?'Foto de':'Sin imagen',imageX+5,imageY+19,9,'helvetica','normal',mute);
+     if(product.image)tx('referencia',imageX+5,imageY+25,9,'helvetica','normal',mute);
+    }
+    const x=M+60;
+    tx('ARTÍCULO '+String(i+1).padStart(2,'0'),x,y+14,8,'helvetica','bold',gold);
+    pdf.setFont('helvetica','bold');pdf.setFontSize(12);rgb(dark);
+    pdf.text(titleLines,x,y+22);
+    let detailY=y+23+titleLines.length*6;
+    tx('Código interno: '+(product.code||'Sin código'),x,detailY,9,'helvetica','normal',forest);detailY+=6;
+    tx('Precio: '+(product.price==null?'A consultar':new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(product.price)),x,detailY,9,'helvetica','normal',forest);detailY+=7;
+    tx('DESCRIPCIÓN',x,detailY,8,'helvetica','bold',mute);detailY+=5;
+    pdf.setFont('helvetica','normal');pdf.setFontSize(8.5);rgb(dark);
+    pdf.text(descLines,x,detailY,{lineHeightFactor:1.24});
+    detailY+=descLines.length*4.25+3;
+    if(hasLink){
+     tx('Abrir foto original (enlace)',x,detailY,8,'helvetica','normal',forest);
+     pdf.link(x,detailY-4,108,6,{url:product.image});
+    }
+    y+=cardHeight+5;
+   });
+  });
+  for(let page=1;page<=pdf.getNumberOfPages();page++){
+   pdf.setPage(page);
+   rule(H-16);
+   tx('NORTE ABERTURAS · Respaldo interno. El archivo JSON permite restaurar los datos.',M,H-10,7,'helvetica','normal',mute);
+   tx(page+' / '+pdf.getNumberOfPages(),R-13,H-10,7,'helvetica','normal',mute);
+  }
+  pdf.save('norte-aberturas-catalogo-administrativo-'+new Date().toISOString().slice(0,10)+'.pdf');
+  toast('Se descargó el catálogo completo en PDF');
+ }catch(err){
+  console.error('No se pudo exportar el catálogo a PDF',err);
+  toast('Error al generar PDF. Revisá la conexión y volvé a intentar.');
+  alert('No se pudo generar el PDF. '+(err?.message||'Volvé a intentar con conexión a Internet.')+' El respaldo JSON sigue disponible.');
+ }finally{
+  button.disabled=false;button.textContent=label;
+ }
+}
+
 function exportJSON(){const data={format:'zenix-norte-demo-v1',products,categories:CATEGORIES.slice(),exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download='norte-aberturas-catalogo-demo.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);toast('Se preparó el archivo de respaldo')}
 async function importJSON(e){
  const file=e.target.files?.[0];e.target.value='';if(!file)return;
@@ -1534,6 +1710,7 @@ $('cancel-edit').addEventListener('click',()=>{$('admin-form').hidden=true;editi
 $('admin-upload').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{uploaded=await photoToDataURL(file);toast('Foto optimizada: guardala con el producto')}catch(err){uploaded=null;toast(err.message)}});
 $('admin-form').addEventListener('submit',saveProduct);
 $('export-json').addEventListener('click',exportJSON);
+$('export-pdf').addEventListener('click',exportPDF);
 $('import-json').addEventListener('click',()=>$('import-file').click());
 $('import-file').addEventListener('change',importJSON);
 $('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 64 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;if(!setStored(CATEGORY_STORE,[]))return;setCategories([],next);products=next;adminOpenGroups.clear();adminVisibleLimits.clear();adminSelectedCategory='Puertas';$('admin-product-search').value='';syncAdminCategories();cart={};setStored(CART_STORE,cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
