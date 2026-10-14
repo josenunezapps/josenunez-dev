@@ -422,6 +422,16 @@ body.site-menu-locked{overflow:hidden!important}
  #drawer .drawerbody{padding:14px 18px}
  #drawer .drawerbottom{padding:14px 18px max(18px,env(safe-area-inset-bottom))}
 }
+
+/* Modales y carrito por encima de la cabecera fija */
+.shade{z-index:1200!important}
+.drawer{z-index:1210!important}
+.modal{z-index:1220!important}
+.drawerheader{min-height:108px;flex:0 0 auto;align-items:flex-start;gap:14px;background:#f8f7f1}
+.drawerheader>div{min-width:0;flex:1}
+.drawerheader h2{font-size:clamp(28px,3vw,38px);line-height:1.08;overflow-wrap:break-word}
+.drawerheader .close{flex-shrink:0}
+@media(max-width:540px){.drawerheader{min-height:96px;padding:20px 18px}.drawerbody{padding:16px 18px}.drawerbottom{padding:16px 18px 22px}}
 </style>
 </head>
 <body>
@@ -517,13 +527,13 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
  <div class="shell showroom-content">
   <div class="showroom-paper">
    <div class="showroom-kicker"><span class="showroom-dot"></span> NORTE ABERTURAS <span class="showroom-sep">/</span> FÁBRICA DE PUERTAS Y VENTANAS</div>
-   <h1>Aberturas que acompañan <em>tu obra.</em></h1>
-   <p>Norte Aberturas fabrica puertas y ventanas, trabaja con clientes mayoristas y minoristas y realiza envíos a todo el país. Explorá referencias y prepará tu consulta por WhatsApp.</p>
+   <h1>Norte Aberturas. <em>Tu proyecto empieza acá.</em></h1>
+   <p>De nuestro taller a tu obra: puertas, ventanas y aberturas a medida. Norte Aberturas trabaja con clientes particulares y mayoristas, con envíos a todo el país. Explorá modelos de referencia y pedí tu cotización por WhatsApp.</p>
    <div class="showroom-buttons"><a class="showroom-primary" href="#categorias">Descubrir colecciones <span>↗</span></a><a class="showroom-secondary" href="#productos">Ver productos <span>→</span></a></div>
    <div class="showroom-mini"><span>Venta mayorista y minorista</span><span>Envíos a todo el país</span></div>
   </div>
  </div>
- <div class="showroom-signature">DISEÑO · CALIDAD · PERSONALIDAD</div>
+ <div class="showroom-signature">NORTE ABERTURAS · FABRICACIÓN · DETALLES · ENVÍOS</div>
 </section>
 <div class="benefitbar"><div class="shell benefitrow">
   <div class="benefititem"><span>▣</span><b>Productos organizados</b></div>
@@ -532,17 +542,17 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
   <div class="benefititem"><span>↗</span><b>WhatsApp directo</b></div>
 </div></div>
 <section class="section" id="categorias"><div class="shell">
-  <div class="sechead"><div><span class="eyebrow">NORTE ABERTURAS · LÍNEAS DE PRODUCTOS</span><h2 class="serif">Descubrí las aberturas de Norte.</h2></div><p>Elegí puertas, ventanas, herrajes o soluciones a medida. Pedí asesoramiento para tu obra y consultá opciones de envío.</p></div>
+  <div class="sechead"><div><span class="eyebrow">NORTE ABERTURAS · LÍNEAS DE PRODUCTOS</span><h2 class="serif">Conocé lo que hacemos en Norte.</h2></div><p>Puertas de ingreso e interior, ventanas, herrajes y fabricación especial. Consultá con Norte Aberturas por materiales, medidas, terminaciones y envíos.</p></div>
   <div class="catgrid">
     <button type="button" class="catcard" data-category="Puertas" aria-label="Ver catálogo de puertas"><img loading="lazy" src="https://images.pexels.com/photos/36777846/pexels-photo-36777846.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Puerta de entrada moderna de madera instalada en vivienda contemporánea, fotografía de referencia"><span class="catinfo"><small>Entradas con diseño y presencia</small><b class="serif">Puertas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
     <button type="button" class="catcard" data-category="Ventanas" aria-label="Ver catálogo de ventanas"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="catinfo"><small>Luz y ventilación para cada ambiente</small><b class="serif">Ventanas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
     <button type="button" class="catcard" data-category="Accesorios" aria-label="Ver catálogo de accesorios"><img loading="lazy" src="https://images.pexels.com/photos/965878/pexels-photo-965878.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Picaporte metálico moderno en puerta blanca, fotografía de referencia"><span class="catinfo"><small>Herrajes y detalles de calidad</small><b class="serif">Accesorios</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
     <button type="button" class="catcard" data-category="A medida" aria-label="Ver productos a medida"><img loading="lazy" src="https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Casa contemporánea con grandes ventanales y aberturas de piso a techo, fotografía de referencia"><span class="catinfo"><small>Soluciones para proyectos especiales</small><b class="serif">A medida</b><em class="type-count">10 referencias</em><span>↗</span></span></button>
   </div>
-  <div class="intro-note"><span>Catálogo ilustrativo: las fotos y modelos reales se incorporan cuando los entregue el fabricante.</span><a href="#productos">Ver los productos ↗</a></div><div class="pella-help"><div><strong>¿Todavía no sabés qué modelo elegir?</strong><span>Prepará una consulta con el tipo de abertura y las medidas de tu proyecto.</span></div><a href="#amedida">Asesoramiento para tu obra ↗</a></div>
+  <div class="intro-note"><span>Catálogo ilustrativo: las fotos y modelos reales se incorporan cuando los entregue el fabricante.</span><a href="#productos">Ver los productos ↗</a></div><div class="pella-help"><div><strong>¿Buscás una abertura para tu obra?</strong><span>Contanos qué tipo de abertura necesitás y las medidas aproximadas. Norte Aberturas te ayuda a elegir.</span></div><a href="#amedida">Asesoramiento para tu obra ↗</a></div>
 </div></section>
 <section class="catalog" id="productos"><div class="shell">
-  <div class="catalog-top"><div><span class="eyebrow">CATÁLOGO DE NORTE ABERTURAS</span><h2 class="serif">Puertas y ventanas para tu proyecto.</h2><p>Conocé referencias del catálogo Norte Aberturas. Sumá modelos a tu consulta y pedí medidas, terminaciones y precios por WhatsApp.</p></div><div class="quotehint"><b>¿Estás equipando una obra?</b>Armá tu lista con puertas, ventanas y herrajes y pedí una cotización conjunta a Norte Aberturas por WhatsApp.</div></div>
+  <div class="catalog-top"><div><span class="eyebrow">CATÁLOGO DE NORTE ABERTURAS</span><h2 class="serif">Tus próximas aberturas, con Norte.</h2><p>Conocé referencias del catálogo Norte Aberturas. Sumá modelos a tu consulta y pedí medidas, terminaciones y precios por WhatsApp.</p></div><div class="quotehint"><b>¿Estás equipando una obra?</b>Armá tu lista con puertas, ventanas y herrajes y pedí una cotización conjunta a Norte Aberturas por WhatsApp.</div></div>
   <div class="catalog-explore"><div class="category-results">
 <div class="catcontrols">
     <div class="filterline" role="group" aria-label="Filtrar productos"><button class="chip" data-filter="Todos" aria-pressed="true">Todos</button><button class="chip" data-filter="Puertas" aria-pressed="false">Puertas</button><button class="chip" data-filter="Ventanas" aria-pressed="false">Ventanas</button><button class="chip" data-filter="Accesorios" aria-pressed="false">Accesorios</button><button class="chip" data-filter="A medida" aria-pressed="false">A medida</button><button class="chip" data-filter="Favoritos" aria-pressed="false">♡ Favoritos</button></div>
@@ -609,7 +619,7 @@ document.addEventListener('click',function(event){
 </div><div class="footend"><span>DEMO COMERCIAL · No es la tienda oficial. Fotografías y productos ilustrativos.</span><span>Diseñada por <a href="https://zenix.com.ar/" target="_blank" rel="noopener noreferrer">Zenix AR ↗</a></span></div></div></footer>
 <div id="mobile-cart" class="mobile-cart" hidden><button type="button" id="mobile-cart-open">🛒 Ver carrito · <span id="mobile-cart-count">0 productos</span> ↗</button></div><div class="shade" id="shade" hidden></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
-  <div class="drawerheader"><div><span class="eyebrow" style="color:#a97548">NORTE ABERTURAS · TU SELECCIÓN</span><h2 id="drawer-title" class="serif">TU CONSULTA</h2></div><button class="close" id="close-drawer" aria-label="Cerrar" type="button">×</button></div>
+  <div class="drawerheader"><div><span class="eyebrow" style="color:#a97548">NORTE ABERTURAS · TU SELECCIÓN</span><h2 id="drawer-title" class="serif">TU SELECCIÓN NORTE</h2></div><button class="close" id="close-drawer" aria-label="Cerrar" type="button">×</button></div>
   <div class="drawerbody"><div id="cart-items"></div><div id="cart-form" hidden><div class="totalnote"><strong>Precio total: A cotizar</strong><br>Norte Aberturas confirmará por WhatsApp disponibilidad, medidas, terminaciones, precio y envío antes de avanzar.</div><label class="label" for="q-name">Tu nombre (opcional)</label><input id="q-name" class="input" maxlength="80" placeholder="¿Cómo te llamás?"><label class="label" for="q-city">Ciudad / Provincia</label><input id="q-city" class="input" maxlength="100" placeholder="¿Desde dónde consultás?"></div></div>
   <div class="drawerbottom"><button type="button" id="send-cart" class="btn darkbtn">Pedir cotización a Norte ↗</button><button type="button" id="continue-shopping" style="width:100%;margin:13px 0 5px;padding:9px;border:0;background:transparent;color:#315947;text-decoration:underline;font-size:12px;font-weight:800">← Seguir comprando</button><p class="smallprint">Tu consulta se envía por WhatsApp a Norte Aberturas. Esta demostración no procesa pagos.</p></div>
 </aside>
