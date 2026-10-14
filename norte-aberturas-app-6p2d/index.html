@@ -572,10 +572,16 @@ body:has(#cart-drawer:not([hidden])) .site-menu-panel{visibility:hidden!importan
 /* El buscador y la navegación del catálogo no deben provocar saltos de pantalla. */
 #catalogo{overflow-anchor:none}
 @media(max-width:760px){html{scroll-padding-top:145px}}
+
+/* Norte Aberturas · revisión r35: evitar reajustes del desplazamiento mientras se edita */
+html{overflow-anchor:none;scroll-behavior:auto}
+body{overflow-anchor:none}
+#catalogo,.catalog-explore,#catalog,#shop-featured-app-rail,#shop-new-app-rail{overflow-anchor:none}
+.shop-search-form input[type="search"]{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS</div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r35</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
