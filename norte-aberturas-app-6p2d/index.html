@@ -600,10 +600,35 @@ body{overflow-anchor:none}
 @media(max-width:760px){
  #admin-modal.modal:not([hidden]){max-height:calc(100dvh - 22px)}
 }
+
+/* r42 · Todas las categorías, incluidas las creadas desde el panel */
+.shop-all-categories-section{margin-top:18px}
+.shop-all-categories-toggle{display:flex;align-items:center;gap:14px;width:100%;border:1px solid #d8e1d6;border-radius:7px;background:#edf2ea;color:#244b37;padding:16px 20px;text-align:left;cursor:pointer;min-height:72px}
+.shop-all-categories-toggle:hover,.shop-all-categories-toggle[aria-expanded="true"]{background:#e3ecdf;border-color:#b8ceba}
+.shop-all-categories-toggle:focus-visible,.shop-all-category:focus-visible{outline:3px solid #60866b;outline-offset:2px}
+.shop-all-categories-toggle-icon{display:grid;place-items:center;flex:0 0 40px;height:40px;border-radius:6px;background:#d8e5d7;font-size:23px}
+.shop-all-categories-toggle-copy{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.shop-all-categories-toggle-copy strong{font:800 14px/1.3 'DM Sans',Arial,sans-serif}
+.shop-all-categories-toggle-copy small{font:500 11px/1.45 'DM Sans',Arial,sans-serif;color:#657e6b}
+.shop-all-categories-toggle-arrow{font-size:28px;transition:transform .2s ease}
+.shop-all-categories-toggle[aria-expanded="true"] .shop-all-categories-toggle-arrow{transform:rotate(180deg)}
+.shop-all-categories-panel{padding:19px 0 6px}
+.shop-all-categories-panel[hidden]{display:none!important}
+.shop-all-categories-heading{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:12px;color:#284e37}
+.shop-all-categories-heading strong{font:700 18px/1.2 'Playfair Display',Georgia,serif}
+.shop-all-categories-heading span{font-size:11px;color:#607765}
+.shop-all-categories-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.shop-all-category{border:1px solid #dbe3d8;border-radius:6px;background:#fffefa;color:#274835;padding:16px;text-align:left;min-height:85px;display:flex;flex-direction:column;gap:7px;cursor:pointer;overflow-wrap:anywhere}
+.shop-all-category:hover{border-color:#8aab93;background:#f3f6ef}
+.shop-all-category-name{font:700 16px/1.25 'DM Sans',Arial,sans-serif}
+.shop-all-category-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;color:#6a7e70}
+.shop-all-category-footer span:last-child{font-size:17px;color:#335b43}
+@media(max-width:760px){.shop-all-categories-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-all-categories-toggle{padding:13px;gap:11px}.shop-all-categories-heading{align-items:start;flex-direction:column;gap:3px}}
+@media(max-width:380px){.shop-all-categories-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r41</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r42</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -718,6 +743,17 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
 <button type="button" data-shop-app-cat="Ventanas" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="pella-catcaption"><strong>Ventanas</strong><small>Luz y ventilación para cada ambiente · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
 <button type="button" data-shop-app-cat="Accesorios" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/965878/pexels-photo-965878.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Picaporte metálico moderno en puerta blanca, fotografía de referencia"><span class="pella-catcaption"><strong>Accesorios</strong><small>Herrajes y detalles de calidad · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
 <button type="button" data-shop-app-cat="A medida" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Casa contemporánea con grandes ventanales y aberturas de piso a techo, fotografía de referencia"><span class="pella-catcaption"><strong>A medida</strong><small>Soluciones para proyectos especiales · 10 referencias</small><b aria-hidden="true">↗</b></span></button>
+</div>
+<div class="shop-all-categories-section">
+  <button type="button" id="shop-all-categories-toggle" class="shop-all-categories-toggle" aria-expanded="false" aria-controls="shop-all-categories-panel">
+    <span class="shop-all-categories-toggle-icon" aria-hidden="true">▦</span>
+    <span class="shop-all-categories-toggle-copy"><strong>Ver todas las categorías</strong><small id="shop-all-categories-count">Explorá nuestras líneas de productos</small></span>
+    <span class="shop-all-categories-toggle-arrow" aria-hidden="true">⌄</span>
+  </button>
+  <div id="shop-all-categories-panel" class="shop-all-categories-panel" hidden>
+    <div class="shop-all-categories-heading"><strong>Elegí una categoría</strong><span>Seleccioná una para ver sus productos</span></div>
+    <div id="shop-all-categories-grid" class="shop-all-categories-grid"></div>
+  </div>
 </div></div></section>
 <section class="section" id="catalogo"><div class="shell">
   <div class="sectiontop"><div><span class="micro" style="color:#9c7b53">CATÁLOGO DE NORTE ABERTURAS</span><h2>Tus próximas aberturas, con Norte.</h2></div><p>Conocé modelos de referencia de Norte Aberturas, guardá tus favoritos y solicitá cotización con las medidas de tu obra.</p></div>
@@ -1066,8 +1102,21 @@ window.norteEnsureCatalog=()=>{
   renderCatalog();
  }
 };
+function renderAllCategoriesExplorer(){
+ const count=$('shop-all-categories-count');
+ const grid=$('shop-all-categories-grid');
+ if(!count||!grid)return;
+ const additional=Math.max(0,CATEGORIES.length-FIXED_CATEGORIES.length);
+ count.textContent=CATEGORIES.length+' categorías disponibles'+(additional?' · '+additional+' nuevas':'');
+ grid.innerHTML=CATEGORIES.map(category=>{
+  const total=products.filter(p=>p.category===category).length;
+  return '<button class="shop-all-category" type="button" data-explore-category="'+esc(category)+'" aria-label="Ver '+esc(category)+', '+total+' '+(total===1?'producto':'productos')+'"><span class="shop-all-category-name">'+esc(category)+'</span><span class="shop-all-category-footer"><span>'+total+' '+(total===1?'producto':'productos')+'</span><span aria-hidden="true">↗</span></span></button>';
+ }).join('');
+}
+
 function renderAll(){
  renderAppShowcase();
+ renderAllCategoriesExplorer();
  // El catálogo completo no se monta hasta que el visitante lo pide.
  if(document.body.classList.contains('catalog-browsing'))renderCatalog();
  else syncCategorySidebar();
@@ -1409,6 +1458,18 @@ window.addEventListener('scroll',()=>{
  requestAnimationFrame(()=>{headerScrollRestore=false});
 },{passive:true});
 $('shop-search-app-form').addEventListener('submit',submitShopAppSearch);
+$('shop-all-categories-toggle').addEventListener('click',()=>{
+ const button=$('shop-all-categories-toggle'),panel=$('shop-all-categories-panel');
+ const opening=button.getAttribute('aria-expanded')!=='true';
+ button.setAttribute('aria-expanded',String(opening));
+ panel.hidden=!opening;
+});
+$('shop-all-categories-grid').addEventListener('click',event=>{
+ const choice=event.target.closest('[data-explore-category]');
+ if(!choice)return;
+ const category=choice.dataset.exploreCategory;
+ if(CATEGORIES.includes(category))window.norteSelectCategory(category);
+});
 all('[data-shop-app-cat]').forEach(b=>b.addEventListener('click',()=>window.norteSelectCategory(b.dataset.shopAppCat)));
 all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(b.dataset.appShelf+'-rail');const item=rail?.querySelector('.shop-item');if(item)rail.scrollBy({left:Number(b.dataset.appDir)*(item.getBoundingClientRect().width+16),behavior:'smooth'})}));
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
