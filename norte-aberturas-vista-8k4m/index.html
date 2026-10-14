@@ -822,7 +822,13 @@ $('mobile-catalog').querySelectorAll('[data-track]').forEach(track=>{
 // El catálogo permanece liviano al iniciar, pero debe pintarse al solicitarlo.
 window.norteEnsureCatalog=()=>{
  document.body.classList.add('catalog-browsing');
- if(!catalogHasRendered)renderProducts();
+ // "Catálogo completo" siempre muestra todas las categorías.
+ if(!catalogHasRendered||current!=='Todos'||search){
+  search='';
+  $('search').value='';
+  $('shop-search-query').value='';
+  filter('Todos');
+ }
 };
 function renderShopfront(){
  const groups=[
@@ -866,7 +872,7 @@ const generic='¡Hola! 👋 Estuve viendo los catálogos de Norte Aberturas. ¿P
 $('shop-search-form').addEventListener('submit',shopSearchSubmit);
 document.querySelectorAll('[data-shop-category]').forEach(b=>b.addEventListener('click',()=>{const cat=b.dataset.shopCategory;$('search').value='';search='';filter(cat);$('productos').scrollIntoView({behavior:'smooth'})}));
 document.querySelectorAll('[data-shelf-dir]').forEach(b=>b.addEventListener('click',()=>{const rail=$(b.dataset.shelf+'-rail');const card=rail?.querySelector('.shop-item');if(card)rail.scrollBy({left:Number(b.dataset.shelfDir)*(card.getBoundingClientRect().width+16),behavior:'smooth'})}));
-document.querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{filter(b.dataset.category);$('search').value='';search='';renderProducts();$('productos').scrollIntoView({behavior:'smooth'})}));
+document.querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{$('search').value='';$('shop-search-query').value='';search='';filter(b.dataset.category);$('productos').scrollIntoView({behavior:'smooth'})}));
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>filter(b.dataset.filter)));
 $('search').addEventListener('input',e=>{search=e.target.value.trim();renderProducts()});$('sort').addEventListener('change',e=>{sortMode=e.target.value;renderProducts()});
 $('header-cart').addEventListener('click',()=>show('drawer'));$('mobile-cart-open').addEventListener('click',()=>show('drawer'));$('continue-shopping').addEventListener('click',()=>{closeAll();$('productos').scrollIntoView({behavior:'smooth'})});
@@ -876,7 +882,7 @@ $('modal-add').addEventListener('click',()=>{if(detailId){add(detailId);show('dr
 $('modal-wa').addEventListener('click',()=>{let p=find(detailId);if(p)openWhatsApp('Hola, vi el catálogo digital de Norte Aberturas y quisiera consultar por '+p.title+'. ¿Me podrían enviar modelos, medidas y precios disponibles? ¡Gracias!')});
 $('send-cart').addEventListener('click',sendBasket);
 const mobileWebCatalog=window.matchMedia('(max-width:720px)');mobileWebCatalog.addEventListener('change',()=>{if(document.body.classList.contains('catalog-browsing'))renderProducts()});
-initCategorySidebar();clean();renderShopfront();if(document.body.classList.contains('catalog-browsing')||location.hash==='#productos')renderProducts();else syncCategorySidebar();renderBasket();
+initCategorySidebar();clean();renderShopfront();syncCategorySidebar();renderBasket();
 })();
 
 /* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
@@ -921,7 +927,7 @@ document.addEventListener('click',e=>{
  else if(e.target.closest('[data-category],[data-drop-choice],[data-shop-category]'))document.body.classList.add('catalog-browsing');
 },true);
 document.getElementById('shop-search-form').addEventListener('submit',()=>document.body.classList.add('catalog-browsing'),true);
-if(location.hash==='#productos')showCatalogForBrowsing();
+if(location.hash==='#productos'){showCatalogForBrowsing();requestAnimationFrame(()=>document.getElementById('productos').scrollIntoView({block:'start'}))}
 window.addEventListener('hashchange',()=>{if(location.hash==='#productos')showCatalogForBrowsing()});
 </script>
 </body>
