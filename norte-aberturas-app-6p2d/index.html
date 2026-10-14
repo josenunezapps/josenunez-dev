@@ -583,10 +583,27 @@ body{overflow-anchor:none}
 .product-code{display:block;margin:4px 0 8px;font-size:11px;line-height:1.5;letter-spacing:.03em;font-weight:700;color:#58725f;overflow-wrap:anywhere}
 .product-code-hint{display:block;font-size:11px;font-weight:400;line-height:1.45;color:#667b6e;margin-top:2px}
 .admin-title small{overflow-wrap:anywhere}
+
+/* r40 · Paneles por delante del velo del fondo.
+   El CSS anterior daba al overlay z-index:4000!important y a .modal 1220!important,
+   dejando el panel de administración detrás del velo desenfocado. */
+#admin-modal.modal:not([hidden]),
+#detail-modal.detail-modal:not([hidden]){
+ position:fixed!important;
+ z-index:4020!important;
+ isolation:isolate;
+}
+#admin-modal.modal:not([hidden]){
+ background:#f9faf6;
+ box-shadow:0 25px 100px #02130d77;
+}
+@media(max-width:760px){
+ #admin-modal.modal:not([hidden]){max-height:calc(100dvh - 22px)}
+}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r39</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r40</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
