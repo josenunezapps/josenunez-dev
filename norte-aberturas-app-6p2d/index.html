@@ -920,10 +920,21 @@ function submitShopAppSearch(e){
  renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'});
 }
 
+window.norteEnsureCatalog=()=>{
+ document.body.classList.add('catalog-browsing');
+ // Abrir el catálogo completo requiere mostrar todos los productos.
+ if(!catalogHasRendered||filter!=='Todas'||query){
+  query='';
+  $('shop-search-app').value='';
+  $('product-search').value='';
+  filter='Todas';
+  renderCatalog();
+ }
+};
 function renderAll(){
  renderAppShowcase();
  // El catálogo completo no se monta hasta que el visitante lo pide.
- if(document.body.classList.contains('catalog-browsing')||location.hash==='#catalogo')renderCatalog();
+ if(document.body.classList.contains('catalog-browsing'))renderCatalog();
  else syncCategorySidebar();
  renderCart();
  // No dibujar el panel oculto: puede tener cientos de fotos.
@@ -993,7 +1004,9 @@ function initCategorySidebar(){
   });
 }
 
+let catalogHasRendered=false;
 function renderCatalog(){
+ catalogHasRendered=true;
  const q=query.toLocaleLowerCase('es-AR');
  let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
  if(sortMode==='az')visible.sort((a,b)=>a.name.localeCompare(b.name,'es-AR'));
@@ -1266,13 +1279,15 @@ document.addEventListener('error',ev=>{
 
 // The storefront stays short until a visitor chooses a category or requests products.
 function showCatalogForBrowsing(){
- document.body.classList.add('catalog-browsing');
+ if(typeof window.norteEnsureCatalog==='function')window.norteEnsureCatalog();
+ else document.body.classList.add('catalog-browsing');
 }
 document.addEventListener('click',e=>{
- if(e.target.closest('[data-shop-app-cat],[data-drop-choice],a[href="#catalogo"]'))showCatalogForBrowsing();
+ if(e.target.closest('a[href="#catalogo"]'))showCatalogForBrowsing();
+ else if(e.target.closest('[data-shop-app-cat],[data-drop-choice]'))document.body.classList.add('catalog-browsing');
 },true);
-document.getElementById('shop-search-app-form').addEventListener('submit',showCatalogForBrowsing,true);
-if(location.hash==='#catalogo')showCatalogForBrowsing();
+document.getElementById('shop-search-app-form').addEventListener('submit',()=>document.body.classList.add('catalog-browsing'),true);
+if(location.hash==='#catalogo'){showCatalogForBrowsing();requestAnimationFrame(()=>document.getElementById('catalogo').scrollIntoView({block:'start'}))}
 window.addEventListener('hashchange',()=>{if(location.hash==='#catalogo')showCatalogForBrowsing()});
 </script>
 </body>
