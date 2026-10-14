@@ -640,7 +640,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r47</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r48</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -1420,7 +1420,7 @@ function norteLoadPdfLibrary(){
  if(nortePdfLibraryPromise)return nortePdfLibraryPromise;
  nortePdfLibraryPromise=new Promise((resolve,reject)=>{
   const script=document.createElement('script');
-  script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
+  script.src='./vendor/jspdf.umd.min.js';
   script.async=true;
   script.onload=()=>window.jspdf?.jsPDF?resolve(window.jspdf.jsPDF):reject(Error('La biblioteca de PDF no se pudo iniciar'));
   script.onerror=()=>reject(Error('No se pudo cargar el generador de PDF. Revisá la conexión a Internet.'));
