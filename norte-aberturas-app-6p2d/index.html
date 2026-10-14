@@ -916,7 +916,15 @@ function submitShopAppSearch(e){
  renderCatalog();$('catalogo').scrollIntoView({behavior:'smooth'});
 }
 
-function renderAll(){renderAppShowcase();renderCatalog();renderCart();renderAdmin()}
+function renderAll(){
+ renderAppShowcase();
+ // El catálogo completo no se monta hasta que el visitante lo pide.
+ if(document.body.classList.contains('catalog-browsing')||location.hash==='#catalogo')renderCatalog();
+ else syncCategorySidebar();
+ renderCart();
+ // No dibujar el panel oculto: puede tener cientos de fotos.
+ if(!$('admin-modal').hidden)renderAdmin();
+}
 
 
 let selectedViewKey='';
@@ -997,7 +1005,8 @@ function renderCatalog(){
  all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
  all('[data-detail]',$('catalog')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
  all('[data-favorite]',$('catalog')).forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.favorite;if(favorites.has(id))favorites.delete(id);else favorites.add(id);setStored(FAV_STORE,[...favorites]);renderCatalog();toast(favorites.has(id)?'Guardado en favoritos':'Quitado de favoritos')}));
- renderMobileCarousels(visible);
+ if(window.matchMedia('(max-width:760px)').matches)renderMobileCarousels(visible);
+ else if($('swipe-catalog').childElementCount)$('swipe-catalog').replaceChildren();
 }
 
 
@@ -1066,29 +1075,48 @@ function openDetail(id){
  all('[data-related]',$('detail-related')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.related)));
  showPanel('detail-modal');
 }
+
+function adminProductRows(items){
+ if(!items.length)return '<p class="admin-empty-category">Este apartado todavía no tiene productos que coincidan.</p>';
+ return items.map(p=>{
+  const image=safeImg(p.image);
+  return '<div class="admin-row"><div class="admin-thumb">'+(image?'<img loading="lazy" decoding="async" src="'+esc(image)+'" alt="">':'<div class="tile-placeholder" style="font-size:27px">▦</div>')+'</div><div class="admin-title"><b>'+esc(p.name)+'</b><small>'+esc(p.category)+' · '+(p.price===null?'Sin precio':formatPrice(p.price))+'</small></div><button class="smallbtn" type="button" data-edit="'+esc(p.id)+'">Editar</button><button class="smallbtn danger" type="button" data-delete="'+esc(p.id)+'">Quitar</button></div>';
+ }).join('');
+}
+function adminGroupContent(category,items,total,q){
+ const fixed=FIXED_CATEGORIES.includes(category);
+ return '<div class="admin-group-actions"><button type="button" class="smallbtn strong" data-new-in="'+esc(category)+'">+ Agregar producto</button>'+(!fixed&&!total?'<button type="button" class="smallbtn danger" data-remove-category="'+esc(category)+'">Eliminar apartado vacío</button>':'')+'</div>'+adminProductRows(items);
+}
 function renderAdmin(){
  const box=$('admin-list'),q=$('admin-product-search').value.trim().toLocaleLowerCase('es-AR');
  const matches=products.filter(p=>[p.name,p.category,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)));
  $('admin-search-summary').textContent=(q?matches.length+' resultados':'Total: '+products.length+' productos')+' · '+CATEGORIES.length+' apartados'+(q?' · búsqueda activa':' · tocá un apartado para ver sus productos');
  const entries=CATEGORIES.map(category=>{
-  const folderProducts=products.filter(p=>p.category===category);
-  const categoryMatch=category.toLocaleLowerCase('es-AR').includes(q);
-  const visible=q?(categoryMatch?folderProducts:folderProducts.filter(p=>[p.name,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)))):folderProducts;
-  return{category,folderProducts,visible};
+  const categoryProducts=products.filter(p=>p.category===category);
+  const categoryMatches=category.toLocaleLowerCase('es-AR').includes(q);
+  const visible=q?(categoryMatches?categoryProducts:categoryProducts.filter(p=>[p.name,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)))):categoryProducts;
+  return{category,categoryProducts,visible};
  }).filter(group=>!q||group.visible.length>0||group.category.toLocaleLowerCase('es-AR').includes(q));
- box.innerHTML=entries.length?entries.map(({category,folderProducts,visible})=>{
-  const open=q||adminOpenGroups.has(category),fixed=FIXED_CATEGORIES.includes(category);
-  return '<details class="admin-category-group" data-admin-folder="'+esc(category)+'"'+(open?' open':'')+'><summary><span class="admin-folder" aria-hidden="true">▤</span><span class="admin-group-name"><strong>'+esc(category)+'</strong><small>Catálogo de '+esc(category.toLocaleLowerCase('es-AR'))+'</small></span><span class="admin-group-count">'+folderProducts.length+' '+(folderProducts.length===1?'producto':'productos')+'</span><span class="admin-group-arrow" aria-hidden="true">⌄</span></summary><div class="admin-group-body"><div class="admin-group-actions"><button type="button" class="smallbtn strong" data-new-in="'+esc(category)+'">+ Agregar producto</button>'+(!fixed&&!folderProducts.length?'<button type="button" class="smallbtn danger" data-remove-category="'+esc(category)+'">Eliminar apartado vacío</button>':'')+'</div>'+(visible.length?visible.map(p=>'<div class="admin-row"><div class="admin-thumb">'+(safeImg(p.image)?'<img loading="lazy" src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:27px">▦</div>')+'</div><div class="admin-title"><b>'+esc(p.name)+'</b><small>'+esc(p.category)+' · '+(p.price===null?'Sin precio':formatPrice(p.price))+'</small></div><button class="smallbtn" type="button" data-edit="'+esc(p.id)+'">Editar</button><button class="smallbtn danger" type="button" data-delete="'+esc(p.id)+'">Quitar</button></div>').join(''):'<p class="admin-empty-category">'+(q?'No hay productos que coincidan con la búsqueda en este apartado.':'Todavía no hay productos en este apartado.')+'</p>')+'</div></details>';
+ box.innerHTML=entries.length?entries.map(({category,categoryProducts,visible})=>{
+  const open=!!q||adminOpenGroups.has(category);
+  // El contenido se genera solo al abrir un apartado; los cerrados no cargan imágenes.
+  return '<details class="admin-category-group" data-admin-folder="'+esc(category)+'"'+(open?' open':'')+'><summary><span class="admin-folder" aria-hidden="true">▤</span><span class="admin-group-name"><strong>'+esc(category)+'</strong><small>Catálogo de '+esc(category.toLocaleLowerCase('es-AR'))+'</small></span><span class="admin-group-count">'+categoryProducts.length+' '+(categoryProducts.length===1?'producto':'productos')+'</span><span class="admin-group-arrow" aria-hidden="true">⌄</span></summary><div class="admin-group-body" data-admin-body>'+((open)?adminGroupContent(category,visible,categoryProducts.length,q):'')+'</div></details>';
  }).join(''):'<div class="admin-zero">No encontramos productos ni apartados que coincidan. Probá otro término.</div>';
  all('[data-admin-folder]',box).forEach(group=>group.addEventListener('toggle',()=>{
   if(q)return;
-  if(group.open){adminOpenGroups.add(group.dataset.adminFolder);adminSelectedCategory=group.dataset.adminFolder}
-  else adminOpenGroups.delete(group.dataset.adminFolder);
+  const category=group.dataset.adminFolder,content=group.querySelector('[data-admin-body]');
+  if(group.open){
+   adminOpenGroups.add(category);adminSelectedCategory=category;
+   // Evitar reconstruirlo dos veces si <details> dispara toggle al inicializar.
+   if(!content.childElementCount){
+    const items=products.filter(p=>p.category===category);
+    content.innerHTML=adminGroupContent(category,items,items.length,'');
+   }
+  }else{
+   adminOpenGroups.delete(category);
+   content.replaceChildren();
+  }
  }));
- all('[data-edit]',box).forEach(b=>b.addEventListener('click',()=>editProduct(b.dataset.edit)));
- all('[data-delete]',box).forEach(b=>b.addEventListener('click',()=>deleteProduct(b.dataset.delete)));
- all('[data-new-in]',box).forEach(b=>b.addEventListener('click',()=>{adminSelectedCategory=b.dataset.newIn;editProduct(null)}));
- all('[data-remove-category]',box).forEach(b=>b.addEventListener('click',()=>removeAdminCategory(b.dataset.removeCategory)));
 }
 function createAdminCategory(e){
  e.preventDefault();
@@ -1159,7 +1187,21 @@ $('add-category').addEventListener('click',()=>{
 });
 $('cancel-category').addEventListener('click',()=>{$('admin-category-form').hidden=true;$('admin-category-name').value=''});
 $('admin-category-form').addEventListener('submit',createAdminCategory);
-$('admin-product-search').addEventListener('input',()=>renderAdmin());
+let adminSearchTimer=0;
+$('admin-product-search').addEventListener('input',()=>{
+ clearTimeout(adminSearchTimer);
+ adminSearchTimer=setTimeout(renderAdmin,180);
+});
+$('admin-list').addEventListener('click',event=>{
+ const button=event.target.closest('[data-edit],[data-delete],[data-new-in],[data-remove-category]');
+ if(!button||!$('admin-list').contains(button))return;
+ if(button.hasAttribute('data-edit'))editProduct(button.dataset.edit);
+ else if(button.hasAttribute('data-delete'))deleteProduct(button.dataset.delete);
+ else if(button.hasAttribute('data-new-in')){adminSelectedCategory=button.dataset.newIn;editProduct(null)}
+ else if(button.hasAttribute('data-remove-category'))removeAdminCategory(button.dataset.removeCategory);
+});
+const mobileCatalogMedia=window.matchMedia('(max-width:760px)');
+mobileCatalogMedia.addEventListener('change',()=>{if(document.body.classList.contains('catalog-browsing'))renderCatalog()});
 $('admin-clear-search').addEventListener('click',()=>{$('admin-product-search').value='';renderAdmin();$('admin-product-search').focus()});
 $('cancel-edit').addEventListener('click',()=>{$('admin-form').hidden=true;editing=null;uploaded=null});
 $('admin-upload').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{uploaded=await photoToDataURL(file);toast('Foto optimizada: guardala con el producto')}catch(err){uploaded=null;toast(err.message)}});
