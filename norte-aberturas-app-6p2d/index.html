@@ -1489,7 +1489,7 @@ async function exportPDF(){
   function pageHeader(category,index){
    fill(dark);pdf.rect(0,0,W,19,'F');
    tx('NORTE ABERTURAS',M,12,10,'helvetica','bold',[255,253,247]);
-   tx('COPIA ADMINISTRATIVA · '+(index+1).toString().padStart(2,'0'),R,12,8,'helvetica','normal',[225,211,190]);
+   pdf.setFont('helvetica','normal');pdf.setFontSize(8);rgb([225,211,190]);pdf.text('COPIA ADMINISTRATIVA · '+(index+1).toString().padStart(2,'0'),R,12,{align:'right'});
    pdf.setFont('times','normal');pdf.setFontSize(27);rgb(dark);
    const catLines=pdf.splitTextToSize(nortePdfText(category),175);
    pdf.text(catLines,M,37);
@@ -1521,7 +1521,7 @@ async function exportPDF(){
    tx((i+1).toString().padStart(2,'0'),M,indexY,10,'helvetica','bold',gold);
    const category=pdf.splitTextToSize(nortePdfText(cat),112);
    tx(category[0]||cat,M+17,indexY,10,'helvetica','normal',dark);
-   tx(String(reportProducts.filter(p=>p.category===cat).length)+' productos',R,indexY,9,'helvetica','normal',mute);
+   pdf.setFont('helvetica','normal');pdf.setFontSize(9);rgb(mute);pdf.text(String(reportProducts.filter(p=>p.category===cat).length)+' productos',R,indexY,{align:'right'});
    rule(indexY+3);indexY+=8;
   });
   // Fichas agrupadas, incluyendo categorías vacías.
@@ -1536,7 +1536,7 @@ async function exportPDF(){
     const descLines=pdf.splitTextToSize(nortePdfText(description)||'Sin descripción cargada',108);
     const photo=photos.get(product.id);
     const hasLink=/^https:\/\//i.test(String(product.image||''));
-    const cardHeight=Math.max(79,32+titleLines.length*6+descLines.length*4.25+(hasLink?8:0));
+    const cardHeight=Math.max(79,56+titleLines.length*6+descLines.length*4.25+(hasLink?8:0));
     if(y+cardHeight>H-22){pdf.addPage();y=pageHeader(category,categoryIndex);}
     fill([250,251,247]);pdf.setDrawColor(217,227,216);pdf.setLineWidth(.3);
     pdf.roundedRect(M,y,R-M,cardHeight-5,2,2,'FD');
@@ -1575,7 +1575,7 @@ async function exportPDF(){
    pdf.setPage(page);
    rule(H-16);
    tx('NORTE ABERTURAS · Respaldo interno. El archivo JSON permite restaurar los datos.',M,H-10,7,'helvetica','normal',mute);
-   tx(page+' / '+pdf.getNumberOfPages(),R-13,H-10,7,'helvetica','normal',mute);
+   pdf.setFont('helvetica','normal');pdf.setFontSize(7);rgb(mute);pdf.text(page+' / '+pdf.getNumberOfPages(),R,H-10,{align:'right'});
   }
   pdf.save('norte-aberturas-catalogo-administrativo-'+new Date().toISOString().slice(0,10)+'.pdf');
   toast('Se descargó el catálogo completo en PDF');
