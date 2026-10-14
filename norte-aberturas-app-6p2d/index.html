@@ -565,6 +565,9 @@ body:has(#cart-drawer:not([hidden])) .site-menu-panel{visibility:hidden!importan
 .norte-consulta .consulta-send{display:block;width:100%;margin-top:21px;min-height:49px}
 .norte-consulta .consulta-footnote{font-size:11px;line-height:1.55;color:#78867a;text-align:center;margin:11px 0 0}
 @media(max-width:540px){#consulta-modal.norte-consulta:not([hidden]){width:calc(100vw - 20px);max-height:calc(100dvh - 20px)}.norte-consulta .consulta-head{padding:19px 17px 14px}.norte-consulta .consulta-body{padding:17px}.norte-consulta .consulta-grid{grid-template-columns:1fr;gap:12px}.norte-consulta .consulta-field.full{grid-column:auto}}
+
+/* Norte Aberturas: acciones del catálogo sin cortes de texto */
+.shop-actions .shop-detail[data-shop-app-category]{white-space:normal;text-align:center;min-width:84px;padding-inline:9px}
 </style>
 </head>
 <body>
@@ -839,7 +842,7 @@ const DEFAULTS=[
 {id:'p9',name:'Ventana para ambientes',category:'Ventanas',description:'Aberturas para diferentes sectores del hogar.',price:null,image:'https://images.unsplash.com/photo-1534799525452-5189c018c746?auto=format&fit=crop&w=900&q=80'},
 {id:'p10',name:'Manijones',category:'Accesorios',description:'Herrajes de referencia para entradas y puertas.',price:null,image:'https://images.unsplash.com/photo-1776417091038-df7f71687a1e?auto=format&fit=crop&w=900&q=80'},
 {id:'p11',name:'Herrajes y terminaciones',category:'Accesorios',description:'Detalles que completan distintos estilos de aberturas.',price:null,image:'https://images.unsplash.com/photo-1623632623717-f8038fb66228?auto=format&fit=crop&w=900&q=80'},
-{id:'p12',name:'Puertas a medida',category:'A medida',description:'Cotizaciones para medidas, terminaciones o estilos especiales.',price:null,image:'https://images.unsplash.com/photo-1764592119348-0aaeab50e2d0?auto=format&fit=crop&w=900&q=80'},,
+{id:'p12',name:'Puertas a medida',category:'A medida',description:'Cotizaciones para medidas, terminaciones o estilos especiales.',price:null,image:'https://images.unsplash.com/photo-1764592119348-0aaeab50e2d0?auto=format&fit=crop&w=900&q=80'},
 {id:"p13",name:"Puerta pivotante",category:"Puertas",description:"Ejemplo de diseño de puerta pivotante. Consultá modelos y disponibilidad con Norte Aberturas.",price:null,image:"https://images.pexels.com/photos/36777846/pexels-photo-36777846.jpeg?auto=compress&cs=tinysrgb&w=900&q=80"},
 {id:"p14",name:"Portón de dos hojas",category:"Puertas",description:"Ejemplo de diseño de portón de dos hojas. Consultá modelos y disponibilidad con Norte Aberturas.",price:null,image:"https://images.pexels.com/photos/36777839/pexels-photo-36777839.jpeg?auto=compress&cs=tinysrgb&w=900&q=80"},
 {id:"p15",name:"Puerta exterior de madera",category:"Puertas",description:"Ejemplo de diseño de puerta exterior de madera. Consultá modelos y disponibilidad con Norte Aberturas.",price:null,image:"https://images.pexels.com/photos/14921607/pexels-photo-14921607.jpeg?auto=compress&cs=tinysrgb&w=900&q=80"},
@@ -898,7 +901,7 @@ const $=id=>document.getElementById(id),all=(s,root=document)=>Array.from(root.q
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImg=s=>{let u=String(s||'').trim();if(/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(u))return referenceArt(u);if(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/i.test(u))return u;try{let p=new URL(u);return p.protocol==='https:'?p.href:''}catch{return ''}};
 const formatPrice=x=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(x);
-const fresh=()=>DEFAULTS.map(x=>({...x}));let products=fresh(),cart={},filter='Puertas',query='',sortMode='default',favorites=new Set(),detailId=null,editing=null,uploaded=null,delayed=null,installPrompt=null,adminOpenGroups=new Set(),adminVisibleLimits=new Map(),adminSelectedCategory='Puertas';
+const fresh=()=>DEFAULTS.filter(p=>p&&typeof p==='object').map(x=>({...x}));let products=fresh(),cart={},filter='Puertas',query='',sortMode='default',favorites=new Set(),detailId=null,editing=null,uploaded=null,delayed=null,installPrompt=null,adminOpenGroups=new Set(),adminVisibleLimits=new Map(),adminSelectedCategory='Puertas';
 function cleanCategory(value){
  const v=String(value||'').trim().replace(/\s+/g,' ').slice(0,45);
  if(!v||v.toLocaleLowerCase('es-AR')==='favoritos'||v.toLocaleLowerCase('es-AR')==='todas'||v.toLocaleLowerCase('es-AR')==='todos')return '';
@@ -978,15 +981,16 @@ function renderAppShowcase(){
   container.innerHTML=unique.map(p=>{
    const photo=safeImg(p.image);
    const placeholder=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
-   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3><div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-detail="'+esc(p.id)+'" aria-label="Ver detalles de '+esc(p.name)+'">Ver ↗</button></div></div></article>';
+   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3><div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
   }).join('');
   if(saved)container.scrollLeft=saved;
   container.querySelectorAll('[data-shop-app-add]').forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.shopAppAdd)));
-  container.querySelectorAll('[data-shop-app-detail]').forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.shopAppDetail)));
+  container.querySelectorAll('[data-shop-app-category]').forEach(b=>b.addEventListener('click',()=>window.norteSelectCategory(b.dataset.shopAppCategory)));
  }
 }
 function submitShopAppSearch(e){
  e.preventDefault();
+ document.body.classList.add('catalog-browsing');
  query=$('shop-search-app').value.trim();
  $('product-search').value=query;filter='Todas';
  all('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter==='Todas')));
@@ -996,7 +1000,7 @@ function submitShopAppSearch(e){
 window.norteEnsureCatalog=()=>{
  document.body.classList.add('catalog-browsing');
  // Abrir el catálogo completo requiere mostrar todos los productos.
- if(!catalogHasRendered||filter!=='Todas'||query){
+ if(!catalogHasRendered||filter!=='Todas'||query||!$('catalog').childElementCount){
   query='';
   $('shop-search-app').value='';
   $('product-search').value='';
@@ -1079,6 +1083,7 @@ function initCategorySidebar(){
 
 let catalogHasRendered=false;
 function renderCatalog(){
+ document.body.classList.add('catalog-browsing');
  catalogHasRendered=true;
  const q=query.toLocaleLowerCase('es-AR');
  let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
