@@ -781,6 +781,7 @@ syncCategorySidebar();syncCatalogMore(found.length);$('result-count').textConten
 const card=p=>'<article class="tile" data-product-id="'+safe(p.id)+'"><div class="tile-image"><img loading="lazy" src="'+pic(p,700)+'" alt="Imagen ilustrativa de '+safe(p.title)+'"><span class="pin">Imagen de referencia</span><button type="button" class="tile-fav" data-favorite="'+safe(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar favorito ':'Guardar favorito ')+safe(p.title)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tile-body"><span class="item-category">'+safe(p.cat)+'</span><h3>'+safe(p.title)+'</h3><p>'+safe(p.desc)+'</p><span class="pricehint">Precio a consultar</span><button type="button" class="tile-action" data-detail="'+safe(p.id)+'">Ver detalles <span>↗</span></button><button type="button" class="tile-add" data-add="'+safe(p.id)+'">🛒 Agregar al carrito</button></div></article>';
 $('product-grid').innerHTML=found.map(card).join('');
 const cats=['Puertas','Ventanas','Accesorios','A medida'];
+if(window.matchMedia('(max-width:720px)').matches){
 $('mobile-catalog').innerHTML=cats.filter(cat=>found.some(p=>p.cat===cat)).map((cat,index)=>{
  const items=found.filter(p=>p.cat===cat),showArrows=items.length>1,trackId='norte-web-track-'+index;
  return '<section class="mobile-category" aria-label="Catálogo '+safe(cat)+'"><div class="mobile-category-head"><h3>'+safe(cat)+'</h3>'+(showArrows?'<div class="mobile-category-controls"><span class="mobile-swipe-hint">Deslizá para ver más →</span><button type="button" class="mobile-slide-btn" data-slide="-1" data-target="'+trackId+'" aria-label="Ver productos anteriores de '+safe(cat)+'" disabled>‹</button><button type="button" class="mobile-slide-btn" data-slide="1" data-target="'+trackId+'" aria-label="Ver más productos de '+safe(cat)+'">›</button></div>':'')+'</div><div class="mobile-track" id="'+trackId+'" data-track="'+safe(cat)+'" role="region" aria-label="Productos de '+safe(cat)+'" tabindex="0">'+items.map(card).join('')+'</div></section>';
@@ -810,6 +811,7 @@ $('mobile-catalog').querySelectorAll('[data-track]').forEach(track=>{
  }));
  update();
 });
+}else if($('mobile-catalog').childElementCount){$('mobile-catalog').replaceChildren()}
 }
 
 
@@ -864,7 +866,8 @@ $('close-drawer').addEventListener('click',closeAll);$('close-modal').addEventLi
 $('modal-add').addEventListener('click',()=>{if(detailId){add(detailId);show('drawer')}});
 $('modal-wa').addEventListener('click',()=>{let p=find(detailId);if(p)openWhatsApp('Hola, vi el catálogo digital de Norte Aberturas y quisiera consultar por '+p.title+'. ¿Me podrían enviar modelos, medidas y precios disponibles? ¡Gracias!')});
 $('send-cart').addEventListener('click',sendBasket);
-initCategorySidebar();clean();renderShopfront();renderProducts();renderBasket();
+const mobileWebCatalog=window.matchMedia('(max-width:720px)');mobileWebCatalog.addEventListener('change',()=>{if(document.body.classList.contains('catalog-browsing'))renderProducts()});
+initCategorySidebar();clean();renderShopfront();if(document.body.classList.contains('catalog-browsing')||location.hash==='#productos')renderProducts();else syncCategorySidebar();renderBasket();
 })();
 
 /* Si una fotografía externa deja de estar disponible, mostramos un dibujo de la categoría correcta. */
