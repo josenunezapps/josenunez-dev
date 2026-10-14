@@ -1005,7 +1005,7 @@ function renderAppShowcase(){
   container.innerHTML=unique.map(p=>{
    const photo=safeImg(p.image);
    const placeholder=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
-   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3><div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
+   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3>'+productCodeHTML(p)+'<div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
   }).join('');
   if(saved)container.scrollLeft=saved;
   container.querySelectorAll('[data-shop-app-add]').forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.shopAppAdd)));
@@ -1135,7 +1135,7 @@ function renderCatalog(){
  document.body.classList.add('catalog-browsing');
  catalogHasRendered=true;
  const q=query.toLocaleLowerCase('es-AR');
- let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
+ let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.code||'',p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
  if(sortMode==='az')visible.sort((a,b)=>a.name.localeCompare(b.name,'es-AR'));
  else if(sortMode==='za')visible.sort((a,b)=>b.name.localeCompare(a.name,'es-AR'));
  else if(sortMode==='category')visible.sort((a,b)=>a.category.localeCompare(b.category,'es-AR')||a.name.localeCompare(b.name,'es-AR'));
@@ -1144,7 +1144,7 @@ function renderCatalog(){
  $('catalog').innerHTML=visible.map(p=>{
  const image=safeImg(p.image);
  const label=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
- return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3><p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
+ return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3>'+productCodeHTML(p)+'<p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
  }).join('');
  all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
  all('[data-detail]',$('catalog')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
@@ -1205,7 +1205,7 @@ function addToCart(id){
  if(wasEmpty)showPanel('cart-drawer');
 }
 function renderCart(){let items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);let sum=items.reduce((n,x)=>n+x.item.qty,0);$('cart-count').textContent=sum;$('sticky-cart-count').textContent=sum+(sum===1?' producto':' productos');$('sticky-cart').hidden=sum===0;$('cart-form').hidden=items.length===0;
-$('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong><small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu carrito está vacío.</b>Explorá productos y agregalos para preparar tu pedido.</div>';
+$('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong>'+productCodeHTML(p)+'<small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu carrito está vacío.</b>Explorá productos y agregalos para preparar tu pedido.</div>';
 const valued=items.filter(x=>x.p.price!==null);const total=valued.reduce((s,x)=>s+x.p.price*x.item.qty,0);
 $('cart-estimate').textContent=valued.length===0?'A consultar':formatPrice(total)+(valued.length<items.length?' + a consultar':'');
 $('send-quote').disabled=items.length===0;
@@ -1214,7 +1214,7 @@ all('[data-remove]',$('cart-items')).forEach(b=>b.addEventListener('click',()=>{
 all('[data-note]',$('cart-items')).forEach(b=>b.addEventListener('input',()=>{if(cart[b.dataset.note]){cart[b.dataset.note].note=b.value.slice(0,180);setStored(CART_STORE,cart)}}));
 }
 function openWhatsApp(message){const a=document.createElement('a');a.href='https://wa.me/'+PHONE+'?text='+encodeURIComponent(message);a.target='_blank';a.rel='noopener noreferrer';document.body.append(a);a.click();a.remove()}
-function submitQuote(){const items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);if(!items.length)return toast('Primero agregá al menos un producto.');let name=$('customer-name').value.trim().slice(0,80),city=$('customer-location').value.trim().slice(0,100);let text='¡Hola! 👋 Estuve viendo el catálogo de Norte Aberturas y quisiera consultar por los siguientes productos:\n\n'+items.map(({p,item},i)=>(i+1)+'. '+p.name+' — cantidad: '+item.qty+(item.note?'\n   Medidas/detalles: '+item.note:'')).join('\n')+'\n\n';if(name)text+='Nombre: '+name+'\n';if(city)text+='Ciudad/provincia: '+city+'\n';text+='¿Podrían confirmarme disponibilidad, opciones y presupuesto? ¡Muchas gracias!';openWhatsApp(text)}
+function submitQuote(){const items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);if(!items.length)return toast('Primero agregá al menos un producto.');let name=$('customer-name').value.trim().slice(0,80),city=$('customer-location').value.trim().slice(0,100);let text='¡Hola! 👋 Estuve viendo el catálogo de Norte Aberturas y quisiera consultar por los siguientes productos:\n\n'+items.map(({p,item},i)=>(i+1)+'. '+p.name+productCodeText(p)+' — cantidad: '+item.qty+(item.note?'\n   Medidas/detalles: '+item.note:'')).join('\n')+'\n\n';if(name)text+='Nombre: '+name+'\n';if(city)text+='Ciudad/provincia: '+city+'\n';text+='¿Podrían confirmarme disponibilidad, opciones y presupuesto? ¡Muchas gracias!';openWhatsApp(text)}
 function sendGeneralInquiry(event){
  event.preventDefault();
  const form=$('consulta-form');
@@ -1248,7 +1248,7 @@ function openDetail(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  detailId=id;const image=safeImg(p.image);
  $('detail-photo').innerHTML=image?'<img src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="detail-placeholder">'+(p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':'🔩')+'</div>';
- $('detail-cat').textContent=p.category;$('detail-title').textContent=p.name;
+ $('detail-cat').textContent=p.category+(p.code?' · Código: '+p.code:'');$('detail-title').textContent=p.name;
  $('detail-desc').textContent=(p.description||'Consultá por modelos, medidas y terminaciones disponibles.')+' Los productos reales se confirman con Norte Aberturas.';
  $('detail-price').textContent=p.price===null?'A consultar':formatPrice(p.price);
  const related=products.filter(x=>x.category===p.category&&x.id!==id).slice(0,3);
@@ -1261,7 +1261,7 @@ function adminProductRows(items){
  if(!items.length)return '<p class="admin-empty-category">Este apartado todavía no tiene productos que coincidan.</p>';
  return items.map(p=>{
   const image=safeImg(p.image);
-  return '<div class="admin-row"><div class="admin-thumb">'+(image?'<img loading="lazy" decoding="async" src="'+esc(image)+'" alt="">':'<div class="tile-placeholder" style="font-size:27px">▦</div>')+'</div><div class="admin-title"><b>'+esc(p.name)+'</b><small>'+esc(p.category)+' · '+(p.price===null?'Sin precio':formatPrice(p.price))+'</small></div><button class="smallbtn" type="button" data-edit="'+esc(p.id)+'">Editar</button><button class="smallbtn danger" type="button" data-delete="'+esc(p.id)+'">Quitar</button></div>';
+  return '<div class="admin-row"><div class="admin-thumb">'+(image?'<img loading="lazy" decoding="async" src="'+esc(image)+'" alt="">':'<div class="tile-placeholder" style="font-size:27px">▦</div>')+'</div><div class="admin-title"><b>'+esc(p.name)+'</b><small>'+(p.code?'Código: '+esc(p.code)+' · ':'')+esc(p.category)+' · '+(p.price===null?'Sin precio':formatPrice(p.price))+'</small></div><button class="smallbtn" type="button" data-edit="'+esc(p.id)+'">Editar</button><button class="smallbtn danger" type="button" data-delete="'+esc(p.id)+'">Quitar</button></div>';
  }).join('');
 }
 function adminGroupContent(category,items,total,q){
@@ -1403,7 +1403,7 @@ $('cta-list').addEventListener('click',()=>{showPanel('consulta-modal');$('consu
 $('consulta-form').addEventListener('submit',sendGeneralInquiry);
 ['cart-close','admin-close','detail-close','consulta-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePanels()});
-$('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
+$('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+productCodeText(p)+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
 $('add-new').addEventListener('click',()=>editProduct(null));
 $('add-category').addEventListener('click',()=>{
  const form=$('admin-category-form');
