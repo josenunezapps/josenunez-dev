@@ -1636,6 +1636,160 @@ async function exportPDF(){
  }
 }
 
+
+/* Excel (XLSX) local; no requiere CDN ni cambia datos durante la exportación. */
+const NORTE_XLSX_FIELDS=['ID interno','Código','Producto','Categoría','Precio (ARS)','Descripción','Foto URL HTTPS'];
+let norteXLSXPromise=null;
+function norteGetXLSX(){
+ if(window.XLSX?.utils&&window.XLSX?.writeFile)return Promise.resolve(window.XLSX);
+ if(norteXLSXPromise)return norteXLSXPromise;
+ norteXLSXPromise=new Promise((resolve,reject)=>{
+  const script=document.createElement('script');script.src='./vendor/xlsx.full.min.js';script.async=true;
+  script.onload=()=>window.XLSX?.utils&&window.XLSX?.writeFile?resolve(window.XLSX):reject(Error('El lector Excel no inició'));
+  script.onerror=()=>reject(Error('No se pudo cargar el lector Excel de la app'));
+  document.head.appendChild(script);
+ }).catch(err=>{norteXLSXPromise=null;throw err});
+ return norteXLSXPromise;
+}
+const norteCell=x=>String(x??'').trim();
+function nortePriceExcel(v){
+ if(v==null||norteCell(v)==='')return null;
+ if(typeof v==='number'){if(!Number.isFinite(v)||v<0||v>999999999)throw Error('Precio fuera de rango');return Math.round(v);}
+ const text=norteCell(v).replace(/[$\s]/g,'');
+ const fixed=text.includes(',')?text.replace(/\./g,'').replace(',','.'):
+ (/^\d{1,3}(?:\.\d{3})+$/.test(text)?text.replace(/\./g,''):text);
+ const value=Number(fixed);
+ if(!Number.isFinite(value)||value<0||value>999999999)throw Error('Precio no válido: '+v);
+ return Math.round(value);
+}
+function norteWorkbookExcel(XLSX,template){
+ const book=XLSX.utils.book_new();
+ const data=template?[]:products.map(p=>[p.id||'',p.code||'',p.name,p.category,p.price??'',p.description||'',String(p.image||'').startsWith('https://')?p.image:'']);
+ const sheet=XLSX.utils.aoa_to_sheet([NORTE_XLSX_FIELDS,...(data.length?data:[['','','','','','','']])]);
+ sheet['!cols']=[{wch:22},{wch:19},{wch:40},{wch:22},{wch:18},{wch:67},{wch:86}];
+ if(data.length)sheet['!autofilter']={ref:'A1:G'+(data.length+1)};
+ XLSX.utils.book_append_sheet(book,sheet,'Productos');
+ const instructions=[
+  ['NORTE ABERTURAS | GUÍA DE IMPORTACIÓN'],
+  ['Editá solamente la hoja Productos y no modifiques sus encabezados.'],
+  ['Para crear productos nuevos, dejá ID interno vacío. Para actualizar, conservá el ID.'],
+  ['Código: opcional y único, hasta 32 caracteres; usá letras, números, guiones, barras, puntos o guion bajo.'],
+  ['La columna Categoría acepta apartados nuevos; se crearán al importar (máximo 24).'],
+  ['Precio (ARS): solo el número. En blanco indica precio a consultar.'],
+  ['Foto URL HTTPS: poné el enlace público directo a la imagen. No pegues fotos dentro de las celdas.'],
+  ['En una actualización, si Foto URL queda en blanco, la foto anterior se conserva.'],
+  ['Para cargar fotos de archivos, usá Cargar fotos por código: por ejemplo PTA-001.jpg.'],
+  ['Las fotos locales no se exportan dentro del Excel; usá JSON para un respaldo de los datos de la demo.'],
+  ['La importación agrega o actualiza productos en el navegador actual; no sincroniza otros dispositivos.']
+ ];
+ const guide=XLSX.utils.aoa_to_sheet(instructions);guide['!cols']=[{wch:120}];
+ XLSX.utils.book_append_sheet(book,guide,'Instrucciones');
+ const cats=XLSX.utils.aoa_to_sheet([['Categorías disponibles'],...CATEGORIES.map(x=>[x])]);
+ cats['!cols']=[{wch:35}];XLSX.utils.book_append_sheet(book,cats,'Categorias');
+ return book;
+}
+async function norteDownloadExcel(template){
+ const button=$(template?'template-excel':'export-excel');if(button.disabled)return;
+ const name=button.textContent;button.disabled=true;button.textContent='Preparando Excel…';
+ try{
+  const xlsx=await norteGetXLSX();
+  xlsx.writeFile(norteWorkbookExcel(xlsx,template),template?'norte-aberturas-plantilla.xlsx':'norte-aberturas-catalogo-'+new Date().toISOString().slice(0,10)+'.xlsx',{bookType:'xlsx',compression:true});
+  toast(template?'Plantilla Excel preparada':'Catálogo Excel descargado');
+ }catch(err){console.error(err);alert('No se pudo generar el Excel: '+err.message)}
+ finally{button.disabled=false;button.textContent=name;}
+}
+function nortePlanExcelImport(rows,baseProducts=products,baseCategories=CATEGORIES){
+ if(!rows?.length)throw Error('La hoja Productos está vacía');
+ for(let i=0;i<NORTE_XLSX_FIELDS.length;i++)if(norteCell(rows[0][i])!==NORTE_XLSX_FIELDS[i])throw Error('No cambies los encabezados de la plantilla: '+NORTE_XLSX_FIELDS[i]);
+ const entries=rows.slice(1).filter(row=>Array.isArray(row)&&row.some(v=>norteCell(v)!==''));
+ if(!entries.length)throw Error('No hay productos para importar');
+ if(entries.length>150)throw Error('Máximo 150 filas de productos');
+ const pending=baseProducts.map(p=>({...p})),categories=baseCategories.slice(),touched=new Set();
+ let created=0,updated=0,keptPhotos=0,linkedPhotos=0;
+ for(let i=0;i<entries.length;i++){
+  const values=entries[i],c=values.map(norteCell),num=i+2;
+  const [id,rawCode,name,rawCategory,_,description,rawPhoto]=c;
+  if(!name||name.length>100)throw Error('Fila '+num+': nombre obligatorio, máximo 100 caracteres');
+  if(description.length>350)throw Error('Fila '+num+': descripción demasiado larga');
+  const categoryName=cleanCategory(rawCategory);
+  if(!categoryName||rawCategory.length>45)throw Error('Fila '+num+': categoría no válida');
+  let category=categories.find(x=>x.toLocaleLowerCase('es-AR')===categoryName.toLocaleLowerCase('es-AR'));
+  if(!category){if(categories.length>=24)throw Error('El catálogo permite 24 apartados como máximo');category=categoryName;categories.push(category);}
+  const code=normalizeProductCode(rawCode);
+  if(id.length>90||rawCode.length>32||!isValidProductCode(code))throw Error('Fila '+num+': ID o código inválido');
+  const price=nortePriceExcel(values[4]);
+  if(rawPhoto&&!/^https:\/\//i.test(rawPhoto))throw Error('Fila '+num+': la foto necesita URL HTTPS');
+  if(rawPhoto&&!safeImg(rawPhoto))throw Error('Fila '+num+': URL de foto inválida');
+  let index=id?pending.findIndex(p=>p.id===id):-1;
+  if(index<0&&code)index=pending.findIndex(p=>normalizeProductCode(p.code)===code);
+  if(index<0&&!id&&!code){
+   const similar=pending.map((p,k)=>({p,k})).filter(v=>v.p.name.toLocaleLowerCase('es-AR')===name.toLocaleLowerCase('es-AR')&&v.p.category.toLocaleLowerCase('es-AR')===category.toLocaleLowerCase('es-AR'));
+   if(similar.length===1)index=similar[0].k;
+  }
+  const before=index<0?null:pending[index];
+  const finalId=before?.id||id||('excel_'+Date.now().toString(36)+'_'+i+'_'+Math.random().toString(36).slice(2,7));
+  if(touched.has(finalId))throw Error('Fila '+num+': producto repetido dentro del Excel');
+  touched.add(finalId);
+  const image=rawPhoto?safeImg(rawPhoto):(before?.image||'');
+  if(rawPhoto)linkedPhotos++;else if(before?.image)keptPhotos++;
+  const item={id:finalId,name,code:code||before?.code||'',category,price,description,image};
+  if(index>=0){pending[index]=item;updated++;}else{pending.push(item);created++;}
+ }
+ if(pending.length>150)throw Error('El catálogo resultante supera 150 productos');
+ if(new Set(pending.map(p=>p.id)).size!==pending.length||hasDuplicateProductCodes(pending))throw Error('Hay IDs o códigos de producto duplicados');
+ return {pending,categories,created,updated,keptPhotos,linkedPhotos};
+}
+async function norteImportExcel(e){
+ const file=e.target.files?.[0];e.target.value='';if(!file)return;
+ if(!/\.xlsx$/i.test(file.name)||file.size>6*1024*1024)return alert('Seleccioná un archivo .xlsx de hasta 6 MB');
+ const btn=$('import-excel');if(btn.disabled)return;
+ const label=btn.textContent;btn.disabled=true;btn.textContent='Leyendo Excel…';
+ try{
+  const XLSX=await norteGetXLSX();
+  const book=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});
+  if(!book.Sheets.Productos)throw Error('La planilla necesita una hoja llamada Productos');
+  const rows=XLSX.utils.sheet_to_json(book.Sheets.Productos,{header:1,defval:'',blankrows:false,raw:true});
+  const plan=nortePlanExcelImport(rows);
+  const message='Nuevos: '+plan.created+'. Actualizados: '+plan.updated+'. Apartados: '+plan.categories.length+'. Fotos conservadas: '+plan.keptPhotos+'. URL de fotos: '+plan.linkedPhotos+'.';
+  if(!confirm('¿Importar Excel en este navegador?\n\n'+message+'\n\nTe recomendamos guardar una copia JSON antes.'))return;
+  const beforeProducts=getStored(STORE),beforeCategories=getStored(CATEGORY_STORE);
+  if(!setStored(STORE,plan.pending))throw Error('No hay espacio para guardar todos los productos');
+  if(!setStored(CATEGORY_STORE,plan.categories.slice(FIXED_CATEGORIES.length))){
+   try{if(beforeProducts===null)localStorage.removeItem(STORE);else localStorage.setItem(STORE,beforeProducts);
+       if(beforeCategories===null)localStorage.removeItem(CATEGORY_STORE);else localStorage.setItem(CATEGORY_STORE,beforeCategories)}catch{}
+   throw Error('No se pudieron guardar las categorías; se intentó restaurar el catálogo anterior');
+  }
+  setCategories(plan.categories,plan.pending);products=plan.pending;
+  adminOpenGroups.clear();adminVisibleLimits.clear();$('admin-product-search').value='';
+  syncAdminCategories();cleanCart();renderAll();
+  toast('Excel importado: '+plan.created+' nuevos, '+plan.updated+' actualizados');
+ }catch(err){console.error(err);alert('No se pudo importar el Excel:\n'+err.message)}
+ finally{btn.disabled=false;btn.textContent=label;}
+}
+async function norteImportPhotos(e){
+ const files=Array.from(e.target.files||[]);e.target.value='';if(!files.length)return;
+ if(files.length>40)return alert('Cargá hasta 40 fotos por vez para cuidar el espacio del navegador');
+ const mapping=[],unmatched=[];
+ for(const file of files){
+  const key=normalizeProductCode(file.name.replace(/\.(jpe?g|png|webp)$/i,''));
+  const product=products.find(p=>p.code&&normalizeProductCode(p.code)===key);
+  if(product&&isValidProductCode(key))mapping.push({file,id:product.id});else unmatched.push(file.name);
+ }
+ if(!mapping.length)return alert('No coinciden los nombres de foto con los códigos. Ejemplo: PTA-001.jpg');
+ if(new Set(mapping.map(m=>m.id)).size!==mapping.length)return alert('Hay dos fotos para el mismo código. Seleccioná solo una por producto.');
+ if(!confirm('¿Asignar '+mapping.length+' fotos a los productos?'+(unmatched.length?'\nSe omitirán '+unmatched.length+' fotos sin código coincidente.':'')))return;
+ const button=$('import-photos'),label=button.textContent;button.disabled=true;
+ try{
+  const changes=new Map();
+  for(let i=0;i<mapping.length;i++){button.textContent='Procesando foto '+(i+1)+' / '+mapping.length;changes.set(mapping[i].id,await photoToDataURL(mapping[i].file));}
+  const updated=products.map(p=>changes.has(p.id)?{...p,image:changes.get(p.id)}:p);
+  if(!setStored(STORE,updated))throw Error('No hay espacio en este navegador; probá con menos fotos');
+  products=updated;renderAll();
+  toast(changes.size+' fotos asociadas por código'+(unmatched.length?' · '+unmatched.length+' omitidas':''));
+ }catch(err){console.error(err);alert('No se pudieron cargar las fotos: '+err.message)}
+ finally{button.disabled=false;button.textContent=label;}
+}
+
 function exportJSON(){const data={format:'zenix-norte-demo-v1',products,categories:CATEGORIES.slice(),exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download='norte-aberturas-catalogo-demo.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);toast('Se preparó el archivo de respaldo')}
 async function importJSON(e){
  const file=e.target.files?.[0];e.target.value='';if(!file)return;
@@ -1759,6 +1913,12 @@ $('admin-upload').addEventListener('change',async e=>{let file=e.target.files?.[
 $('admin-form').addEventListener('submit',saveProduct);
 $('export-json').addEventListener('click',exportJSON);
 $('export-pdf').addEventListener('click',exportPDF);
+$('export-excel').addEventListener('click',()=>norteDownloadExcel(false));
+$('template-excel').addEventListener('click',()=>norteDownloadExcel(true));
+$('import-excel').addEventListener('click',()=>$('excel-file').click());
+$('excel-file').addEventListener('change',norteImportExcel);
+$('import-photos').addEventListener('click',()=>$('photos-files').click());
+$('photos-files').addEventListener('change',norteImportPhotos);
 $('import-json').addEventListener('click',()=>$('import-file').click());
 $('import-file').addEventListener('change',importJSON);
 $('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 64 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;if(!setStored(CATEGORY_STORE,[]))return;setCategories([],next);products=next;adminOpenGroups.clear();adminVisibleLimits.clear();adminSelectedCategory='Puertas';$('admin-product-search').value='';syncAdminCategories();cart={};setStored(CART_STORE,cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
