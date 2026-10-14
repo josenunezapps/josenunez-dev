@@ -581,7 +581,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r37</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r38</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -1179,7 +1179,17 @@ function renderMobileCarousels(visible){
  });
 }
 
-function addToCart(id){if(!products.some(p=>p.id===id))return;const item=cart[id]||{qty:0,note:''};item.qty=Math.min(99,item.qty+1);cart[id]=item;setStored(CART_STORE,cart);renderCart();toast('¡Producto agregado al carrito!');showPanel('cart-drawer')}
+function addToCart(id){
+ if(!products.some(p=>p.id===id))return;
+ const wasEmpty=!Object.entries(cart).some(([key,entry])=>products.some(p=>p.id===key)&&Number(entry?.qty)>0);
+ const item=cart[id]||{qty:0,note:''};
+ item.qty=Math.min(99,item.qty+1);
+ cart[id]=item;
+ setStored(CART_STORE,cart);
+ renderCart();
+ toast(wasEmpty?'¡Producto agregado al carrito!':'¡Agregado! Podés seguir eligiendo productos.');
+ if(wasEmpty)showPanel('cart-drawer');
+}
 function renderCart(){let items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);let sum=items.reduce((n,x)=>n+x.item.qty,0);$('cart-count').textContent=sum;$('sticky-cart-count').textContent=sum+(sum===1?' producto':' productos');$('sticky-cart').hidden=sum===0;$('cart-form').hidden=items.length===0;
 $('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong><small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu carrito está vacío.</b>Explorá productos y agregalos para preparar tu pedido.</div>';
 const valued=items.filter(x=>x.p.price!==null);const total=valued.reduce((s,x)=>s+x.p.price*x.item.qty,0);
