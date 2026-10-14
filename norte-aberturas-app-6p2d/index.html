@@ -578,10 +578,15 @@ html{overflow-anchor:none;scroll-behavior:auto}
 body{overflow-anchor:none}
 #catalogo,.catalog-explore,#catalog,#shop-featured-app-rail,#shop-new-app-rail{overflow-anchor:none}
 .shop-search-form input[type="search"]{overflow-anchor:none}
+
+/* Norte Aberturas · códigos opcionales de productos */
+.product-code{display:block;margin:4px 0 8px;font-size:11px;line-height:1.5;letter-spacing:.03em;font-weight:700;color:#58725f;overflow-wrap:anywhere}
+.product-code-hint{display:block;font-size:11px;font-weight:400;line-height:1.45;color:#667b6e;margin-top:2px}
+.admin-title small{overflow-wrap:anywhere}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r38</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r39</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -792,6 +797,7 @@ document.addEventListener('click',function(event){
      <h3 id="admin-form-title">Agregar producto</h3>
      <div class="admin-fields">
        <div class="field full"><label for="admin-name">Nombre del producto *</label><input id="admin-name" maxlength="100" required placeholder="Ej.: Puerta de madera"></div>
+       <div class="field full"><label for="admin-code">Código del producto (opcional y único)</label><input id="admin-code" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ej.: PTA-001 o VENT-120"><small class="product-code-hint">Usá letras, números, guiones, barras, puntos o guion bajo. Si no tiene código, dejalo vacío.</small></div>
        <div class="field"><label for="admin-category">Categoría *</label><select id="admin-category"><option>Puertas</option><option>Ventanas</option><option>Accesorios</option><option>A medida</option></select></div>
        <div class="field"><label for="admin-price">Precio orientativo (opcional, ARS)</label><input id="admin-price" type="number" min="0" max="999999999" step="1" placeholder="Dejar vacío si es a consultar"></div>
        <div class="field full"><label for="admin-description">Descripción</label><textarea id="admin-description" maxlength="350" placeholder="Materiales, características, terminaciones..."></textarea></div>
@@ -911,6 +917,14 @@ const $=id=>document.getElementById(id),all=(s,root=document)=>Array.from(root.q
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImg=s=>{let u=String(s||'').trim();if(/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(u))return referenceArt(u);if(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/i.test(u))return u;try{let p=new URL(u);return p.protocol==='https:'?p.href:''}catch{return ''}};
 const formatPrice=x=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(x);
+const normalizeProductCode=value=>String(value??'').trim().toUpperCase().slice(0,32);
+const isValidProductCode=code=>!code||/^[A-Z0-9][A-Z0-9._\/-]{0,31}$/.test(code);
+const productCodeHTML=p=>p.code?'<span class="product-code">Código: '+esc(p.code)+'</span>':'';
+const productCodeText=p=>p.code?' (Código: '+p.code+')':'';
+const hasDuplicateProductCodes=items=>{
+ const codes=items.map(p=>normalizeProductCode(p.code)).filter(Boolean);
+ return new Set(codes).size!==codes.length;
+};
 const fresh=()=>DEFAULTS.filter(p=>p&&typeof p==='object').map(x=>({...x}));let products=fresh(),cart={},filter='Puertas',query='',sortMode='default',favorites=new Set(),detailId=null,editing=null,uploaded=null,delayed=null,installPrompt=null,adminOpenGroups=new Set(),adminVisibleLimits=new Map(),adminSelectedCategory='Puertas';
 function cleanCategory(value){
  const v=String(value||'').trim().replace(/\s+/g,' ').slice(0,45);
@@ -937,7 +951,7 @@ function syncAdminCategories(){
  if(slot)slot.innerHTML=CATEGORIES.slice(FIXED_CATEGORIES.length).map(c=>'<button type="button" class="site-menu-link site-menu-category" data-site-category="'+esc(c)+'" aria-pressed="'+String(filter===c)+'"><span class="site-menu-icon">▦</span>'+esc(c)+'<span class="site-menu-count" data-site-count="'+esc(c)+'">'+products.filter(p=>p.category===c).length+'</span><span class="site-menu-end">›</span></button>').join('');
 }
 
-function normalize(x){if(!x||typeof x!=='object')return null;const name=String(x.name||'').trim().slice(0,100);if(!name)return null;let val=x.price==null||x.price===''?null:Number(x.price);if(val!==null&&(!Number.isFinite(val)||val<0||val>999999999))val=null;return{id:String(x.id||('p'+Date.now()+Math.random())).slice(0,90),name,category:CATEGORIES.includes(x.category)?x.category:'Puertas',description:String(x.description||'').slice(0,350),price:val===null?null:Math.round(val),image:(/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(String(x.image||''))||(String(x.image||'').startsWith('data:image/svg+xml')&&String(x.image||'').includes('IMAGEN%20ILUSTRATIVA')))?String(x.image):safeImg(x.image)}}
+function normalize(x){if(!x||typeof x!=='object')return null;const name=String(x.name||'').trim().slice(0,100);if(!name)return null;let val=x.price==null||x.price===''?null:Number(x.price);if(val!==null&&(!Number.isFinite(val)||val<0||val>999999999))val=null;return{id:String(x.id||('p'+Date.now()+Math.random())).slice(0,90),name,category:CATEGORIES.includes(x.category)?x.category:'Puertas',description:String(x.description||'').slice(0,350),price:val===null?null:Math.round(val),image:(/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(String(x.image||''))||(String(x.image||'').startsWith('data:image/svg+xml')&&String(x.image||'').includes('IMAGEN%20ILUSTRATIVA')))?String(x.image):safeImg(x.image),code:normalizeProductCode(x.code)}}
 function getStored(k){try{return localStorage.getItem(k)}catch{return null}}
 function setStored(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch{toast('No se pudo guardar: almacenamiento lleno o bloqueado.');return false}}
 function load(){
@@ -1257,12 +1271,12 @@ function adminGroupContent(category,items,total,q){
 }
 function renderAdmin(){
  const box=$('admin-list'),q=$('admin-product-search').value.trim().toLocaleLowerCase('es-AR');
- const matches=products.filter(p=>[p.name,p.category,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)));
+ const matches=products.filter(p=>[p.name,p.code,p.category,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)));
  $('admin-search-summary').textContent=(q?matches.length+' resultados':'Total: '+products.length+' productos')+' · '+CATEGORIES.length+' apartados'+(q?' · búsqueda activa':' · tocá un apartado para ver sus productos');
  const entries=CATEGORIES.map(category=>{
   const categoryProducts=products.filter(p=>p.category===category);
   const categoryMatches=category.toLocaleLowerCase('es-AR').includes(q);
-  const visible=q?(categoryMatches?categoryProducts:categoryProducts.filter(p=>[p.name,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)))):categoryProducts;
+  const visible=q?(categoryMatches?categoryProducts:categoryProducts.filter(p=>[p.name,p.code,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)))):categoryProducts;
   return{category,categoryProducts,visible};
  }).filter(group=>!q||group.visible.length>0||group.category.toLocaleLowerCase('es-AR').includes(q));
  box.innerHTML=entries.length?entries.map(({category,categoryProducts,visible})=>{
@@ -1308,12 +1322,17 @@ function removeAdminCategory(name){
  if(filter===name)filter='Puertas';
  syncAdminCategories();renderAll();toast('Apartado eliminado');
 }
-function editProduct(id){editing=id||null;uploaded=null;const p=products.find(x=>x.id===id);$('admin-form-title').textContent=p?'Editar producto':'Agregar producto';$('admin-name').value=p?.name||'';syncAdminCategories();$('admin-category').value=p?.category||(CATEGORIES.includes(adminSelectedCategory)?adminSelectedCategory:'Puertas');$('admin-price').value=p?.price??'';$('admin-description').value=p?.description||'';$('admin-image').value=p&&p.image&&!p.image.startsWith('data:')?p.image:'';$('admin-upload').value='';$('admin-form').hidden=false;$('admin-form').scrollIntoView({behavior:'smooth',block:'nearest'});$('admin-name').focus()}
+function editProduct(id){editing=id||null;uploaded=null;const p=products.find(x=>x.id===id);$('admin-form-title').textContent=p?'Editar producto':'Agregar producto';$('admin-name').value=p?.name||'';$('admin-code').value=p?.code||'';syncAdminCategories();$('admin-category').value=p?.category||(CATEGORIES.includes(adminSelectedCategory)?adminSelectedCategory:'Puertas');$('admin-price').value=p?.price??'';$('admin-description').value=p?.description||'';$('admin-image').value=p&&p.image&&!p.image.startsWith('data:')?p.image:'';$('admin-upload').value='';$('admin-form').hidden=false;$('admin-form').scrollIntoView({behavior:'smooth',block:'nearest'});$('admin-name').focus()}
 function deleteProduct(id){let p=products.find(x=>x.id===id);if(!p||!confirm('¿Quitar "'+p.name+'" del catálogo de demostración?'))return;const next=products.filter(x=>x.id!==id);if(!setStored(STORE,next))return;products=next;delete cart[id];cleanCart();renderAll();toast('Producto quitado del catálogo local')}
 async function photoToDataURL(file){if(file.size>8*1024*1024)throw Error('La foto supera 8 MB');if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Formato no admitido');return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(Error('No se pudo leer la imagen'));reader.onload=()=>{const image=new Image();image.onerror=()=>reject(Error('Imagen inválida'));image.onload=()=>{let scale=Math.min(1,850/Math.max(image.width,image.height));const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(image.width*scale));cv.height=Math.max(1,Math.round(image.height*scale));cv.getContext('2d').drawImage(image,0,0,cv.width,cv.height);resolve(cv.toDataURL('image/webp',.66))};image.src=reader.result};reader.readAsDataURL(file)})}
-async function saveProduct(e){e.preventDefault();const nm=$('admin-name').value.trim();if(!nm)return toast('Completá el nombre del producto');if(!editing&&products.length>=150)return toast('Máximo 150 productos en la demo');const before=products.find(x=>x.id===editing);let image=$('admin-image').value.trim();if(image&&!safeImg(image))return toast('La foto debe tener una URL HTTPS válida');if(uploaded)image=uploaded;else if(before&&before.image.startsWith('data:')&&!image)image=before.image;else if(before&&!image)image=before.image;
+async function saveProduct(e){e.preventDefault();const nm=$('admin-name').value.trim();if(!nm)return toast('Completá el nombre del producto');if(!editing&&products.length>=150)return toast('Máximo 150 productos en la demo');
+const rawCode=$('admin-code').value.trim();
+const code=normalizeProductCode(rawCode);
+if(rawCode.length>32||!isValidProductCode(code)){toast('Código inválido: hasta 32 caracteres, sin espacios ni símbolos especiales');$('admin-code').focus();return;}
+if(code&&products.some(p=>p.id!==editing&&normalizeProductCode(p.code)===code)){toast('Este código ya está asignado a otro producto');$('admin-code').focus();return;}
+const before=products.find(x=>x.id===editing);let image=$('admin-image').value.trim();if(image&&!safeImg(image))return toast('La foto debe tener una URL HTTPS válida');if(uploaded)image=uploaded;else if(before&&before.image.startsWith('data:')&&!image)image=before.image;else if(before&&!image)image=before.image;
 if(!CATEGORIES.includes($('admin-category').value))return toast('Elegí un apartado válido');
-let rawPrice=$('admin-price').value.trim(),p=normalize({id:editing||('p'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),name:nm,category:$('admin-category').value,description:$('admin-description').value.trim(),price:rawPrice===''?null:Number(rawPrice),image});if(!p)return;const next=editing?products.map(x=>x.id===editing?p:x):[p,...products];if(!setStored(STORE,next))return;products=next;$('admin-form').hidden=true;editing=null;uploaded=null;renderAll();toast('Producto guardado en este dispositivo')}
+let rawPrice=$('admin-price').value.trim(),p=normalize({id:editing||('p'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),name:nm,code,category:$('admin-category').value,description:$('admin-description').value.trim(),price:rawPrice===''?null:Number(rawPrice),image});if(!p)return;const next=editing?products.map(x=>x.id===editing?p:x):[p,...products];if(!setStored(STORE,next))return;products=next;$('admin-form').hidden=true;editing=null;uploaded=null;renderAll();toast('Producto guardado en este dispositivo')}
 function exportJSON(){const data={format:'zenix-norte-demo-v1',products,categories:CATEGORIES.slice(),exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let u=URL.createObjectURL(blob);let a=document.createElement('a');a.href=u;a.download='norte-aberturas-catalogo-demo.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);toast('Se preparó el archivo de respaldo')}
 async function importJSON(e){
  const file=e.target.files?.[0];e.target.value='';if(!file)return;
@@ -1329,6 +1348,8 @@ async function importJSON(e){
   const next=data.products.map(normalize);
   if(next.some(x=>!x))throw Error('Hay datos inválidos');
   if(new Set(next.map(x=>x.id)).size!==next.length)throw Error('Hay identificadores duplicados');
+  if(data.products.some(p=>String(p.code??'').trim().length>32||!isValidProductCode(normalizeProductCode(p.code))))throw Error('Hay códigos de producto inválidos');
+  if(hasDuplicateProductCodes(next))throw Error('Hay códigos de producto duplicados');
   if(!confirm('¿Reemplazar el catálogo y los apartados locales con '+next.length+' productos del archivo?')){setCategories(before,[]);return}
   if(!setStored(STORE,next)){setCategories(before,[]);return}
   if(!setStored(CATEGORY_STORE,CATEGORIES.slice(FIXED_CATEGORIES.length))){toast('Productos guardados, pero no se pudieron guardar los apartados');}
@@ -1409,7 +1430,7 @@ $('admin-list').addEventListener('click',event=>{
   if(!body||!CATEGORIES.includes(cat))return;
   const q=$('admin-product-search').value.trim().toLocaleLowerCase('es-AR');
   const allProducts=products.filter(p=>p.category===cat);
-  const visible=!q||cat.toLocaleLowerCase('es-AR').includes(q)?allProducts:allProducts.filter(p=>[p.name,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)));
+  const visible=!q||cat.toLocaleLowerCase('es-AR').includes(q)?allProducts:allProducts.filter(p=>[p.name,p.code,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)));
   adminVisibleLimits.set(cat,(adminVisibleLimits.get(cat)||8)+8);
   body.innerHTML=adminGroupContent(cat,visible,allProducts.length,q);
   body.querySelector('[data-admin-show-more]')?.focus();
