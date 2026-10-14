@@ -603,7 +603,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r40</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r41</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -815,7 +815,7 @@ document.addEventListener('click',function(event){
      <div class="admin-fields">
        <div class="field full"><label for="admin-name">Nombre del producto *</label><input id="admin-name" maxlength="100" required placeholder="Ej.: Puerta de madera"></div>
        <div class="field full"><label for="admin-code">Código del producto (opcional y único)</label><input id="admin-code" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ej.: PTA-001 o VENT-120"><small class="product-code-hint">Usá letras, números, guiones, barras, puntos o guion bajo. Si no tiene código, dejalo vacío.</small></div>
-       <div class="field"><label for="admin-category">Categoría *</label><select id="admin-category"><option>Puertas</option><option>Ventanas</option><option>Accesorios</option><option>A medida</option></select></div>
+       <div class="field"><label for="admin-category">Categoría *</label><select id="admin-category" required><option>Puertas</option><option>Ventanas</option><option>Accesorios</option><option>A medida</option></select></div>
        <div class="field"><label for="admin-price">Precio orientativo (opcional, ARS)</label><input id="admin-price" type="number" min="0" max="999999999" step="1" placeholder="Dejar vacío si es a consultar"></div>
        <div class="field full"><label for="admin-description">Descripción</label><textarea id="admin-description" maxlength="350" placeholder="Materiales, características, terminaciones..."></textarea></div>
        <div class="field full"><label for="admin-image">URL de foto HTTPS (opcional)</label><input id="admin-image" type="url" maxlength="1500" placeholder="https://..."></div>
@@ -1022,7 +1022,7 @@ function renderAppShowcase(){
   container.innerHTML=unique.map(p=>{
    const photo=safeImg(p.image);
    const placeholder=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
-   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3>'+productCodeHTML(p)+'<div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
+   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3>'+'<div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
   }).join('');
   if(saved)container.scrollLeft=saved;
   container.querySelectorAll('[data-shop-app-add]').forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.shopAppAdd)));
@@ -1152,7 +1152,7 @@ function renderCatalog(){
  document.body.classList.add('catalog-browsing');
  catalogHasRendered=true;
  const q=query.toLocaleLowerCase('es-AR');
- let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.code||'',p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
+ let visible=products.filter(p=>(filter==='Todas'||(filter==='Favoritos'?favorites.has(p.id):p.category===filter))&&[p.name,p.category,p.description].some(s=>s.toLocaleLowerCase('es-AR').includes(q)));
  if(sortMode==='az')visible.sort((a,b)=>a.name.localeCompare(b.name,'es-AR'));
  else if(sortMode==='za')visible.sort((a,b)=>b.name.localeCompare(a.name,'es-AR'));
  else if(sortMode==='category')visible.sort((a,b)=>a.category.localeCompare(b.category,'es-AR')||a.name.localeCompare(b.name,'es-AR'));
@@ -1161,7 +1161,7 @@ function renderCatalog(){
  $('catalog').innerHTML=visible.map(p=>{
  const image=safeImg(p.image);
  const label=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
- return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3>'+productCodeHTML(p)+'<p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
+ return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3>'+'<p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
  }).join('');
  all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
  all('[data-detail]',$('catalog')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
@@ -1222,7 +1222,7 @@ function addToCart(id){
  if(wasEmpty)showPanel('cart-drawer');
 }
 function renderCart(){let items=Object.entries(cart).map(([id,item])=>({p:products.find(p=>p.id===id),item})).filter(x=>x.p);let sum=items.reduce((n,x)=>n+x.item.qty,0);$('cart-count').textContent=sum;$('sticky-cart-count').textContent=sum+(sum===1?' producto':' productos');$('sticky-cart').hidden=sum===0;$('cart-form').hidden=items.length===0;
-$('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong>'+productCodeHTML(p)+'<small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu carrito está vacío.</b>Explorá productos y agregalos para preparar tu pedido.</div>';
+$('cart-items').innerHTML=items.length?items.map(({p,item})=>'<div class="cartitem"><div class="cart-thumb">'+(safeImg(p.image)?'<img src="'+esc(safeImg(p.image))+'" alt="">':'<div class="tile-placeholder" style="font-size:30px">🚪</div>')+'</div><div class="cartitem-info"><strong>'+esc(p.name)+'</strong>'+'<small>'+esc(p.category)+'</small><div class="qty-controls"><button type="button" aria-label="Quitar una unidad de '+esc(p.name)+'" data-qty="-1" data-id="'+esc(p.id)+'">−</button><span>'+item.qty+'</span><button type="button" aria-label="Agregar una unidad de '+esc(p.name)+'" data-qty="1" data-id="'+esc(p.id)+'">+</button><button type="button" class="remove" data-remove="'+esc(p.id)+'">Quitar</button></div><input class="item-note" type="text" maxlength="180" data-note="'+esc(p.id)+'" placeholder="Medidas o detalles (opcional)" value="'+esc(item.note)+'"></div></div>').join(''):'<div class="emptycart"><b>Tu carrito está vacío.</b>Explorá productos y agregalos para preparar tu pedido.</div>';
 const valued=items.filter(x=>x.p.price!==null);const total=valued.reduce((s,x)=>s+x.p.price*x.item.qty,0);
 $('cart-estimate').textContent=valued.length===0?'A consultar':formatPrice(total)+(valued.length<items.length?' + a consultar':'');
 $('send-quote').disabled=items.length===0;
@@ -1265,7 +1265,7 @@ function openDetail(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  detailId=id;const image=safeImg(p.image);
  $('detail-photo').innerHTML=image?'<img src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="detail-placeholder">'+(p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':'🔩')+'</div>';
- $('detail-cat').textContent=p.category+(p.code?' · Código: '+p.code:'');$('detail-title').textContent=p.name;
+ $('detail-cat').textContent=p.category;$('detail-title').textContent=p.name;
  $('detail-desc').textContent=(p.description||'Consultá por modelos, medidas y terminaciones disponibles.')+' Los productos reales se confirman con Norte Aberturas.';
  $('detail-price').textContent=p.price===null?'A consultar':formatPrice(p.price);
  const related=products.filter(x=>x.category===p.category&&x.id!==id).slice(0,3);
@@ -1327,7 +1327,7 @@ function createAdminCategory(e){
  if(!setStored(CATEGORY_STORE,custom))return;
  CATEGORIES.push(name);adminSelectedCategory=name;adminOpenGroups.add(name);
  $('admin-product-search').value='';$('admin-category-form').hidden=true;$('admin-category-name').value='';
- syncAdminCategories();renderAll();toast('Apartado "'+name+'" creado en este dispositivo');
+ syncAdminCategories();$('admin-category').value=name;renderAll();toast('Apartado "'+name+'" creado en este dispositivo');
 }
 function removeAdminCategory(name){
  if(FIXED_CATEGORIES.includes(name)||!CATEGORIES.includes(name))return;
@@ -1420,7 +1420,7 @@ $('cta-list').addEventListener('click',()=>{showPanel('consulta-modal');$('consu
 $('consulta-form').addEventListener('submit',sendGeneralInquiry);
 ['cart-close','admin-close','detail-close','consulta-close','overlay'].forEach(id=>$(id).addEventListener('click',hidePanels));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePanels()});
-$('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+productCodeText(p)+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
+$('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
 $('add-new').addEventListener('click',()=>editProduct(null));
 $('add-category').addEventListener('click',()=>{
  const form=$('admin-category-form');
