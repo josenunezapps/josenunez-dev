@@ -1161,7 +1161,7 @@ function sendGeneralInquiry(event){
  const qty=$('consulta-quantity').value.trim();
  const measures=$('consulta-measures').value.trim().slice(0,120);
  const details=$('consulta-details').value.trim().slice(0,650);
- if(!category||!details||!/^\\d+$/.test(qty)||Number(qty)<1||Number(qty)>999){
+ if(!category||!details||!/^\d+$/.test(qty)||Number(qty)<1||Number(qty)>999){
    toast('Completá el producto, la cantidad y los detalles de tu consulta.');
    return;
  }
@@ -1176,7 +1176,7 @@ function sendGeneralInquiry(event){
  if(name)parts.push('Nombre: '+name);
  if(city)parts.push('Ciudad/provincia: '+city);
  parts.push('', '¿Podrían asesorarme sobre modelos, disponibilidad, precios y envío? ¡Gracias!');
- openWhatsApp(parts.join('\\n'));
+ openWhatsApp(parts.join('\n'));
 }
 function hidePanels(){$('overlay').hidden=true;$('cart-drawer').hidden=true;$('admin-modal').hidden=true;$('detail-modal').hidden=true;$('consulta-modal').hidden=true;document.body.style.overflow=''}
 function showPanel(which){hidePanels();$('overlay').hidden=false;$(which).hidden=false;document.body.style.overflow='hidden';$(which).querySelector('button')?.focus()}
