@@ -1314,18 +1314,9 @@ async function importJSON(e){
 }
 async function promptInstall(){if(installPrompt){installPrompt.prompt();try{await installPrompt.userChoice}catch{}installPrompt=null}else toast('Para instalarla: menú del navegador → Agregar a pantalla de inicio')}
 // En el catálogo, el buscador de la cabecera filtra sin saltar la pantalla.
-let headerSearchTimer=0;
-$('shop-search-app').addEventListener('input',()=>{
- clearTimeout(headerSearchTimer);
- if(!document.body.classList.contains('catalog-browsing'))return;
- headerSearchTimer=setTimeout(()=>{
-  query=$('shop-search-app').value.trim();
-  $('product-search').value=query;
-  filter='Todas';
-  renderCatalog();
- },160);
-});
-$('shop-search-app-form').addEventListener('submit',e=>{clearTimeout(headerSearchTimer);submitShopAppSearch(e)});
+// Búsqueda superior a demanda: escribir o borrar no reconstruye
+// el catálogo ni altera la altura del documento (evita saltos).
+$('shop-search-app-form').addEventListener('submit',submitShopAppSearch);
 all('[data-shop-app-cat]').forEach(b=>b.addEventListener('click',()=>window.norteSelectCategory(b.dataset.shopAppCat)));
 all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(b.dataset.appShelf+'-rail');const item=rail?.querySelector('.shop-item');if(item)rail.scrollBy({left:Number(b.dataset.appDir)*(item.getBoundingClientRect().width+16),behavior:'smooth'})}));
 all('.chip').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;all('.chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCatalog()}));
