@@ -1,5 +1,5 @@
 // Norte Aberturas demo r35: nunca servir un HTML de una versión anterior.
-const CACHE='norte-pwa-demo-44';
+const CACHE='norte-pwa-demo-45';
 const ASSETS=['./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
