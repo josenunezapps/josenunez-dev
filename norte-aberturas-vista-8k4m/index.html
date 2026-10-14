@@ -407,6 +407,21 @@ body.site-menu-locked{overflow:hidden!important}
 #categorias .catcard .catinfo small,#categorias .catcard .pella-catcaption small{color:#fff5e6!important;text-shadow:0 1px 4px rgba(0,0,0,.42)}
 #categorias .catcard .catinfo b,#categorias .catcard .pella-catcaption strong{color:#fff!important;text-shadow:0 2px 7px rgba(0,0,0,.26)}
 @media (max-width:760px){#categorias .catcard>img{object-position:center center}}
+
+/* Jerarquía de capas corregida: el carrito siempre se muestra por encima de la cabecera fija. */
+#shade.shade:not([hidden]){position:fixed;inset:0;z-index:2000;backdrop-filter:blur(3px)}
+#drawer.drawer:not([hidden]){position:fixed;inset-block:0;right:0;z-index:2010;max-height:100dvh;min-height:0;isolation:isolate}
+#drawer .drawerheader{flex:0 0 auto;position:relative;z-index:2;align-items:flex-start;background:#f8f7f1;padding-top:max(22px,env(safe-area-inset-top));}
+#drawer .drawerheader h2{font-size:clamp(30px,3vw,38px);line-height:1.08;margin:8px 0 0;overflow-wrap:anywhere}
+#drawer .drawerbody{min-height:0;overscroll-behavior:contain}
+#drawer .drawerbottom{flex:0 0 auto;padding-bottom:max(20px,env(safe-area-inset-bottom));}
+#modal.modal:not([hidden]){z-index:2020}
+@media(max-width:520px){
+ #drawer.drawer:not([hidden]){width:100vw;max-width:100vw}
+ #drawer .drawerheader{padding:18px 18px 14px}
+ #drawer .drawerbody{padding:14px 18px}
+ #drawer .drawerbottom{padding:14px 18px max(18px,env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -501,9 +516,9 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
  <div class="showroom-shade"></div>
  <div class="shell showroom-content">
   <div class="showroom-paper">
-   <div class="showroom-kicker"><span class="showroom-dot"></span> NORTE ABERTURAS <span class="showroom-sep">/</span> CATÁLOGO DIGITAL</div>
-   <h1>Una nueva forma de <em>abrir espacios.</em></h1>
-   <p>Puertas, ventanas y herrajes para imaginar tu próximo proyecto. Elegí una categoría, explorá diseños y armá tu consulta en minutos.</p>
+   <div class="showroom-kicker"><span class="showroom-dot"></span> NORTE ABERTURAS <span class="showroom-sep">/</span> FÁBRICA DE PUERTAS Y VENTANAS</div>
+   <h1>Aberturas que acompañan <em>tu obra.</em></h1>
+   <p>Norte Aberturas fabrica puertas y ventanas, trabaja con clientes mayoristas y minoristas y realiza envíos a todo el país. Explorá referencias y prepará tu consulta por WhatsApp.</p>
    <div class="showroom-buttons"><a class="showroom-primary" href="#categorias">Descubrir colecciones <span>↗</span></a><a class="showroom-secondary" href="#productos">Ver productos <span>→</span></a></div>
    <div class="showroom-mini"><span>Venta mayorista y minorista</span><span>Envíos a todo el país</span></div>
   </div>
@@ -517,7 +532,7 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
   <div class="benefititem"><span>↗</span><b>WhatsApp directo</b></div>
 </div></div>
 <section class="section" id="categorias"><div class="shell">
-  <div class="sechead"><div><span class="eyebrow">ELEGÍ QUÉ ESTÁS BUSCANDO</span><h2 class="serif">Encontrá tu abertura ideal.</h2></div><p>Elegí un tipo de producto para ver únicamente sus modelos.</p></div>
+  <div class="sechead"><div><span class="eyebrow">NORTE ABERTURAS · LÍNEAS DE PRODUCTOS</span><h2 class="serif">Descubrí las aberturas de Norte.</h2></div><p>Elegí puertas, ventanas, herrajes o soluciones a medida. Pedí asesoramiento para tu obra y consultá opciones de envío.</p></div>
   <div class="catgrid">
     <button type="button" class="catcard" data-category="Puertas" aria-label="Ver catálogo de puertas"><img loading="lazy" src="https://images.pexels.com/photos/36777846/pexels-photo-36777846.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Puerta de entrada moderna de madera instalada en vivienda contemporánea, fotografía de referencia"><span class="catinfo"><small>Entradas con diseño y presencia</small><b class="serif">Puertas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
     <button type="button" class="catcard" data-category="Ventanas" aria-label="Ver catálogo de ventanas"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="catinfo"><small>Luz y ventilación para cada ambiente</small><b class="serif">Ventanas</b><em class="type-count">18 referencias</em><span>↗</span></span></button>
@@ -527,7 +542,7 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
   <div class="intro-note"><span>Catálogo ilustrativo: las fotos y modelos reales se incorporan cuando los entregue el fabricante.</span><a href="#productos">Ver los productos ↗</a></div><div class="pella-help"><div><strong>¿Todavía no sabés qué modelo elegir?</strong><span>Prepará una consulta con el tipo de abertura y las medidas de tu proyecto.</span></div><a href="#amedida">Asesoramiento para tu obra ↗</a></div>
 </div></section>
 <section class="catalog" id="productos"><div class="shell">
-  <div class="catalog-top"><div><span class="eyebrow">COLECCIONES DE NORTE</span><h2 class="serif">Productos para tu proyecto.</h2><p>Modelos de referencia organizados por tipo. Elegí uno y consultá las medidas por WhatsApp.</p></div><div class="quotehint"><b>¿Necesitás varios productos?</b>Agregalos a una lista y enviá un solo mensaje con cantidades y medidas por WhatsApp.</div></div>
+  <div class="catalog-top"><div><span class="eyebrow">CATÁLOGO DE NORTE ABERTURAS</span><h2 class="serif">Puertas y ventanas para tu proyecto.</h2><p>Conocé referencias del catálogo Norte Aberturas. Sumá modelos a tu consulta y pedí medidas, terminaciones y precios por WhatsApp.</p></div><div class="quotehint"><b>¿Estás equipando una obra?</b>Armá tu lista con puertas, ventanas y herrajes y pedí una cotización conjunta a Norte Aberturas por WhatsApp.</div></div>
   <div class="catalog-explore"><div class="category-results">
 <div class="catcontrols">
     <div class="filterline" role="group" aria-label="Filtrar productos"><button class="chip" data-filter="Todos" aria-pressed="true">Todos</button><button class="chip" data-filter="Puertas" aria-pressed="false">Puertas</button><button class="chip" data-filter="Ventanas" aria-pressed="false">Ventanas</button><button class="chip" data-filter="Accesorios" aria-pressed="false">Accesorios</button><button class="chip" data-filter="A medida" aria-pressed="false">A medida</button><button class="chip" data-filter="Favoritos" aria-pressed="false">♡ Favoritos</button></div>
@@ -545,7 +560,7 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
   <p class="disclaimer">* Los artículos de esta propuesta son ejemplos de categorías y posibles productos. Las imágenes son ilustrativas. No se informa stock, precio, medidas ni disponibilidad sin confirmación de Norte Aberturas. Los pedidos se coordinan por WhatsApp.</p>
 </div></div></div></section>
 <section class="shop-shelf" id="shop-featured" aria-label="Destacados"><div class="shell">
-<div class="shop-heading"><div><span class="eyebrow">INSPIRACIÓN PARA TUS ESPACIOS</span><h2>Ideas para tu próxima obra</h2><p>Una selección breve con propuestas para explorar.</p></div><div class="shop-heading-actions"><span>Deslizá para descubrir más →</span><button type="button" class="shop-arrow" data-shelf-dir="-1" data-shelf="shop-featured" aria-label="Anterior producto en Destacados">‹</button><button type="button" class="shop-arrow" data-shelf-dir="1" data-shelf="shop-featured" aria-label="Siguiente producto en Destacados">›</button></div></div>
+<div class="shop-heading"><div><span class="eyebrow">IDEAS PARA CONSTRUIR CON NORTE</span><h2>Aberturas que inspiran proyectos</h2><p>Descubrí referencias de puertas, ventanas y herrajes para pensar tu próximo proyecto con Norte Aberturas.</p></div><div class="shop-heading-actions"><span>Deslizá para descubrir más →</span><button type="button" class="shop-arrow" data-shelf-dir="-1" data-shelf="shop-featured" aria-label="Anterior producto en Destacados">‹</button><button type="button" class="shop-arrow" data-shelf-dir="1" data-shelf="shop-featured" aria-label="Siguiente producto en Destacados">›</button></div></div>
 <div class="shop-product-rail" id="shop-featured-rail" tabindex="0" role="region" aria-label="Productos de Destacados" data-static-gallery="true"><article class="shop-item" data-category="Puertas"><div class="shop-item-image"><img loading="lazy" src="https://images.unsplash.com/photo-1646146361482-fd2374db66da?auto=format&amp;fit=crop&amp;w=700&amp;q=78" alt="Foto de referencia de Puerta de entrada"><small>Puertas</small></div><div class="shop-item-body"><small>FOTO DE REFERENCIA</small><h3>Puerta de entrada</h3><div class="shop-item-price">Precio a consultar</div><div class="shop-item-actions"><a class="shop-item-detail shop-static-link" href="#productos">Ver catálogo ↗</a></div></div></article>
 <article class="shop-item" data-category="Ventanas"><div class="shop-item-image"><img loading="lazy" src="https://images.unsplash.com/photo-1755378402362-40cbb72abb63?auto=format&amp;fit=crop&amp;w=700&amp;q=78" alt="Foto de referencia de Ventana corrediza"><small>Ventanas</small></div><div class="shop-item-body"><small>FOTO DE REFERENCIA</small><h3>Ventana corrediza</h3><div class="shop-item-price">Precio a consultar</div><div class="shop-item-actions"><a class="shop-item-detail shop-static-link" href="#productos">Ver catálogo ↗</a></div></div></article>
 <article class="shop-item" data-category="Accesorios"><div class="shop-item-image"><img loading="lazy" src="https://images.unsplash.com/photo-1776417091038-df7f71687a1e?auto=format&amp;fit=crop&amp;w=700&amp;q=78" alt="Foto de referencia de Manijones"><small>Accesorios</small></div><div class="shop-item-body"><small>FOTO DE REFERENCIA</small><h3>Manijones</h3><div class="shop-item-price">Precio a consultar</div><div class="shop-item-actions"><a class="shop-item-detail shop-static-link" href="#productos">Ver catálogo ↗</a></div></div></article>
@@ -573,7 +588,7 @@ document.addEventListener('click',function(event){
 <div class="shop-heading"><div><span class="eyebrow">MÁS IDEAS PARA TU PROYECTO</span><h2>Para descubrir</h2><p>Otras opciones de puertas, ventanas y accesorios para explorar.</p></div><div class="shop-heading-actions"><span>Deslizá para descubrir más →</span><button type="button" class="shop-arrow" data-shelf-dir="-1" data-shelf="shop-new" aria-label="Anterior producto en Para descubrir">‹</button><button type="button" class="shop-arrow" data-shelf-dir="1" data-shelf="shop-new" aria-label="Siguiente producto en Para descubrir">›</button></div></div>
 <div class="shop-product-rail" id="shop-new-rail" tabindex="0" role="region" aria-label="Productos de Para descubrir"></div></div></section>
 <section class="project" id="amedida"><div class="shell projectgrid">
- <div><span class="eyebrow">03 / Para cada proyecto</span><h2 class="serif">¿Buscás algo con medidas especiales?</h2><p>Obra nueva, renovación o equipamiento para reventa: podés preparar una consulta con el tipo de abertura, medidas aproximadas y provincia de destino para que el equipo pueda orientarte.</p><button type="button" class="btn rustbtn" id="custom-quote">Pedir presupuesto a medida ↗</button></div>
+ <div><span class="eyebrow">03 / Para cada proyecto</span><h2 class="serif">¿Necesitás aberturas a medida?</h2><p>Obra nueva, renovación o equipamiento para reventa: podés preparar una consulta con el tipo de abertura, medidas aproximadas y provincia de destino para que el equipo pueda orientarte.</p><button type="button" class="btn rustbtn" id="custom-quote">Pedir presupuesto a medida ↗</button></div>
  <div class="projectcards"><div class="projectcard"><strong>01</strong><b>Elegí el producto</b><p>Puerta, ventana, herraje o fabricación especial.</p></div><div class="projectcard"><strong>02</strong><b>Indicá las medidas</b><p>Agregá cantidades, características y terminaciones.</p></div><div class="projectcard"><strong>03</strong><b>Decinos tu provincia</b><p>Podés consultar coordinación de envíos nacionales.</p></div><div class="projectcard"><strong>04</strong><b>Recibí asesoramiento</b><p>La consulta se abre en el WhatsApp del negocio.</p></div></div>
 </div></section>
 <section class="questions" id="consultas"><div class="shell faqgrid">
@@ -594,9 +609,9 @@ document.addEventListener('click',function(event){
 </div><div class="footend"><span>DEMO COMERCIAL · No es la tienda oficial. Fotografías y productos ilustrativos.</span><span>Diseñada por <a href="https://zenix.com.ar/" target="_blank" rel="noopener noreferrer">Zenix AR ↗</a></span></div></div></footer>
 <div id="mobile-cart" class="mobile-cart" hidden><button type="button" id="mobile-cart-open">🛒 Ver carrito · <span id="mobile-cart-count">0 productos</span> ↗</button></div><div class="shade" id="shade" hidden></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
-  <div class="drawerheader"><div><span class="eyebrow" style="color:#a97548">Tu lista de productos</span><h2 id="drawer-title" class="serif">TU CARRITO</h2></div><button class="close" id="close-drawer" aria-label="Cerrar" type="button">×</button></div>
-  <div class="drawerbody"><div id="cart-items"></div><div id="cart-form" hidden><div class="totalnote"><strong>Precio total: A cotizar</strong><br>El comercio confirmará el importe, las medidas y el envío antes de comprar.</div><label class="label" for="q-name">Tu nombre (opcional)</label><input id="q-name" class="input" maxlength="80" placeholder="¿Cómo te llamás?"><label class="label" for="q-city">Ciudad / Provincia</label><input id="q-city" class="input" maxlength="100" placeholder="¿Desde dónde consultás?"></div></div>
-  <div class="drawerbottom"><button type="button" id="send-cart" class="btn darkbtn">Enviar carrito por WhatsApp ↗</button><button type="button" id="continue-shopping" style="width:100%;margin:13px 0 5px;padding:9px;border:0;background:transparent;color:#315947;text-decoration:underline;font-size:12px;font-weight:800">← Seguir comprando</button><p class="smallprint">El pedido se cotiza por WhatsApp. No se realiza ningún pago en esta demostración.</p></div>
+  <div class="drawerheader"><div><span class="eyebrow" style="color:#a97548">NORTE ABERTURAS · TU SELECCIÓN</span><h2 id="drawer-title" class="serif">TU CONSULTA</h2></div><button class="close" id="close-drawer" aria-label="Cerrar" type="button">×</button></div>
+  <div class="drawerbody"><div id="cart-items"></div><div id="cart-form" hidden><div class="totalnote"><strong>Precio total: A cotizar</strong><br>Norte Aberturas confirmará por WhatsApp disponibilidad, medidas, terminaciones, precio y envío antes de avanzar.</div><label class="label" for="q-name">Tu nombre (opcional)</label><input id="q-name" class="input" maxlength="80" placeholder="¿Cómo te llamás?"><label class="label" for="q-city">Ciudad / Provincia</label><input id="q-city" class="input" maxlength="100" placeholder="¿Desde dónde consultás?"></div></div>
+  <div class="drawerbottom"><button type="button" id="send-cart" class="btn darkbtn">Pedir cotización a Norte ↗</button><button type="button" id="continue-shopping" style="width:100%;margin:13px 0 5px;padding:9px;border:0;background:transparent;color:#315947;text-decoration:underline;font-size:12px;font-weight:800">← Seguir comprando</button><p class="smallprint">Tu consulta se envía por WhatsApp a Norte Aberturas. Esta demostración no procesa pagos.</p></div>
 </aside>
 <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
  <div class="modalhead"><span class="eyebrow" style="color:#a16d42">Ficha de producto · Catálogo demostrativo</span><button type="button" class="close" id="close-modal" aria-label="Cerrar ficha de producto">×</button></div>
