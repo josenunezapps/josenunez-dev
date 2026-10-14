@@ -581,7 +581,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r35</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r36</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -1322,6 +1322,37 @@ async function promptInstall(){if(installPrompt){installPrompt.prompt();try{awai
 // En el catálogo, el buscador de la cabecera filtra sin saltar la pantalla.
 // Búsqueda superior a demanda: escribir o borrar no reconstruye
 // el catálogo ni altera la altura del documento (evita saltos).
+// r36: conservar la posición visible al editar el buscador del encabezado.
+const headerSearchInput=$('shop-search-app');
+let headerSearchPinnedY=null;
+let headerScrollRestore=false;
+const restoreHeaderScroll=()=>{
+ if(headerSearchPinnedY===null||document.activeElement!==headerSearchInput)return;
+ if(Math.abs(window.scrollY-headerSearchPinnedY)>1){
+  window.scrollTo({top:headerSearchPinnedY,behavior:'instant'});
+ }
+};
+headerSearchInput.addEventListener('pointerdown',()=>{
+ headerSearchPinnedY=window.scrollY;
+},true);
+headerSearchInput.addEventListener('focus',()=>{
+ if(headerSearchPinnedY===null)headerSearchPinnedY=window.scrollY;
+},true);
+for(const eventName of ['input','search']){
+ headerSearchInput.addEventListener(eventName,event=>{
+  // Solo el botón Buscar aplica filtros. El valor del campo sigue cambiando.
+  event.stopImmediatePropagation();
+  requestAnimationFrame(restoreHeaderScroll);
+ },true);
+}
+headerSearchInput.addEventListener('blur',()=>{headerSearchPinnedY=null},true);
+window.addEventListener('scroll',()=>{
+ if(headerSearchPinnedY===null||document.activeElement!==headerSearchInput||headerScrollRestore)return;
+ if(Math.abs(window.scrollY-headerSearchPinnedY)<=1)return;
+ headerScrollRestore=true;
+ restoreHeaderScroll();
+ requestAnimationFrame(()=>{headerScrollRestore=false});
+},{passive:true});
 $('shop-search-app-form').addEventListener('submit',submitShopAppSearch);
 all('[data-shop-app-cat]').forEach(b=>b.addEventListener('click',()=>window.norteSelectCategory(b.dataset.shopAppCat)));
 all('[data-app-shelf]').forEach(b=>b.addEventListener('click',()=>{const rail=$(b.dataset.appShelf+'-rail');const item=rail?.querySelector('.shop-item');if(item)rail.scrollBy({left:Number(b.dataset.appDir)*(item.getBoundingClientRect().width+16),behavior:'smooth'})}));
