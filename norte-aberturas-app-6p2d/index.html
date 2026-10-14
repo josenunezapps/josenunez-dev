@@ -539,6 +539,15 @@ body.site-menu-locked{overflow:hidden!important}
 .drawer-header h2{font-size:clamp(28px,3vw,36px);line-height:1.08;overflow-wrap:break-word}
 .drawer-close{flex-shrink:0}
 @media(max-width:540px){.drawer-header{min-height:94px;padding:20px 18px}.drawer-content{padding:16px 18px}.drawer-footer{padding:16px 18px 22px}}
+
+/* Norte Aberturas · capas seguras y carrito móvil · 2026-10-14 */
+#overlay.overlay:not([hidden]){position:fixed!important;inset:0!important;z-index:4000!important;}
+#cart-drawer.drawer:not([hidden]){position:fixed!important;top:0!important;right:0!important;bottom:0!important;z-index:4010!important;max-height:100dvh!important;min-height:0;isolation:isolate;}
+#cart-drawer .drawer-header{position:relative;z-index:1;flex-shrink:0;}
+#cart-drawer .drawer-content{min-height:0;overflow-y:auto;overscroll-behavior:contain;}
+body:has(#cart-drawer:not([hidden])) .header-search{visibility:hidden!important;pointer-events:none!important;}
+body:has(#cart-drawer:not([hidden])) .site-menu-panel{visibility:hidden!important;pointer-events:none!important;}
+@media(max-width:540px){#cart-drawer.drawer:not([hidden]){left:0!important;width:100vw!important;max-width:100vw!important;height:100dvh!important;}}
 </style>
 </head>
 <body>
@@ -1237,7 +1246,7 @@ $('admin-product-search').addEventListener('input',()=>{
  adminSearchTimer=setTimeout(renderAdmin,180);
 });
 $('admin-list').addEventListener('click',event=>{
- const button=event.target.closest('[data-edit],[data-delete],[data-new-in],[data-remove-category]');
+ const button=event.target.closest('[data-edit],[data-delete],[data-new-in],[data-remove-category],[data-admin-show-more]');
  if(!button||!$('admin-list').contains(button))return;
  if(button.hasAttribute('data-edit'))editProduct(button.dataset.edit);
  else if(button.hasAttribute('data-delete'))deleteProduct(button.dataset.delete);
