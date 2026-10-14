@@ -432,6 +432,15 @@ body.site-menu-locked{overflow:hidden!important}
 .drawerheader h2{font-size:clamp(28px,3vw,38px);line-height:1.08;overflow-wrap:break-word}
 .drawerheader .close{flex-shrink:0}
 @media(max-width:540px){.drawerheader{min-height:96px;padding:20px 18px}.drawerbody{padding:16px 18px}.drawerbottom{padding:16px 18px 22px}}
+
+/* Norte Aberturas · capas seguras y carrito móvil · 2026-10-14 */
+#shade.shade:not([hidden]){position:fixed!important;inset:0!important;z-index:4000!important;}
+#drawer.drawer:not([hidden]){position:fixed!important;top:0!important;right:0!important;bottom:0!important;z-index:4010!important;max-height:100dvh!important;min-height:0;isolation:isolate;}
+#drawer .drawerheader{position:relative;z-index:1;flex-shrink:0;}
+#drawer .drawerbody{min-height:0;overflow-y:auto;overscroll-behavior:contain;}
+body:has(#drawer:not([hidden])) .header-search{visibility:hidden!important;pointer-events:none!important;}
+body:has(#drawer:not([hidden])) .site-menu-panel{visibility:hidden!important;pointer-events:none!important;}
+@media(max-width:540px){#drawer.drawer:not([hidden]){left:0!important;width:100vw!important;max-width:100vw!important;height:100dvh!important;}}
 </style>
 </head>
 <body>
