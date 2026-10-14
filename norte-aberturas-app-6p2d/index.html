@@ -1107,7 +1107,7 @@ function renderAllCategoriesExplorer(){
  const grid=$('shop-all-categories-grid');
  if(!count||!grid)return;
  const additional=Math.max(0,CATEGORIES.length-FIXED_CATEGORIES.length);
- count.textContent=CATEGORIES.length+' categorías disponibles'+(additional?' · '+additional+' nuevas':'');
+ count.textContent=CATEGORIES.length+' categorías disponibles'+(additional?' · '+additional+' '+(additional===1?'nueva':'nuevas'):'');
  grid.innerHTML=CATEGORIES.map(category=>{
   const total=products.filter(p=>p.category===category).length;
   return '<button class="shop-all-category" type="button" data-explore-category="'+esc(category)+'" aria-label="Ver '+esc(category)+', '+total+' '+(total===1?'producto':'productos')+'"><span class="shop-all-category-name">'+esc(category)+'</span><span class="shop-all-category-footer"><span>'+total+' '+(total===1?'producto':'productos')+'</span><span aria-hidden="true">↗</span></span></button>';
