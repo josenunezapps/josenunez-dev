@@ -239,7 +239,7 @@ body{background:#f7f5ef}
 .catalog-explore,.category-results{width:100%;min-width:0}
 .category-results .filterline,.category-results .filters{display:none!important}
 .category-results .catcontrols{justify-content:flex-end}
-.category-results #catalog:not(.catalog-expanded)>.tile:nth-child(n+10){display:none}
+.category-results #catalog.catalog-limited:not(.catalog-expanded)>.tile:nth-child(n+10){display:none}
 .catalog-show-more{display:block;margin:20px auto 0;padding:12px 26px;min-height:44px;color:#264b37;border:1px solid #d0dfce;border-radius:5px;background:#fffefb;font-size:12px;font-weight:800}
 .catalog-show-more:hover{background:#ebf1e9}
 .catalog-show-more[hidden]{display:none!important}
@@ -658,7 +658,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r52</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r53</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -1215,9 +1215,15 @@ function syncCategorySidebar(){
   if(selectedViewKey!==view){$('catalog').classList.remove('catalog-expanded');selectedViewKey=view;}
 }
 function syncCatalogMore(count){
-  const button=$('catalog-show-more');
-  button.hidden=count<=9;
-  button.textContent=$('catalog').classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
+  const catalog=$('catalog'),button=$('catalog-show-more');
+  // Mostrar cada producto de la categoría elegida. Limitar solo la vista general
+  // para que no aparezcan de golpe todas las fichas del catálogo.
+  const limited=filter==='Todas'&&!query.trim()&&count>9;
+  catalog.classList.toggle('catalog-limited',limited);
+  if(!limited)catalog.classList.remove('catalog-expanded');
+  button.hidden=!limited;
+  const extra=Math.max(0,count-9);
+  button.textContent=catalog.classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver los '+extra+' productos restantes ↓';
 }
 
 window.norteSelectCategory=category=>{
@@ -1253,7 +1259,7 @@ function initCategorySidebar(){
   });
   $('catalog-show-more').addEventListener('click',()=>{
     const g=$('catalog');g.classList.toggle('catalog-expanded');
-    $('catalog-show-more').textContent=g.classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver más productos ↓';
+    $('catalog-show-more').textContent=g.classList.contains('catalog-expanded')?'Mostrar menos ↑':'Ver los '+Math.max(0,g.childElementCount-9)+' productos restantes ↓';
     if(!g.classList.contains('catalog-expanded'))window.norteScrollCatalog();
   });
 }
