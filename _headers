@@ -25,3 +25,7 @@
   Cache-Control: no-store
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
+
+# La demo debe recuperar su última versión en cada visita.
+/norte-aberturas-app-6p2d/*
+  Cache-Control: no-store, max-age=0, must-revalidate
