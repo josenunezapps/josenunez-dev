@@ -510,6 +510,10 @@ body.site-menu-locked{overflow:hidden!important}
  .admin-category-formline input{flex-basis:100%}
 }
 @media(prefers-reduced-motion:reduce){.admin-group-arrow{transition:none}}
+
+.admin-show-more{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:11px;border:1px solid #c6d9c7;border-radius:5px;background:#eef5ed;color:#2b563c;padding:12px 9px;min-height:42px;cursor:pointer;font-weight:800;font-size:11px}
+.admin-show-more span{font-weight:600;color:#65846d}
+.admin-show-more:hover{background:#e2eee1}
 </style>
 </head>
 <body>
@@ -821,7 +825,7 @@ const $=id=>document.getElementById(id),all=(s,root=document)=>Array.from(root.q
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeImg=s=>{let u=String(s||'').trim();if(/^refsvg:(door|window|hardware|custom)-([1-9]|1[0-9])$/.test(u))return referenceArt(u);if(/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/i.test(u))return u;try{let p=new URL(u);return p.protocol==='https:'?p.href:''}catch{return ''}};
 const formatPrice=x=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(x);
-const fresh=()=>DEFAULTS.map(x=>({...x}));let products=fresh(),cart={},filter='Puertas',query='',sortMode='default',favorites=new Set(),detailId=null,editing=null,uploaded=null,delayed=null,installPrompt=null,adminOpenGroups=new Set(),adminSelectedCategory='Puertas';
+const fresh=()=>DEFAULTS.map(x=>({...x}));let products=fresh(),cart={},filter='Puertas',query='',sortMode='default',favorites=new Set(),detailId=null,editing=null,uploaded=null,delayed=null,installPrompt=null,adminOpenGroups=new Set(),adminVisibleLimits=new Map(),adminSelectedCategory='Puertas';
 function cleanCategory(value){
  const v=String(value||'').trim().replace(/\s+/g,' ').slice(0,45);
  if(!v||v.toLocaleLowerCase('es-AR')==='favoritos'||v.toLocaleLowerCase('es-AR')==='todas'||v.toLocaleLowerCase('es-AR')==='todos')return '';
@@ -1085,7 +1089,8 @@ function adminProductRows(items){
 }
 function adminGroupContent(category,items,total,q){
  const fixed=FIXED_CATEGORIES.includes(category);
- return '<div class="admin-group-actions"><button type="button" class="smallbtn strong" data-new-in="'+esc(category)+'">+ Agregar producto</button>'+(!fixed&&!total?'<button type="button" class="smallbtn danger" data-remove-category="'+esc(category)+'">Eliminar apartado vacío</button>':'')+'</div>'+adminProductRows(items);
+ const limit=adminVisibleLimits.get(category)||8,visible=items.slice(0,limit),remaining=items.length-visible.length;
+ return '<div class="admin-group-actions"><button type="button" class="smallbtn strong" data-new-in="'+esc(category)+'">+ Agregar producto</button>'+(!fixed&&!total?'<button type="button" class="smallbtn danger" data-remove-category="'+esc(category)+'">Eliminar apartado vacío</button>':'')+'</div>'+adminProductRows(visible)+(remaining?'<button type="button" class="admin-show-more" data-admin-show-more="'+esc(category)+'">Ver '+Math.min(8,remaining)+' productos más <span>('+visible.length+' de '+items.length+')</span> ↓</button>':'');
 }
 function renderAdmin(){
  const box=$('admin-list'),q=$('admin-product-search').value.trim().toLocaleLowerCase('es-AR');
@@ -1164,7 +1169,7 @@ async function importJSON(e){
   if(!confirm('¿Reemplazar el catálogo y los apartados locales con '+next.length+' productos del archivo?')){setCategories(before,[]);return}
   if(!setStored(STORE,next)){setCategories(before,[]);return}
   if(!setStored(CATEGORY_STORE,CATEGORIES.slice(FIXED_CATEGORIES.length))){toast('Productos guardados, pero no se pudieron guardar los apartados');}
-  products=next;adminOpenGroups.clear();$('admin-product-search').value='';syncAdminCategories();cleanCart();renderAll();toast('Catálogo y apartados importados en este dispositivo');
+  products=next;adminOpenGroups.clear();adminVisibleLimits.clear();$('admin-product-search').value='';syncAdminCategories();cleanCart();renderAll();toast('Catálogo y apartados importados en este dispositivo');
  }catch(err){setCategories(before,[]);toast('No se pudo importar: '+err.message)}
 }
 async function promptInstall(){if(installPrompt){installPrompt.prompt();try{await installPrompt.userChoice}catch{}installPrompt=null}else toast('Para instalarla: menú del navegador → Agregar a pantalla de inicio')}
@@ -1190,6 +1195,7 @@ $('admin-category-form').addEventListener('submit',createAdminCategory);
 let adminSearchTimer=0;
 $('admin-product-search').addEventListener('input',()=>{
  clearTimeout(adminSearchTimer);
+ adminVisibleLimits.clear();
  adminSearchTimer=setTimeout(renderAdmin,180);
 });
 $('admin-list').addEventListener('click',event=>{
@@ -1199,6 +1205,16 @@ $('admin-list').addEventListener('click',event=>{
  else if(button.hasAttribute('data-delete'))deleteProduct(button.dataset.delete);
  else if(button.hasAttribute('data-new-in')){adminSelectedCategory=button.dataset.newIn;editProduct(null)}
  else if(button.hasAttribute('data-remove-category'))removeAdminCategory(button.dataset.removeCategory);
+ else if(button.hasAttribute('data-admin-show-more')){
+  const cat=button.dataset.adminShowMore,folder=button.closest('[data-admin-folder]'),body=folder?.querySelector('[data-admin-body]');
+  if(!body||!CATEGORIES.includes(cat))return;
+  const q=$('admin-product-search').value.trim().toLocaleLowerCase('es-AR');
+  const allProducts=products.filter(p=>p.category===cat);
+  const visible=!q||cat.toLocaleLowerCase('es-AR').includes(q)?allProducts:allProducts.filter(p=>[p.name,p.description].some(v=>String(v||'').toLocaleLowerCase('es-AR').includes(q)));
+  adminVisibleLimits.set(cat,(adminVisibleLimits.get(cat)||8)+8);
+  body.innerHTML=adminGroupContent(cat,visible,allProducts.length,q);
+  body.querySelector('[data-admin-show-more]')?.focus();
+ }
 });
 const mobileCatalogMedia=window.matchMedia('(max-width:760px)');
 mobileCatalogMedia.addEventListener('change',()=>{if(document.body.classList.contains('catalog-browsing'))renderCatalog()});
@@ -1209,7 +1225,7 @@ $('admin-form').addEventListener('submit',saveProduct);
 $('export-json').addEventListener('click',exportJSON);
 $('import-json').addEventListener('click',()=>$('import-file').click());
 $('import-file').addEventListener('change',importJSON);
-$('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 64 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;if(!setStored(CATEGORY_STORE,[]))return;setCategories([],next);products=next;adminOpenGroups.clear();adminSelectedCategory='Puertas';$('admin-product-search').value='';syncAdminCategories();cart={};setStored(CART_STORE,cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
+$('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 64 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;if(!setStored(CATEGORY_STORE,[]))return;setCategories([],next);products=next;adminOpenGroups.clear();adminVisibleLimits.clear();adminSelectedCategory='Puertas';$('admin-product-search').value='';syncAdminCategories();cart={};setStored(CART_STORE,cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
 $('install-app').addEventListener('click',promptInstall);
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 $('mobile-home').addEventListener('click',()=>{document.getElementById('inicio').scrollIntoView({behavior:'smooth'})});
