@@ -644,12 +644,15 @@ body{overflow-anchor:none}
 .admin-data-manager>summary::-webkit-details-marker{display:none}
 .admin-data-manager>summary:hover{background:#e1ece1}
 .admin-data-manager[open]>summary{border-bottom:1px solid #d7e3d6}
-.admin-data-symbol{width:39px;height:39px;flex:0 0 39px;border-radius:5px;background:#d5e4d7;display:grid;place-items:center;font-size:21px;color:#315b43}
 .admin-data-summary{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
 .admin-data-summary strong{font:700 15px/1.2 'DM Sans',Arial,sans-serif;color:#214331}
 .admin-data-summary small{font:500 11px/1.3 'DM Sans',Arial,sans-serif;color:#607a68}
-.admin-data-chevron{flex:0 0 27px;width:27px;height:27px;color:#708d78;display:grid;place-items:center;transition:transform .2s}
-.admin-data-manager[open] .admin-data-chevron{transform:rotate(180deg)}
+.admin-data-settings{flex:0 0 43px;width:43px;height:43px;border:1px solid #c5d8c9;border-radius:12px;background:#f8fbf6;color:#436a50;display:grid;place-items:center;transition:background .22s ease,border-color .22s ease,color .22s ease}
+.admin-data-settings svg{display:block;transform-origin:50% 50%;transition:transform .3s ease}
+.admin-data-manager>summary:hover .admin-data-settings{background:#d5e5d8;border-color:#a9c2b0}
+.admin-data-manager[open] .admin-data-settings{background:#204835;border-color:#204835;color:#fffaf0}
+.admin-data-manager[open] .admin-data-settings svg{transform:rotate(45deg)}
+.admin-data-manager>summary:focus-visible{outline:3px solid #b48e58;outline-offset:-3px}
 .admin-data-body{padding:18px 17px 12px}
 .admin-data-label{font:800 10px/1.3 'DM Sans',Arial,sans-serif;color:#92704f;letter-spacing:.12em;margin:7px 0 9px}
 .admin-data-buttons{display:flex;flex-wrap:wrap;gap:8px}
@@ -662,7 +665,7 @@ body{overflow-anchor:none}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r49</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r50</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -874,7 +877,7 @@ document.addEventListener('click',function(event){
    <div class="notice"><b>Modo de demostración:</b> podés agregar, editar y quitar productos para probar el panel, pero los cambios se guardan <b>solo en este navegador</b>. No se publican para otros clientes. La versión definitiva necesita una base de datos compartida y un acceso de administración seguro.</div>
    <div class="admin-actions"><button type="button" class="smallbtn strong" id="add-new">+ Nuevo producto</button><button type="button" class="smallbtn" id="add-category">＋ Crear apartado</button><button type="button" class="smallbtn" id="install-app">▣ Instalar app</button></div>
    <details class="admin-data-manager" id="admin-data-manager">
-    <summary><span class="admin-data-symbol" aria-hidden="true">▤</span><span class="admin-data-summary"><strong>Administración de datos</strong><small>Planillas Excel, fotos, PDF y copias de seguridad</small></span><span class="admin-data-chevron" aria-hidden="true"><svg viewBox="0 0 24 14" width="20" height="13" focusable="false"><path d="M3 3 L12 9 L21 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary>
+    <summary><span class="admin-data-summary"><strong>Administración de datos</strong><small>Planillas Excel, fotos, PDF y copias de seguridad</small></span><span class="admin-data-settings" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9.8 2.9a2 2 0 0 1 4.4 0l.2 1.3a8 8 0 0 1 1.7.7l1.1-.8a2 2 0 0 1 3.1 3.1l-.8 1.1a8 8 0 0 1 .7 1.7l1.3.2a2 2 0 0 1 0 4.4l-1.3.2a8 8 0 0 1-.7 1.7l.8 1.1a2 2 0 0 1-3.1 3.1l-1.1-.8a8 8 0 0 1-1.7.7l-.2 1.3a2 2 0 0 1-4.4 0l-.2-1.3a8 8 0 0 1-1.7-.7l-1.1.8a2 2 0 0 1-3.1-3.1l.8-1.1a8 8 0 0 1-.7-1.7l-1.3-.2a2 2 0 0 1 0-4.4l1.3-.2a8 8 0 0 1 .7-1.7l-.8-1.1a2 2 0 0 1 3.1-3.1l1.1.8a8 8 0 0 1 1.7-.7z"/><circle cx="12" cy="12" r="3"/></svg></span></summary>
     <div class="admin-data-body">
      <div class="admin-data-label">EXCEL · CARGA MASIVA</div>
      <div class="admin-data-buttons">
