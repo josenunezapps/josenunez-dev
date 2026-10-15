@@ -655,10 +655,22 @@ body{overflow-anchor:none}
 .admin-data-bottom{padding:14px 0 3px;border-top:1px solid #dae3d8}
 .admin-data-manager .smallbtn:disabled{opacity:.5;cursor:wait}
 @media(max-width:540px){.admin-data-body{padding:15px 12px 10px}.admin-data-buttons>.smallbtn{flex:1 1 170px}.admin-actions{gap:6px}.admin-actions>.smallbtn{padding:9px 8px}.admin-gear-btn{flex-basis:40px;width:40px}}
+
+/* r55 - Navegación por vistas independientes dentro del panel de catálogo */
+#admin-modal .admin-screen[hidden]{display:none!important}
+#admin-modal .admin-screen{width:100%;min-width:0}
+#admin-modal .admin-return{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;padding:7px 10px 7px 0;background:none;border:0;color:#356149;font-size:12px;font-weight:800;line-height:1.3}
+#admin-modal .admin-return:hover{color:#ba8753}
+#admin-modal .admin-return[hidden]{display:none!important}
+#admin-modal .admin-form{margin-top:0}
+#admin-modal .admin-new-category{margin:0}
+#admin-modal .admin-data-manager{margin:0}
+#admin-modal .modalbody{overscroll-behavior:contain;scrollbar-gutter:stable}
+@media(max-width:760px){#admin-modal .admin-return{margin-bottom:9px}#admin-modal .modalhead{gap:10px}}
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r54</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r55</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -865,8 +877,9 @@ document.addEventListener('click',function(event){
 <div class="detail-layout"><div id="detail-photo" class="detail-photo"></div><div class="detail-copy"><span class="micro" id="detail-cat"></span><h2 id="detail-title"></h2><p id="detail-desc"></p><div class="detail-specs"><div><b>Precio</b><span id="detail-price">A consultar</span></div><div><b>Medidas</b><span>Según modelo</span></div><div><b>Disponibilidad</b><span>A confirmar</span></div></div><button type="button" class="btn btn-primary" id="detail-add">🛒 Agregar al carrito</button><button type="button" class="btn btn-outline" id="detail-wa">Consultar este producto ↗</button><div class="related-products" id="detail-related"></div><p class="fine">Las imágenes y modelos son ilustrativos, sujetos a confirmación del fabricante.</p></div></div>
 </section>
 <section class="modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title" hidden>
- <div class="modalhead"><div><span class="micro" style="color:#987245">Demostración · Autogestión</span><h2 id="admin-title">Panel de catálogo</h2></div><button type="button" class="drawer-close" id="admin-close" aria-label="Cerrar panel">×</button></div>
+ <div class="modalhead"><div><button type="button" class="admin-return" id="admin-back" hidden>← Volver al catálogo</button><span class="micro" style="color:#987245">Demostración · Autogestión</span><h2 id="admin-title">Panel de catálogo</h2></div><button type="button" class="drawer-close" id="admin-close" aria-label="Cerrar panel">×</button></div>
  <div class="modalbody">
+  <section class="admin-screen" id="admin-screen-home" data-admin-screen="home" aria-label="Catálogo y productos">
    <div class="notice"><b>Modo de demostración:</b> podés agregar, editar y quitar productos para probar el panel, pero los cambios se guardan <b>solo en este navegador</b>. No se publican para otros clientes. La versión definitiva necesita una base de datos compartida y un acceso de administración seguro.</div>
    <div class="admin-actions">
     <button type="button" class="smallbtn strong" id="add-new">+ Nuevo producto</button>
@@ -874,7 +887,35 @@ document.addEventListener('click',function(event){
     <button type="button" class="smallbtn" id="install-app">▣ Instalar app</button>
     <button type="button" class="admin-gear-btn" id="admin-data-toggle" aria-label="Administración de datos" title="Administración de datos" aria-expanded="false" aria-controls="admin-data-manager"><svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor" focusable="false" aria-hidden="true"><path fill-rule="evenodd" d="M10 1h4v2.5l1.9.8 1.8-1.8 2.8 2.8-1.8 1.8.8 1.9H22v4h-2.5l-.8 1.9 1.8 1.8-2.8 2.8-1.8-1.8-1.9.8V22h-4v-2.5l-1.9-.8-1.8 1.8-2.8-2.8 1.8-1.8-.8-1.9H2v-4h2.5l.8-1.9-1.8-1.8 2.8-2.8 1.8 1.8 1.9-.8z M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2z"/></svg></button>
    </div>
-   <div class="admin-data-manager" id="admin-data-manager" hidden>
+   <div class="admin-findbar"><label for="admin-product-search">Buscar en el catálogo</label><div class="admin-findline"><span aria-hidden="true">⌕</span><input type="search" id="admin-product-search" placeholder="Buscar puertas, ventanas, herrajes..." autocomplete="off"><button type="button" id="admin-clear-search" aria-label="Limpiar búsqueda">×</button></div><p id="admin-search-summary" aria-live="polite"></p></div>
+   <div id="admin-list" class="admin-category-list"></div>
+  </section>
+  <section class="admin-screen" id="admin-screen-product" data-admin-screen="product" aria-label="Crear o editar producto" hidden>
+   <form class="admin-form" id="admin-form">
+     <h3 id="admin-form-title">Agregar producto</h3>
+     <div class="admin-fields">
+       <div class="field full"><label for="admin-name">Nombre del producto *</label><input id="admin-name" maxlength="100" required placeholder="Ej.: Puerta de madera"></div>
+       <div class="field full"><label for="admin-code">Código del producto (opcional y único)</label><input id="admin-code" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ej.: PTA-001 o VENT-120"><small class="product-code-hint">Usá letras, números, guiones, barras, puntos o guion bajo. Si no tiene código, dejalo vacío.</small></div>
+       <div class="field"><label for="admin-category">Categoría *</label><select id="admin-category" required><option>Puertas</option><option>Ventanas</option><option>Accesorios</option><option>A medida</option></select></div>
+       <div class="field"><label for="admin-price">Precio orientativo (opcional, ARS)</label><input id="admin-price" type="number" min="0" max="999999999" step="1" placeholder="Dejar vacío si es a consultar"></div>
+       <div class="field full"><label for="admin-description">Descripción</label><textarea id="admin-description" maxlength="350" placeholder="Materiales, características, terminaciones..."></textarea></div>
+       <div class="field full"><label for="admin-image">URL de foto HTTPS (opcional)</label><input id="admin-image" type="url" maxlength="1500" placeholder="https://..."></div>
+       <div class="field full"><label for="admin-upload">O subir una foto desde el dispositivo (se comprime para la demo)</label><input id="admin-upload" type="file" accept="image/jpeg,image/png,image/webp"></div>
+     </div>
+     <p class="fine">Las fotos cargadas también quedan almacenadas solo en este dispositivo. Si la memoria local se llena, exportá una copia antes de hacer otros cambios.</p>
+     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" type="submit">Guardar producto</button><button class="btn btn-outline" type="button" id="cancel-edit">Cancelar</button></div>
+   </form>
+ </di
+  </section>
+  <section class="admin-screen" id="admin-screen-category" data-admin-screen="category" aria-label="Crear apartado" hidden>
+   <form class="admin-new-category" id="admin-category-form">
+     <label for="admin-category-name">Nombre del nuevo apartado</label>
+     <div class="admin-category-formline"><input type="text" id="admin-category-name" maxlength="45" placeholder="Ej.: Portones, Mamparas, Rejas..." autocomplete="off" required><button type="submit" class="smallbtn strong">Crear apartado</button><button type="button" class="smallbtn" id="cancel-category">Cancelar</button></div>
+     <small>Podrás agrupar productos dentro de este apartado. Se guarda solamente en este navegador.</small>
+   </form>
+  </section>
+  <section class="admin-screen" id="admin-screen-data" data-admin-screen="data" aria-label="Administración de datos" hidden>
+   <div class="admin-data-manager" id="admin-data-manager">
     <div class="admin-data-body">
      <div class="admin-data-label">EXCEL · CARGA MASIVA</div>
      <div class="admin-data-buttons">
@@ -900,28 +941,8 @@ document.addEventListener('click',function(event){
     </div>
 
    </div>
-   <form class="admin-new-category" id="admin-category-form" hidden>
-     <label for="admin-category-name">Nombre del nuevo apartado</label>
-     <div class="admin-category-formline"><input type="text" id="admin-category-name" maxlength="45" placeholder="Ej.: Portones, Mamparas, Rejas..." autocomplete="off" required><button type="submit" class="smallbtn strong">Crear apartado</button><button type="button" class="smallbtn" id="cancel-category">Cancelar</button></div>
-     <small>Podrás agrupar productos dentro de este apartado. Se guarda solamente en este navegador.</small>
-   </form>
-   <div class="admin-findbar"><label for="admin-product-search">Buscar en el catálogo</label><div class="admin-findline"><span aria-hidden="true">⌕</span><input type="search" id="admin-product-search" placeholder="Buscar puertas, ventanas, herrajes..." autocomplete="off"><button type="button" id="admin-clear-search" aria-label="Limpiar búsqueda">×</button></div><p id="admin-search-summary" aria-live="polite"></p></div>
-   <div id="admin-list" class="admin-category-list"></div>
-   <form class="admin-form" id="admin-form" hidden>
-     <h3 id="admin-form-title">Agregar producto</h3>
-     <div class="admin-fields">
-       <div class="field full"><label for="admin-name">Nombre del producto *</label><input id="admin-name" maxlength="100" required placeholder="Ej.: Puerta de madera"></div>
-       <div class="field full"><label for="admin-code">Código del producto (opcional y único)</label><input id="admin-code" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ej.: PTA-001 o VENT-120"><small class="product-code-hint">Usá letras, números, guiones, barras, puntos o guion bajo. Si no tiene código, dejalo vacío.</small></div>
-       <div class="field"><label for="admin-category">Categoría *</label><select id="admin-category" required><option>Puertas</option><option>Ventanas</option><option>Accesorios</option><option>A medida</option></select></div>
-       <div class="field"><label for="admin-price">Precio orientativo (opcional, ARS)</label><input id="admin-price" type="number" min="0" max="999999999" step="1" placeholder="Dejar vacío si es a consultar"></div>
-       <div class="field full"><label for="admin-description">Descripción</label><textarea id="admin-description" maxlength="350" placeholder="Materiales, características, terminaciones..."></textarea></div>
-       <div class="field full"><label for="admin-image">URL de foto HTTPS (opcional)</label><input id="admin-image" type="url" maxlength="1500" placeholder="https://..."></div>
-       <div class="field full"><label for="admin-upload">O subir una foto desde el dispositivo (se comprime para la demo)</label><input id="admin-upload" type="file" accept="image/jpeg,image/png,image/webp"></div>
-     </div>
-     <p class="fine">Las fotos cargadas también quedan almacenadas solo en este dispositivo. Si la memoria local se llena, exportá una copia antes de hacer otros cambios.</p>
-     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" type="submit">Guardar producto</button><button class="btn btn-outline" type="button" id="cancel-edit">Cancelar</button></div>
-   </form>
- </div>
+  </section>
+ </div>>
 </section>
 <div class="toast" id="toast" aria-live="polite"></div>
 <nav class="bottomnav" aria-label="Menú de la aplicación">
@@ -1373,8 +1394,33 @@ function sendGeneralInquiry(event){
  parts.push('', '¿Podrían asesorarme sobre modelos, disponibilidad, precios y envío? ¡Gracias!');
  openWhatsApp(parts.join('\n'));
 }
+
+const ADMIN_SCREEN_TITLES={home:'Panel de catálogo',product:'Nuevo producto',category:'Crear apartado',data:'Administración de datos'};
+let adminActiveScreen='home';
+function setAdminScreen(screen){
+ if(!Object.hasOwn(ADMIN_SCREEN_TITLES,screen))return;
+ adminActiveScreen=screen;
+ document.querySelectorAll('#admin-modal [data-admin-screen]').forEach(section=>{
+  section.hidden=section.dataset.adminScreen!==screen;
+ });
+ $('admin-title').textContent=screen==='product'?$('admin-form-title').textContent:ADMIN_SCREEN_TITLES[screen];
+ $('admin-back').hidden=screen==='home';
+ $('admin-data-toggle').setAttribute('aria-expanded',String(screen==='data'));
+ $('admin-data-manager').hidden=screen!=='data';
+ $('admin-form').hidden=screen!=='product';
+ $('admin-category-form').hidden=screen!=='category';
+ const body=$('admin-modal').querySelector('.modalbody');
+ if(body)body.scrollTop=0;
+ if(screen==='home'&&!$('admin-modal').hidden)renderAdmin();
+}
+function adminReturnHome(){
+ editing=null;uploaded=null;
+ $('admin-category-name').value='';
+ setAdminScreen('home');
+}
+
 function hidePanels(){$('overlay').hidden=true;$('cart-drawer').hidden=true;$('admin-modal').hidden=true;$('detail-modal').hidden=true;$('consulta-modal').hidden=true;document.body.style.overflow=''}
-function showPanel(which){hidePanels();$('overlay').hidden=false;$(which).hidden=false;document.body.style.overflow='hidden';$(which).querySelector('button')?.focus()}
+function showPanel(which){hidePanels();$('overlay').hidden=false;$(which).hidden=false;document.body.style.overflow='hidden';if(which==='admin-modal')setAdminScreen('home');$(which).querySelector('button:not([hidden])')?.focus()}
 function openDetail(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  detailId=id;const image=safeImg(p.image);
@@ -1440,8 +1486,8 @@ function createAdminCategory(e){
  const custom=CATEGORIES.slice(FIXED_CATEGORIES.length).concat(name);
  if(!setStored(CATEGORY_STORE,custom))return;
  CATEGORIES.push(name);adminSelectedCategory=name;adminOpenGroups.add(name);
- $('admin-product-search').value='';$('admin-category-form').hidden=true;$('admin-category-name').value='';
- syncAdminCategories();$('admin-category').value=name;renderAll();toast('Apartado "'+name+'" creado en este dispositivo');
+ $('admin-product-search').value='';$('admin-category-name').value='';
+ syncAdminCategories();$('admin-category').value=name;setAdminScreen('home');renderAll();toast('Apartado "'+name+'" creado en este dispositivo');
 }
 function removeAdminCategory(name){
  if(FIXED_CATEGORIES.includes(name)||!CATEGORIES.includes(name))return;
@@ -1453,7 +1499,7 @@ function removeAdminCategory(name){
  if(filter===name)filter='Puertas';
  syncAdminCategories();renderAll();toast('Apartado eliminado');
 }
-function editProduct(id){editing=id||null;uploaded=null;const p=products.find(x=>x.id===id);$('admin-form-title').textContent=p?'Editar producto':'Agregar producto';$('admin-name').value=p?.name||'';$('admin-code').value=p?.code||'';syncAdminCategories();$('admin-category').value=p?.category||(CATEGORIES.includes(adminSelectedCategory)?adminSelectedCategory:'Puertas');$('admin-price').value=p?.price??'';$('admin-description').value=p?.description||'';$('admin-image').value=p&&p.image&&!p.image.startsWith('data:')?p.image:'';$('admin-upload').value='';$('admin-form').hidden=false;$('admin-form').scrollIntoView({behavior:'smooth',block:'nearest'});$('admin-name').focus()}
+function editProduct(id){editing=id||null;uploaded=null;const p=products.find(x=>x.id===id);$('admin-form-title').textContent=p?'Editar producto':'Agregar producto';$('admin-name').value=p?.name||'';$('admin-code').value=p?.code||'';syncAdminCategories();$('admin-category').value=p?.category||(CATEGORIES.includes(adminSelectedCategory)?adminSelectedCategory:'Puertas');$('admin-price').value=p?.price??'';$('admin-description').value=p?.description||'';$('admin-image').value=p&&p.image&&!p.image.startsWith('data:')?p.image:'';$('admin-upload').value='';setAdminScreen('product');$('admin-name').focus()}
 function deleteProduct(id){let p=products.find(x=>x.id===id);if(!p||!confirm('¿Quitar "'+p.name+'" del catálogo de demostración?'))return;const next=products.filter(x=>x.id!==id);if(!setStored(STORE,next))return;products=next;delete cart[id];cleanCart();renderAll();toast('Producto quitado del catálogo local')}
 async function photoToDataURL(file){if(file.size>8*1024*1024)throw Error('La foto supera 8 MB');if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('Formato no admitido');return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=()=>reject(Error('No se pudo leer la imagen'));reader.onload=()=>{const image=new Image();image.onerror=()=>reject(Error('Imagen inválida'));image.onload=()=>{let scale=Math.min(1,850/Math.max(image.width,image.height));const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(image.width*scale));cv.height=Math.max(1,Math.round(image.height*scale));cv.getContext('2d').drawImage(image,0,0,cv.width,cv.height);resolve(cv.toDataURL('image/webp',.66))};image.src=reader.result};reader.readAsDataURL(file)})}
 async function saveProduct(e){e.preventDefault();const nm=$('admin-name').value.trim();if(!nm)return toast('Completá el nombre del producto');if(!editing&&products.length>=150)return toast('Máximo 150 productos en la demo');
@@ -1463,7 +1509,7 @@ if(rawCode.length>32||!isValidProductCode(code)){toast('Código inválido: hasta
 if(code&&products.some(p=>p.id!==editing&&normalizeProductCode(p.code)===code)){toast('Este código ya está asignado a otro producto');$('admin-code').focus();return;}
 const before=products.find(x=>x.id===editing);let image=$('admin-image').value.trim();if(image&&!safeImg(image))return toast('La foto debe tener una URL HTTPS válida');if(uploaded)image=uploaded;else if(before&&before.image.startsWith('data:')&&!image)image=before.image;else if(before&&!image)image=before.image;
 if(!CATEGORIES.includes($('admin-category').value))return toast('Elegí un apartado válido');
-let rawPrice=$('admin-price').value.trim(),p=normalize({id:editing||('p'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),name:nm,code,category:$('admin-category').value,description:$('admin-description').value.trim(),price:rawPrice===''?null:Number(rawPrice),image});if(!p)return;const next=editing?products.map(x=>x.id===editing?p:x):[p,...products];if(!setStored(STORE,next))return;products=next;$('admin-form').hidden=true;editing=null;uploaded=null;renderAll();toast('Producto guardado en este dispositivo')}
+let rawPrice=$('admin-price').value.trim(),p=normalize({id:editing||('p'+Date.now()+'_'+Math.random().toString(36).slice(2,8)),name:nm,code,category:$('admin-category').value,description:$('admin-description').value.trim(),price:rawPrice===''?null:Number(rawPrice),image});if(!p)return;const next=editing?products.map(x=>x.id===editing?p:x):[p,...products];if(!setStored(STORE,next))return;products=next;editing=null;uploaded=null;setAdminScreen('home');renderAll();toast('Producto guardado en este dispositivo')}
 
 /* PDF de respaldo administrativo: genera un archivo legible sin alterar datos locales. */
 let nortePdfLibraryPromise=null;
@@ -1878,12 +1924,12 @@ $('consulta-form').addEventListener('submit',sendGeneralInquiry);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePanels()});
 $('send-quote').addEventListener('click',submitQuote);$('detail-add').addEventListener('click',()=>{if(detailId)addToCart(detailId)});$('detail-wa').addEventListener('click',()=>{const p=products.find(x=>x.id===detailId);if(p)openWhatsApp('¡Hola! Vi el catálogo de Norte Aberturas y quisiera consultar por '+p.name+'. ¿Podrían enviarme modelos, medidas y precios disponibles? ¡Gracias!')});
 $('add-new').addEventListener('click',()=>editProduct(null));
+$('admin-back').addEventListener('click',adminReturnHome);
 $('add-category').addEventListener('click',()=>{
- const form=$('admin-category-form');
- form.hidden=!form.hidden;
- if(!form.hidden)$('admin-category-name').focus();
+ setAdminScreen('category');
+ $('admin-category-name').focus();
 });
-$('cancel-category').addEventListener('click',()=>{$('admin-category-form').hidden=true;$('admin-category-name').value=''});
+$('cancel-category').addEventListener('click',adminReturnHome);
 $('admin-category-form').addEventListener('submit',createAdminCategory);
 let adminSearchTimer=0;
 $('admin-product-search').addEventListener('input',()=>{
@@ -1912,15 +1958,10 @@ $('admin-list').addEventListener('click',event=>{
 const mobileCatalogMedia=window.matchMedia('(max-width:760px)');
 mobileCatalogMedia.addEventListener('change',()=>{if(document.body.classList.contains('catalog-browsing'))renderCatalog()});
 $('admin-clear-search').addEventListener('click',()=>{$('admin-product-search').value='';renderAdmin();$('admin-product-search').focus()});
-$('cancel-edit').addEventListener('click',()=>{$('admin-form').hidden=true;editing=null;uploaded=null});
+$('cancel-edit').addEventListener('click',adminReturnHome);
 $('admin-upload').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{uploaded=await photoToDataURL(file);toast('Foto optimizada: guardala con el producto')}catch(err){uploaded=null;toast(err.message)}});
 $('admin-form').addEventListener('submit',saveProduct);
-$('admin-data-toggle').addEventListener('click',()=>{
- const button=$('admin-data-toggle'),panel=$('admin-data-manager');
- const open=button.getAttribute('aria-expanded')!=='true';
- button.setAttribute('aria-expanded',String(open));
- panel.hidden=!open;
-});
+$('admin-data-toggle').addEventListener('click',()=>setAdminScreen('data'));
 $('export-json').addEventListener('click',exportJSON);
 $('export-pdf').addEventListener('click',exportPDF);
 $('export-excel').addEventListener('click',()=>norteDownloadExcel(false));
