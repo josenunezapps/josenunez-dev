@@ -1,0 +1,26 @@
+{
+  "id": "/dg-lab-7q4m/",
+  "name": "DistraGuard Web",
+  "short_name": "DistraGuard",
+  "description": "YouTube con intención: biblioteca propia y filtros locales.",
+  "lang": "es-AR",
+  "start_url": "/dg-lab-7q4m/#inicio",
+  "scope": "/dg-lab-7q4m/",
+  "display": "standalone",
+  "background_color": "#090d19",
+  "theme_color": "#0b1020",
+  "icons": [
+    {
+      "src": "/dg-lab-7q4m/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/dg-lab-7q4m/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
