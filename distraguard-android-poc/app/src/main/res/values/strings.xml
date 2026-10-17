@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DistraGuard · Prueba Shorts</string>
+    <string name="accessibility_label">DistraGuard — Bloqueo de Shorts</string>
+    <string name="accessibility_description">Detecta únicamente señales de Shorts dentro de YouTube y, si el usuario lo autorizó, utiliza la acción Atrás. No envía textos ni datos fuera del dispositivo.</string>
+</resources>
