@@ -1,6 +1,6 @@
-const CACHE_NAME = 'distraguard-web-hidden-v1';
+const CACHE_NAME = 'distraguard-web-hidden-v2';
 const BASE = new URL(self.registration.scope).pathname;
-const APP_SHELL = ['','index.html','styles.css','app.js','manifest.webmanifest','assets/icon.svg','assets/icon-192.png','assets/icon-512.png'].map(item=>BASE+item);
+const APP_SHELL = ['','index.html','styles.css','redesign.css','app.js','manifest.webmanifest','assets/icon.svg','assets/icon-192.png','assets/icon-512.png'].map(item=>BASE+item);
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()));
 });
