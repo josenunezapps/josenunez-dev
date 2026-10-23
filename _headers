@@ -35,3 +35,4 @@
   ! Permissions-Policy
   Permissions-Policy: camera=(self "https://josenunezapps.github.io"), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-cache
