@@ -1,8 +1,16 @@
+// Nexa (antes Zenix Agent) — mismo asistente de zenix.com.ar (misma API /api/chat y /api/lead, misma sesión),
+// adaptado al diseño nuevo y con salida directa a WhatsApp.
 (function(){
   if (window.__zenixChatLoaded) return;
   window.__zenixChatLoaded = true;
 
   const STORAGE_KEY = 'zenix-agent-session-v2';
+  const SITE = 'zenix-next';
+  const WA = 'https://wa.me/5492901471353';
+  const CONTACT_FORM = '/contacto.html';
+  // avatar de Nexa: esfera de partículas que se deforma con ondas, como una voz (canvas, sin librerías)
+  const ORB = '<span class="nexa-orb" aria-hidden="true"><canvas class="nexa-cv"></canvas></span>';
+  const QUICK_DEFAULT = '<button type="button" data-message="Necesito una página web">Web</button><button type="button" data-message="Quiero una app o un sistema">App o sistema</button><button type="button" data-message="Quiero automatizar una tarea de mi negocio">Automatizar</button><button type="button" data-message="¿Cuánto cuesta un proyecto?">Precios</button>';
 
   const emptyProfile = () => ({
     business: '',
@@ -24,19 +32,25 @@
   const root = document.createElement('div');
   root.className = 'zenix-chat';
   root.innerHTML = `
-    <button class="zenix-chat-launcher" type="button" aria-label="Abrir Zenix Agent" aria-expanded="false">
+    <button class="zenix-chat-launcher" type="button" aria-label="Abrir Nexa, asistente digital de Zenix AR" aria-expanded="false">
+      <span class="zenix-chat-launcher-ic" aria-hidden="true">
+        <svg class="ic-chat" viewBox="0 0 24 24"><path d="M5 6.5A3.5 3.5 0 0 1 8.5 3h7A3.5 3.5 0 0 1 19 6.5v6a3.5 3.5 0 0 1-3.5 3.5H11l-4.7 3.4.9-3.7A3.5 3.5 0 0 1 5 12.5v-6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.5 9.5h7M8.5 12.5h4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <svg class="ic-close" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+      </span>
+      <span class="zenix-chat-launcher-txt">Nexa</span>
       <span class="zenix-chat-launcher-dot" aria-hidden="true"></span>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5A3.5 3.5 0 0 1 8.5 3h7A3.5 3.5 0 0 1 19 6.5v6a3.5 3.5 0 0 1-3.5 3.5H11l-4.7 3.4.9-3.7A3.5 3.5 0 0 1 5 12.5v-6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.5 9.5h7M8.5 12.5h4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-      <span>Zenix Agent</span>
     </button>
 
-    <section class="zenix-chat-panel" aria-label="Zenix Agent" aria-hidden="true">
+    <section class="zenix-chat-panel" aria-label="Nexa, asistente digital de Zenix AR" aria-hidden="true">
       <header class="zenix-chat-head">
         <div class="zenix-chat-brand">
-          <img src="assets/zenix-icon-home-cropped.png" alt="">
-          <div><strong>Zenix Agent</strong><span><i></i> En línea</span></div>
+          ${ORB}
+          <div><strong>Nexa</strong><span class="nexa-status"><i></i><em class="nexa-st-idle">Asistente digital de Zenix AR</em><em class="nexa-st-active">Respondiendo…</em></span></div>
         </div>
-        <button class="zenix-chat-close" type="button" aria-label="Cerrar chat">×</button>
+        <div class="zenix-chat-head-actions">
+          <a class="zenix-chat-wa" href="${WA}?text=${encodeURIComponent('Hola Zenix! Vengo de la web y quiero hacer una consulta.')}" target="_blank" rel="noopener" aria-label="Seguir por WhatsApp" title="Seguir por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 20.5l1.2-4.3A8.5 8.5 0 1 1 8 19.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1.2-1 .9c-1-.4-2.2-1.6-2.6-2.6l.9-1-1.2-2z" fill="currentColor"/></svg></a>
+          <button class="zenix-chat-close" type="button" aria-label="Cerrar chat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+        </div>
       </header>
 
       <div class="zenix-chat-messages" role="log" aria-live="polite"></div>
@@ -53,12 +67,7 @@
         </div>
       </button>
 
-      <div class="zenix-chat-quick" aria-label="Opciones rápidas">
-        <button type="button" data-message="Necesito una página web">Web</button>
-        <button type="button" data-message="Necesito una app Android">App</button>
-        <button type="button" data-message="Quiero automatizar mi negocio">Automatizar</button>
-        <button type="button" data-message="Quiero pedir un presupuesto">Presupuesto</button>
-      </div>
+      <div class="zenix-chat-quick" aria-label="Opciones rápidas">${QUICK_DEFAULT}</div>
 
       <form class="zenix-chat-form">
         <input class="zenix-chat-input" type="text" maxlength="1000" autocomplete="off" placeholder="Escribí tu consulta…" aria-label="Mensaje">
@@ -67,7 +76,7 @@
         </button>
       </form>
 
-      <div class="zenix-chat-foot">Zenix Agent organiza la consulta y deriva al equipo cuando hace falta.</div>
+      <div class="zenix-chat-foot">Asistente con IA. Para avanzar, te deriva al equipo de Zenix AR.</div>
     </section>`;
 
   document.body.appendChild(root);
@@ -86,7 +95,7 @@
   const agentSteps = root.querySelector('.zenix-agent-steps');
   const agentSummary = root.querySelector('.zenix-agent-summary');
 
-  const defaultQuickHtml = quick.innerHTML;
+  const defaultQuickHtml = QUICK_DEFAULT;
 
   let history = [];
   let profile = emptyProfile();
@@ -152,7 +161,7 @@
       }
 
       if (!greeted) {
-        addMessage('assistant', 'Hola 👋 Soy Zenix Agent, el asistente con IA de Zenix AR. Contame qué necesitás y te ayudo.');
+        addMessage('assistant', 'Hola, soy Nexa, la asistente digital de Zenix AR. Te ayudo con webs, apps, automatizaciones o extensiones. ¿Qué querés resolver?');
         greeted = true;
       }
 
@@ -173,6 +182,20 @@
     messages.appendChild(item);
 
     if (scroll) messages.scrollTop = messages.scrollHeight;
+    if (role !== 'user' && scroll) speak(text);
+  }
+
+  // ---------- estado de Nexa ----------
+  // ACTIVE mientras hay un indicador de escritura en pantalla (pedido a /api/chat o /api/lead en curso)
+  // y un instante más mientras aparece su respuesta; IDLE el resto del tiempo.
+  // se mira el indicador de escritura que ya usa el chat, así no hay contadores que se desincronicen
+  let speakTimer = 0;
+  function syncNexa(){ root.classList.toggle('nexa-active', !!messages.querySelector('.zenix-chat-typing-row') || speakTimer > 0); }
+  function stopTyping(row){ if (row) row.remove(); syncNexa(); }
+  function speak(text){
+    clearTimeout(speakTimer);
+    speakTimer = setTimeout(() => { speakTimer = 0; syncNexa(); }, Math.min(2600, 700 + String(text || '').length * 14));
+    syncNexa();
   }
 
   function addTyping(){
@@ -181,6 +204,7 @@
     item.innerHTML = '<div class="zenix-chat-bubble zenix-chat-typing"><span></span><span></span><span></span></div>';
     messages.appendChild(item);
     messages.scrollTop = messages.scrollHeight;
+    syncNexa();
     return item;
   }
 
@@ -194,8 +218,28 @@
     quick.innerHTML = defaultQuickHtml;
   }
 
+  // enlace a WhatsApp con un resumen corto de lo que se habló
+  function waLink(){
+    const bits = [profile.projectType, profile.need].filter(Boolean).join(': ');
+    const text = 'Hola Zenix! Vengo del asistente de la web' + (bits ? '. Quiero consultar por ' + bits.slice(0, 220) : ' y quiero hacer una consulta') + '.';
+    return WA + '?text=' + encodeURIComponent(text);
+  }
+
+  // cuando el visitante quiere avanzar: WhatsApp, dejar sus datos o el formulario
+  function showHandoffOptions(){
+    quick.innerHTML = '';
+    const wa = document.createElement('a');
+    wa.className = 'zenix-chat-opt is-wa'; wa.href = waLink(); wa.target = '_blank'; wa.rel = 'noopener'; wa.textContent = 'Seguir por WhatsApp';
+    const lead = document.createElement('button');
+    lead.type = 'button'; lead.className = 'zenix-chat-opt'; lead.dataset.action = 'lead'; lead.textContent = 'Dejar mis datos';
+    const formLink = document.createElement('a');
+    formLink.className = 'zenix-chat-opt'; formLink.href = CONTACT_FORM; formLink.textContent = 'Formulario';
+    quick.append(wa, lead, formLink);
+  }
+
   function showConsentButtons(){
     quick.innerHTML = '<button type="button" data-consent="yes">Confirmar envío</button><button type="button" data-consent="no">Cancelar</button>';
+    if (leadState && leadState.failed) { const wa = document.createElement('a'); wa.className = 'zenix-chat-opt is-wa'; wa.href = waLink(); wa.target = '_blank'; wa.rel = 'noopener'; wa.textContent = 'WhatsApp'; quick.appendChild(wa); }
   }
 
   function isEmail(value){
@@ -336,7 +380,7 @@
       });
 
       const data = await response.json().catch(() => ({}));
-      typing.remove();
+      stopTyping(typing);
 
       if (!response.ok || data.success !== true) {
         throw new Error(data.message || 'No pude enviar tus datos.');
@@ -349,20 +393,22 @@
       if (data.summary && !profile.summary) profile.summary = data.summary;
       actions = uniqueActions([...actions, 'Contacto solicitado', 'Equipo notificado']);
 
-      addMessage('assistant', 'Listo. Ya envié tus datos y la ficha del proyecto al equipo de Zenix AR. Van a recibir también el resumen de esta conversación para poder continuar desde ahí.');
+      addMessage('assistant', 'Listo. Ya envié tus datos y la ficha del proyecto al equipo de Zenix AR. Van a recibir también el resumen de esta conversación para poder continuar desde ahí. Si preferís, también podés escribir directo por WhatsApp.');
       history.push({ role: 'assistant', content: 'Los datos y la ficha del proyecto fueron enviados al equipo de Zenix AR.' });
       if (history.length > 18) history.splice(0, history.length - 18);
 
       saveSession();
       renderAgentCard();
       resetLeadCapture();
+      showHandoffOptions();
     } catch (error) {
-      typing.remove();
+      stopTyping(typing);
       addMessage('assistant', error && error.name === 'AbortError'
-        ? 'El envío tardó demasiado. Podés intentar otra vez o usar la sección Contacto.'
-        : 'No pude enviar tus datos en este momento. Podés reintentar o usar la sección Contacto.');
+        ? 'El envío tardó demasiado. Podés intentar otra vez o escribirnos por WhatsApp.'
+        : 'No pude enviar tus datos en este momento. Podés reintentar o escribirnos por WhatsApp.');
       setBusy(false);
       leadState.step = 'confirm';
+      leadState.failed = true;
       input.disabled = true;
       send.disabled = true;
       showConsentButtons();
@@ -443,7 +489,8 @@
         body: JSON.stringify({
           message: clean,
           history: history.slice(0, -1),
-          profile
+          profile,
+          site: SITE
         }),
         signal: controller.signal
       });
@@ -451,7 +498,7 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok || !data.reply) throw new Error(data.message || 'No pude responder en este momento.');
 
-      typing.remove();
+      stopTyping(typing);
       addMessage('assistant', data.reply);
 
       history.push({ role: 'assistant', content: data.reply });
@@ -467,13 +514,15 @@
         actions = uniqueActions([...actions, 'Contacto solicitado']);
         saveSession();
         renderAgentCard();
-        startLeadCapture();
+        addMessage('assistant', 'Podés seguir ahora mismo por WhatsApp, dejarme tus datos para que el equipo te escriba o usar el formulario de contacto.');
+        showHandoffOptions();
       }
     } catch (error) {
-      typing.remove();
+      stopTyping(typing);
       addMessage('assistant', error && error.name === 'AbortError'
-        ? 'Estoy tardando más de lo normal. Podés intentar otra vez o escribir desde la sección Contacto.'
-        : 'No pude responder ahora. Podés usar el formulario de Contacto o WhatsApp y el equipo te responde directamente.');
+        ? 'Estoy tardando más de lo normal. Podés intentar otra vez o escribirnos por WhatsApp.'
+        : 'No pude responder ahora. Escribinos por WhatsApp o desde el formulario y el equipo te responde directamente.');
+      showHandoffOptions();
     } finally {
       clearTimeout(timer);
 
@@ -509,6 +558,8 @@
       return;
     }
 
+    if (event.target.closest('button[data-action="lead"]')) { startLeadCapture(); return; }
+
     const button = event.target.closest('button[data-message]');
     if (button) ask(button.dataset.message);
   });
@@ -516,6 +567,92 @@
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && root.classList.contains('is-open')) setOpen(false);
   });
+
+
+  // ---------- Nexa: esfera de partículas "Voz" ----------
+  // 90 puntos sobre una esfera que gira; ondas la recorren y la deforman. En reposo respira suave;
+  // al responder (.nexa-active) las ondas crecen y todo se acelera. El cambio es continuo: cada esfera
+  // tiene su propio reloj que acelera y frena con una curva suave (sin saltos).
+  (function nexaVoice(){
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const TAU = Math.PI * 2, N = 90;
+    const pts = Array.from({ length: N }, (_, i) => { const y = 1 - (i + .5) * 2 / N, r = Math.sqrt(1 - y * y), a = i * 2.39996; return { x: Math.cos(a) * r, y, z: Math.sin(a) * r, lat: Math.asin(y), lon: Math.atan2(Math.sin(a) * r, Math.cos(a) * r) }; });
+    const VIO = [167, 139, 250], CY = [103, 232, 249], WHITE = [240, 236, 255];
+    const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    const orbs = [...root.querySelectorAll('.nexa-cv')].map(c => ({ c, ctx: c.getContext('2d'), inLauncher: !!c.closest('.zenix-chat-launcher') }));
+    const fit = () => { const dpr = Math.min(3, devicePixelRatio || 1); orbs.forEach(o => { const w = o.c.clientWidth || 38; o.c.width = o.c.height = Math.round(w * dpr); o.dpr = dpr; o.css = w; }); };
+    fit(); let rzT; addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(fit, 150); });
+    let kl = 0, k = 0, clk = 0, rot = 0, last = performance.now(), drawnK = -1, acc = 0;
+
+    function draw(o){
+      const { ctx, dpr } = o, W = o.c.width, cx = W / 2, R = W * .4;
+      ctx.clearRect(0, 0, W, W);
+      const glow = ctx.createRadialGradient(cx, cx, 0, cx, cx, W * .5);
+      glow.addColorStop(0, `rgba(139,92,246,${.24 + k * .16})`); glow.addColorStop(1, 'rgba(139,92,246,0)');
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, W);
+      const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(.45), st = Math.sin(.45);
+      const amp = .06 + k * .18, P = [];
+      for (const p of pts) {
+        const w = 1 + amp * Math.sin(p.lat * 4 - clk * 2.2) * Math.cos(p.lon * 2 + clk * .8);
+        const x = p.x * w, y = p.y * w, z = p.z * w;
+        let X = x * cr + z * sr, Z = -x * sr + z * cr; const Y = y * ct - Z * st; Z = y * st + Z * ct;
+        P.push([cx + X * R, cx + Y * R, (Z + 1) / 2]);
+      }
+      P.sort((a, b) => a[2] - b[2]);
+      const base = (o.css < 60 ? 1.05 : 1.6) * dpr;
+      for (const [px, py, d] of P) {
+        let c = d > .55 ? mix(VIO, CY, Math.min(1, (d - .55) * 2.2)) : VIO;
+        if (k > .5 && d > .85) c = mix(c, WHITE, k - .5);
+        ctx.fillStyle = `rgba(${c},${.25 + d * .75})`;
+        ctx.beginPath(); ctx.arc(px, py, base * (.55 + d * .85) * (1 + k * .3), 0, TAU); ctx.fill();
+      }
+    }
+
+    function frame(now){
+      requestAnimationFrame(frame);
+      const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now;
+      if (document.hidden) return;
+      const on = root.classList.contains('nexa-active');
+      kl = Math.max(0, Math.min(1, kl + (on ? dt : -dt) * 1.1)); k = kl * kl * (3 - 2 * kl);
+      if (!reduceMotion) { clk += dt * (1 + k * 2.2); rot += dt * .5 * (1 + k * 1.8); }
+      // ~40 cuadros por segundo alcanzan para algo tan chico y ahorran batería
+      acc += dt; if (acc < 1 / 40) return; acc = 0;
+      // con "reducir movimiento" solo se redibuja cuando cambia el estado
+      if (reduceMotion && drawnK === kl) return; drawnK = kl;
+      const open = root.classList.contains('is-open'), shy = root.classList.contains('is-shy');
+      for (const o of orbs) { if (o.inLauncher ? (!open && !shy) : open) draw(o); }
+    }
+    // primer dibujo para que el botón nunca aparezca vacío
+    orbs.forEach(draw);
+    requestAnimationFrame(frame);
+  })();
+
+  // el temporizador de inactividad (chat-expiry.js) vuelve a poner las opciones de este diseño
+  window.__zenixChatQuickHtml = QUICK_DEFAULT;
+
+  // el botón se aparta cuando debajo de él hay un teléfono con una demo o el CTA final de WhatsApp,
+  // para no tapar botones de las apps ni el contacto
+  if ('IntersectionObserver' in window) {
+    const targets = [...document.querySelectorAll('.m-phone .phone, .final .btn.wa')];
+    const under = new Set();
+    let watcher;
+    const watch = () => {
+      if (watcher) watcher.disconnect();
+      under.clear(); root.classList.remove('is-shy');
+      // zona del botón calculada desde su posición fija (sin la animación de apartarse)
+      const cs = getComputedStyle(root), pad = 12, vw = document.documentElement.clientWidth, vh = innerHeight;
+      const rightGap = parseFloat(cs.right) || 0, bottomGap = parseFloat(cs.bottom) || 0;
+      const right = Math.max(0, rightGap - pad), bottom = Math.max(0, bottomGap - pad);
+      const left = Math.max(0, vw - rightGap - launcher.offsetWidth - pad), top = Math.max(0, vh - bottomGap - launcher.offsetHeight - pad);
+      watcher = new IntersectionObserver(entries => {
+        entries.forEach(e => e.isIntersecting ? under.add(e.target) : under.delete(e.target));
+        root.classList.toggle('is-shy', under.size > 0);
+      }, { rootMargin: `${-top}px ${-right}px ${-bottom}px ${-left}px` });
+      targets.forEach(t => watcher.observe(t));
+    };
+    let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(watch, 200); });
+    watch();
+  }
 
   loadSession();
 })();

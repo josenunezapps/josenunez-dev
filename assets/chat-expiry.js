@@ -1,3 +1,4 @@
+// Copia de /assets/chat-expiry.js (misma sesión y mismo tiempo de inactividad); solo cambian las opciones rápidas.
 (function(){
   const SESSION_KEY='zenix-agent-session-v2';
   const ACTIVITY_KEY='zenix-agent-last-activity-v1';
@@ -18,7 +19,7 @@
   function resetVisualState(){
     const root=document.querySelector('.zenix-chat');
     if(!root)return;
-    root.classList.remove('is-open');
+    root.classList.remove('is-open','nexa-active');
     const launcher=root.querySelector('.zenix-chat-launcher');
     const panel=root.querySelector('.zenix-chat-panel');
     const messages=root.querySelector('.zenix-chat-messages');
@@ -32,7 +33,7 @@
     if(input){input.value='';input.disabled=false;input.placeholder='Escribí tu consulta…';}
     if(send)send.disabled=false;
     if(card){card.hidden=true;card.classList.remove('is-expanded');card.setAttribute('aria-expanded','false');}
-    if(quick)quick.innerHTML='<button type="button" data-message="Necesito una página web">Web</button><button type="button" data-message="Necesito una app Android">App</button><button type="button" data-message="Quiero automatizar mi negocio">Automatizar</button><button type="button" data-message="Quiero pedir un presupuesto">Presupuesto</button>';
+    if(quick)quick.innerHTML=window.__zenixChatQuickHtml||'<button type="button" data-message="Necesito una página web">Web</button><button type="button" data-message="Quiero una app o un sistema">App o sistema</button><button type="button" data-message="Quiero automatizar una tarea de mi negocio">Automatizar</button><button type="button" data-message="¿Cuánto cuesta un proyecto?">Precios</button>';
   }
 
   function expire(){
