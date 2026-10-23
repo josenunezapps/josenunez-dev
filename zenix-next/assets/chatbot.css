@@ -16,8 +16,8 @@
 .zenix-chat-launcher:hover { transform: translateY(-2px); border-color: rgba(34, 211, 238, .5); }
 .zenix-chat-launcher-ic { position: relative; width: 36px; height: 36px; display: grid; place-items: center; flex: none; color: #fff; }
 .zenix-chat-launcher-ic .nexa-orb { --o: 36px; transition: opacity .25s; }
-.zenix-chat-launcher .nexa-halo { inset: -16%; }
-.zenix-chat-launcher-ic svg { position: absolute; width: 19px; height: 19px; transition: opacity .2s, transform .25s; }
+.zenix-chat-launcher .nexa-halo { inset: -12%; }
+.zenix-chat-launcher-ic > svg { position: absolute; width: 19px; height: 19px; transition: opacity .2s, transform .25s; }
 .zenix-chat-launcher .ic-chat { display: none; }
 .zenix-chat-launcher .ic-close { opacity: 0; transform: rotate(-45deg) scale(.8); }
 .zenix-chat.is-open .zenix-chat-launcher-ic .nexa-orb { opacity: .28; }
@@ -25,43 +25,42 @@
 .zenix-chat-launcher-dot { display: none; }
 .zenix-chat.is-shy:not(.is-open) { transform: translateY(16px); opacity: 0; pointer-events: none; }
 
-/* ---------- Nexa: esfera abstracta ----------
-   Solo se animan transform, opacity y border-radius, sobre elementos chicos: liviano en cualquier celular.
-   IDLE: respira, flota y la luz interna gira despacio. ACTIVE (.nexa-active): late, se deforma apenas y emite ondas. */
-.nexa-orb { --o: 36px; position: relative; display: block; width: var(--o); height: var(--o); flex: none; animation: nexaFloat 6s ease-in-out infinite; }
-.nexa-orb > span { position: absolute; border-radius: 50%; }
-.nexa-halo { inset: -30%; background: radial-gradient(circle, rgba(139, 92, 246, .5) 0%, rgba(109, 61, 245, .2) 40%, rgba(34, 211, 238, .06) 58%, transparent 70%); animation: nexaBreath 5s ease-in-out infinite; }
-.nexa-core { inset: 0; overflow: hidden; isolation: isolate;
-  background: radial-gradient(circle at 36% 32%, #d9ccff 0%, #9370ff 17%, #5a2fe0 44%, #26106e 74%, #0c0622 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .13), inset -3px -5px 10px rgba(34, 211, 238, .32), 0 0 14px rgba(139, 92, 246, .5);
-  animation: nexaMorph 9s ease-in-out infinite; }
-/* dos capas de luz que giran en sentidos opuestos: se ve como energía moviéndose adentro */
-.nexa-flow, .nexa-flow::after { position: absolute; inset: 0; border-radius: 50%; mix-blend-mode: screen; }
-.nexa-flow { opacity: .75; background: radial-gradient(circle at 30% 70%, rgba(34, 211, 238, .7), transparent 38%), radial-gradient(circle at 72% 32%, rgba(196, 181, 253, .45), transparent 40%); animation: nexaSpin 12s linear infinite; }
-.nexa-flow::after { content: ""; inset: 0; background: radial-gradient(circle at 70% 76%, rgba(167, 139, 250, .6), transparent 32%), radial-gradient(circle at 30% 28%, rgba(34, 211, 238, .3), transparent 30%); animation: nexaSpin 8s linear infinite reverse; }
-.nexa-glint { position: absolute; left: 22%; top: 14%; width: 30%; height: 19%; border-radius: 50%; background: radial-gradient(ellipse, rgba(255, 255, 255, .8), transparent 70%); transform: rotate(-24deg); }
-.nexa-wave, .nexa-wave::after { inset: 0; border: 1.5px solid rgba(34, 211, 238, .55); opacity: 0; }
-.nexa-wave::after { content: ""; position: absolute; inset: -1.5px; border-radius: 50%; border-color: rgba(167, 139, 250, .6); }
+/* ---------- Nexa: red neuronal ----------
+   Un disco oscuro con 7 nodos conectados. Solo se animan transform, opacity y el recorrido de las señales,
+   sobre un SVG chico: liviano en cualquier celular.
+   IDLE: la red gira muy despacio, los nodos respiran y pasan pocas señales.
+   ACTIVE (.nexa-active): se encienden todas las conexiones, las señales van más rápido y el núcleo brilla. */
+.nexa-orb { --o: 36px; position: relative; display: block; width: var(--o); height: var(--o); flex: none; border-radius: 50%; isolation: isolate;
+  background: radial-gradient(circle at 50% 42%, rgba(109, 61, 245, .32), rgba(14, 12, 24, .95) 72%);
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, .42), 0 0 14px -3px rgba(139, 92, 246, .6); transition: box-shadow .4s; }
+.nexa-halo { position: absolute; z-index: -1; inset: -22%; border-radius: 50%; background: radial-gradient(circle, rgba(139, 92, 246, .38), rgba(34, 211, 238, .06) 55%, transparent 70%); animation: nexaBreath 5s ease-in-out infinite; }
+.nexa-net { position: absolute; inset: 3%; width: 94%; height: 94%; overflow: visible; }
+.nx-spin { transform-origin: 24px 24px; animation: nxSpin 48s linear infinite; }
+.nx-edges path { fill: none; stroke: rgba(196, 181, 253, .34); stroke-width: 1.15; stroke-linecap: round; transition: stroke .4s; }
+.nx-sig path { fill: none; stroke: #67e8f9; stroke-width: 1.9; stroke-linecap: round; stroke-dasharray: 16 184; stroke-dashoffset: 16; opacity: 0; }
+.nx-sig path.i { opacity: 1; animation: nxSig 3.4s linear infinite; animation-delay: var(--d); }
+.nx-nodes circle { transform-box: fill-box; transform-origin: center; animation: nxNode 3.8s ease-in-out infinite; animation-delay: var(--d); }
+.nx-nodes .a { fill: #a78bfa; } .nx-nodes .b { fill: #67e8f9; } .nx-nodes .c { fill: #f4f0ff; }
+.nx-glow { fill: rgba(139, 92, 246, .45); transform-box: fill-box; transform-origin: center; animation: nxGlow 3.8s ease-in-out infinite; }
 
-.zenix-chat.nexa-active .nexa-halo { animation: nexaPulse 1.15s ease-in-out infinite; }
-.zenix-chat.nexa-active .nexa-core { animation: nexaMorphActive 1.7s ease-in-out infinite, nexaThrob 1.15s ease-in-out infinite; }
-.zenix-chat.nexa-active .nexa-flow { animation-duration: 3s; opacity: 1; }
-.zenix-chat.nexa-active .nexa-flow::after { animation-duration: 2.2s; }
-.zenix-chat.nexa-active .nexa-wave { animation: nexaWave 1.7s ease-out infinite; }
-.zenix-chat.nexa-active .nexa-wave::after { animation: nexaWave 1.7s ease-out .85s infinite; }
+.zenix-chat.nexa-active .nexa-orb { box-shadow: inset 0 0 0 1px rgba(34, 211, 238, .55), 0 0 18px -2px rgba(139, 92, 246, .85); }
+.zenix-chat.nexa-active .nexa-halo { animation: nexaPulse 1.2s ease-in-out infinite; }
+.zenix-chat.nexa-active .nx-spin { animation-duration: 14s; }
+.zenix-chat.nexa-active .nx-edges path { stroke: rgba(196, 181, 253, .6); }
+.zenix-chat.nexa-active .nx-sig path { opacity: 1; animation: nxSig 1.15s linear infinite; animation-delay: calc(var(--d) * .35); }
+.zenix-chat.nexa-active .nx-nodes circle { animation-duration: 1s; }
+.zenix-chat.nexa-active .nx-glow { animation: nxGlow 1s ease-in-out infinite; fill: rgba(34, 211, 238, .4); }
 /* lo que no se ve, no se anima */
 .zenix-chat:not(.is-open) .zenix-chat-panel .nexa-orb, .zenix-chat:not(.is-open) .zenix-chat-panel .nexa-orb *,
 .zenix-chat.is-shy:not(.is-open) .nexa-orb, .zenix-chat.is-shy:not(.is-open) .nexa-orb *,
 .zenix-chat.is-open .zenix-chat-launcher .nexa-orb, .zenix-chat.is-open .zenix-chat-launcher .nexa-orb * { animation-play-state: paused; }
 
-@keyframes nexaFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5%); } }
-@keyframes nexaBreath { 0%, 100% { transform: scale(.9); opacity: .65; } 50% { transform: scale(1.05); opacity: 1; } }
-@keyframes nexaSpin { to { transform: rotate(360deg); } }
-@keyframes nexaMorph { 0%, 100% { border-radius: 50%; } 33% { border-radius: 49% 51% 52% 48% / 51% 49% 51% 49%; } 66% { border-radius: 51% 49% 48% 52% / 49% 52% 48% 51%; } }
-@keyframes nexaMorphActive { 0%, 100% { border-radius: 50%; } 25% { border-radius: 46% 54% 53% 47% / 54% 47% 53% 46%; } 50% { border-radius: 53% 47% 46% 54% / 47% 54% 46% 53%; } 75% { border-radius: 48% 52% 55% 45% / 52% 45% 55% 48%; } }
-@keyframes nexaThrob { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.07); } 55% { transform: scale(.97); } 78% { transform: scale(1.04); } }
-@keyframes nexaPulse { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.22); opacity: 1; } }
-@keyframes nexaWave { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.85); opacity: 0; } }
+@keyframes nxSpin { to { transform: rotate(360deg); } }
+@keyframes nxSig { 0% { stroke-dashoffset: 16; } 65%, 100% { stroke-dashoffset: -100; } }
+@keyframes nxNode { 0%, 100% { transform: scale(.82); opacity: .7; } 50% { transform: scale(1.12); opacity: 1; } }
+@keyframes nxGlow { 0%, 100% { transform: scale(.8); opacity: .55; } 50% { transform: scale(1.25); opacity: 1; } }
+@keyframes nexaBreath { 0%, 100% { transform: scale(.9); opacity: .6; } 50% { transform: scale(1.05); opacity: 1; } }
+@keyframes nexaPulse { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.2); opacity: 1; } }
 
 /* panel */
 .zenix-chat-panel { position: absolute; right: 0; bottom: 62px; width: min(392px, calc(100vw - 32px)); height: min(600px, calc(100dvh - 110px));
@@ -135,9 +134,8 @@
 @media (prefers-reduced-motion: reduce) {
   .zenix-chat, .zenix-chat-panel, .zenix-chat-launcher, .zenix-chat-launcher-ic svg, .zenix-chat-send { transition: none; }
   .zenix-chat-typing span { animation: none; }
-  /* sin movimiento: la esfera queda quieta y el estado activo se nota solo por la luz */
-  .nexa-orb, .nexa-orb *, .nexa-wave::after, .nexa-flow::after { animation: none !important; }
-  .nexa-halo { transition: opacity .3s; opacity: .7; }
-  .zenix-chat.nexa-active .nexa-halo { opacity: 1; transform: scale(1.15); }
-  .zenix-chat.nexa-active .nexa-flow { opacity: .9; }
+  /* sin movimiento: la red queda quieta y el estado activo se nota solo por la luz */
+  .nexa-orb, .nexa-orb * { animation: none !important; }
+  .nx-sig path { opacity: 0 !important; }
+  .zenix-chat.nexa-active .nx-glow { transform: scale(1.25); }
 }
