@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#07060d">
+<title>Nexa · opciones</title>
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<style>
+:root { --bg: #07060d; --panel: #13111f; --line: rgba(255,255,255,.09); --ink: #f3f1fa; --ink2: rgba(243,241,250,.72); --muted: rgba(243,241,250,.5); --vio: #8b5cf6; --vio2: #6d3df5; --cy: #22d3ee; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; padding: 28px 16px 60px; -webkit-font-smoothing: antialiased; }
+header { max-width: 900px; margin: 0 auto 26px; }
+h1 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; }
+header p { color: var(--ink2); margin-top: 6px; }
+.global { margin-top: 16px; display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 18px; border-radius: 99px; border: 1px solid rgba(139,92,246,.45); background: rgba(139,92,246,.12); color: #ddd2ff; font: 650 14px inherit; font-family: inherit; cursor: pointer; }
+.global[aria-pressed="true"] { background: linear-gradient(135deg, var(--vio2), var(--vio)); color: #fff; border-color: transparent; }
+.grid { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 16px; }
+.card { border: 1px solid var(--line); border-radius: 22px; background: radial-gradient(90% 60% at 50% 0%, rgba(109,61,245,.12), transparent 60%), var(--panel); padding: 20px; display: grid; gap: 16px; }
+.card h2 { font-size: 18px; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+.card h2 b { font-size: 12px; font-weight: 750; color: var(--bg); background: var(--cy); border-radius: 99px; padding: 2px 9px; }
+.card p { color: var(--ink2); font-size: 14px; }
+.stage { display: grid; place-items: center; height: 170px; border-radius: 16px; background: #0c0a16; border: 1px solid var(--line); }
+.stage .av { --o: 110px; }
+.mini { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+/* simulación de la cabecera del chat y el botón flotante */
+.head { flex: 1 1 220px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line); background: rgba(16,14,27,.9); }
+.head strong { display: block; font-size: 15px; } .head > div > span { font-size: 11.5px; color: var(--muted); }
+.card.on .head > div > span::after { content: " · Respondiendo…"; color: #bff3fb; }
+.fab { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(139,92,246,.4); background: rgba(16,14,27,.85); flex: none; }
+.head .av { --o: 40px; } .fab .av { --o: 38px; }
+.toggle { justify-self: start; height: 40px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--ink2); font: 650 13px inherit; font-family: inherit; cursor: pointer; }
+.card.on .toggle { color: #fff; border-color: rgba(34,211,238,.5); background: rgba(34,211,238,.12); }
+.av { position: relative; width: var(--o); height: var(--o); flex: none; display: block; }
+.av * { position: absolute; }
+
+/* ===== 1 · Onda de voz ===== */
+.v1 { border-radius: 50%; background: radial-gradient(circle at 50% 40%, rgba(109,61,245,.35), #0e0b1c 72%); box-shadow: inset 0 0 0 1px rgba(139,92,246,.5), 0 0 16px -4px rgba(139,92,246,.7); display: flex; align-items: center; justify-content: center; gap: 7%; }
+.v1 i { position: static; display: block; width: 8%; height: 22%; border-radius: 99px; background: linear-gradient(180deg, var(--cy), var(--vio)); transform-origin: center; animation: v1idle 2.8s ease-in-out infinite; }
+.v1 i:nth-child(2) { animation-delay: .2s; height: 30%; } .v1 i:nth-child(3) { animation-delay: .4s; height: 38%; } .v1 i:nth-child(4) { animation-delay: .6s; height: 30%; } .v1 i:nth-child(5) { animation-delay: .8s; }
+.on .v1 i { animation: v1talk .7s ease-in-out infinite; }
+.on .v1 i:nth-child(2) { animation-duration: .55s; } .on .v1 i:nth-child(3) { animation-duration: .8s; } .on .v1 i:nth-child(4) { animation-duration: .6s; } .on .v1 i:nth-child(5) { animation-duration: .75s; }
+.on .v1 { box-shadow: inset 0 0 0 1px rgba(34,211,238,.6), 0 0 22px -2px rgba(139,92,246,.9); }
+@keyframes v1idle { 0%, 100% { transform: scaleY(.7); opacity: .75; } 50% { transform: scaleY(1); opacity: 1; } }
+@keyframes v1talk { 0%, 100% { transform: scaleY(.6); } 50% { transform: scaleY(2.1); } }
+
+/* ===== 2 · Anillo de luz ===== */
+.v2 .ring { inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(139,92,246,0), var(--vio) 40%, var(--cy) 70%, rgba(34,211,238,0) 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); animation: spin 4s linear infinite; }
+.v2 .track { inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(139,92,246,.25); }
+.v2 .core { inset: 30%; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #c4b5fd 30%, var(--vio2) 70%); box-shadow: 0 0 14px rgba(139,92,246,.8); animation: breath 3.6s ease-in-out infinite; }
+.v2 .glow { inset: 12%; border-radius: 50%; background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%); animation: breath 3.6s ease-in-out infinite; }
+.on .v2 .ring { animation-duration: 1s; }
+.on .v2 .core { animation: beat 1s ease-in-out infinite; background: radial-gradient(circle at 40% 35%, #fff, #a5f3fc 30%, var(--vio) 72%); }
+.on .v2 .glow { animation: beat 1s ease-in-out infinite; background: radial-gradient(circle, rgba(34,211,238,.4), transparent 70%); }
+
+/* ===== 3 · Núcleo y órbitas ===== */
+.v3 .core { inset: 36%; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff, #c4b5fd 35%, var(--vio2)); box-shadow: 0 0 12px rgba(139,92,246,.9); animation: breath 3.4s ease-in-out infinite; }
+.v3 .orb { inset: 4%; border-radius: 50%; border: 1px solid rgba(196,181,253,.35); }
+.v3 .orb.a { transform: rotateX(70deg) rotateZ(0deg); } .v3 .orb.b { transform: rotateX(70deg) rotateY(60deg); } .v3 .orb.c { transform: rotateX(70deg) rotateY(-60deg); }
+.v3 .sp { inset: 0; animation: spin 5s linear infinite; } .v3 .sp.b { animation-duration: 7s; animation-direction: reverse; }
+.v3 .sp i { left: 50%; top: 2%; width: 9%; height: 9%; margin-left: -4.5%; border-radius: 50%; background: var(--cy); box-shadow: 0 0 8px var(--cy); }
+.v3 .sp.b i { top: auto; bottom: 2%; background: #c4b5fd; box-shadow: 0 0 8px #a78bfa; }
+.on .v3 .sp { animation-duration: 1.2s; } .on .v3 .sp.b { animation-duration: 1.6s; }
+.on .v3 .core { animation: beat 1s ease-in-out infinite; }
+.on .v3 .orb { border-color: rgba(34,211,238,.5); }
+
+/* ===== 4 · Z viva (marca) ===== */
+.v4 { border-radius: 30%; background: linear-gradient(160deg, #1d1838, #0c0a16); box-shadow: inset 0 0 0 1px rgba(139,92,246,.45), 0 0 16px -4px rgba(139,92,246,.7); overflow: hidden; }
+.v4 img { inset: 16%; width: 68%; height: 68%; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(124,58,237,.6)); animation: breath 4s ease-in-out infinite; }
+.v4 .sweep { inset: -50%; background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.28) 50%, transparent 60%); animation: sweep 4.5s ease-in-out infinite; }
+.v4 .dot { right: 10%; top: 10%; width: 14%; height: 14%; border-radius: 50%; background: var(--cy); box-shadow: 0 0 8px var(--cy); animation: blink 2.4s ease-in-out infinite; }
+.on .v4 { box-shadow: inset 0 0 0 1px rgba(34,211,238,.6), 0 0 22px -2px rgba(139,92,246,.95); }
+.on .v4 img { animation: beat .9s ease-in-out infinite; }
+.on .v4 .sweep { animation-duration: 1.2s; }
+.on .v4 .dot { animation-duration: .6s; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes breath { 0%, 100% { transform: scale(.94); opacity: .85; } 50% { transform: scale(1.04); opacity: 1; } }
+@keyframes beat { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.12); } 55% { transform: scale(.96); } 78% { transform: scale(1.06); } }
+@keyframes sweep { 0%, 55% { transform: translateX(-60%); } 100% { transform: translateX(60%); } }
+@keyframes blink { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .av, .av * { animation: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Nexa · 4 ideas</h1>
+  <p>Cada una tiene dos estados: en reposo y respondiendo. Tocá "Simular respuesta" en cada tarjeta, o el botón de abajo para ver todas a la vez.</p>
+  <button class="global" type="button" aria-pressed="false">Simular respuesta en todas</button>
+</header>
+<main class="grid">
+  <article class="card">
+    <h2><b>1</b> Onda de voz</h2>
+    <p>Cinco barras dentro de un círculo: en reposo respiran; al responder bailan como una voz. Es lo que más se asocia a "asistente que habla". Simple y se entiende al toque, incluso chiquito.</p>
+    <div class="stage"><span class="av v1"><i></i><i></i><i></i><i></i><i></i></span></div>
+    <div class="mini"><div class="head"><span class="av v1"><i></i><i></i><i></i><i></i><i></i></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v1"><i></i><i></i><i></i><i></i><i></i></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>2</b> Anillo de luz</h2>
+    <p>Un anillo fino violeta→cyan que gira alrededor de un núcleo de luz. Muy limpio y premium; al responder el anillo acelera y el núcleo late.</p>
+    <div class="stage"><span class="av v2"><span class="track"></span><span class="glow"></span><span class="ring"></span><span class="core"></span></span></div>
+    <div class="mini"><div class="head"><span class="av v2"><span class="track"></span><span class="glow"></span><span class="ring"></span><span class="core"></span></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v2"><span class="track"></span><span class="glow"></span><span class="ring"></span><span class="core"></span></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>3</b> Núcleo y órbitas</h2>
+    <p>Un núcleo brillante con órbitas finas y dos partículas (cyan y lila) dando vueltas. Más "tecnológico"; al responder las partículas aceleran.</p>
+    <div class="stage"><span class="av v3"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span><span class="sp"><i></i></span><span class="sp b"><i></i></span><span class="core"></span></span></div>
+    <div class="mini"><div class="head"><span class="av v3"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span><span class="sp"><i></i></span><span class="sp b"><i></i></span><span class="core"></span></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v3"><span class="orb a"></span><span class="orb b"></span><span class="orb c"></span><span class="sp"><i></i></span><span class="sp b"><i></i></span><span class="core"></span></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>4</b> Z viva</h2>
+    <p>La Z de Zenix dentro de un cuadrado redondeado de vidrio, con un brillo que la recorre y un punto cyan de "en línea". La opción más de marca: Nexa es Zenix.</p>
+    <div class="stage"><span class="av v4"><img src="assets/logo-zx.webp" alt=""><span class="sweep"></span><span class="dot"></span></span></div>
+    <div class="mini"><div class="head"><span class="av v4"><img src="assets/logo-zx.webp" alt=""><span class="sweep"></span><span class="dot"></span></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v4"><img src="assets/logo-zx.webp" alt=""><span class="sweep"></span><span class="dot"></span></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+</main>
+<script>
+  document.querySelectorAll('.toggle').forEach(b => b.onclick = () => { const c = b.closest('.card'); const on = c.classList.toggle('on'); b.textContent = on ? 'Volver a reposo' : 'Simular respuesta'; });
+  const g = document.querySelector('.global');
+  g.onclick = () => { const on = g.getAttribute('aria-pressed') !== 'true'; g.setAttribute('aria-pressed', on); g.textContent = on ? 'Volver todas a reposo' : 'Simular respuesta en todas';
+    document.querySelectorAll('.card').forEach(c => { c.classList.toggle('on', on); c.querySelector('.toggle').textContent = on ? 'Volver a reposo' : 'Simular respuesta'; }); };
+</script>
+</body>
+</html>
