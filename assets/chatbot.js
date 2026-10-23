@@ -34,6 +34,7 @@
   root.innerHTML = `
     <button class="zenix-chat-launcher" type="button" aria-label="Abrir Nexa, asistente digital de Zenix AR" aria-expanded="false">
       <span class="zenix-chat-launcher-ic" aria-hidden="true">
+        ${ORB}
         <svg class="ic-chat" viewBox="0 0 24 24"><path d="M5 6.5A3.5 3.5 0 0 1 8.5 3h7A3.5 3.5 0 0 1 19 6.5v6a3.5 3.5 0 0 1-3.5 3.5H11l-4.7 3.4.9-3.7A3.5 3.5 0 0 1 5 12.5v-6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.5 9.5h7M8.5 12.5h4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         <svg class="ic-close" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
       </span>
