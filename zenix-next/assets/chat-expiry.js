@@ -19,7 +19,7 @@
   function resetVisualState(){
     const root=document.querySelector('.zenix-chat');
     if(!root)return;
-    root.classList.remove('is-open');
+    root.classList.remove('is-open','nexa-active');
     const launcher=root.querySelector('.zenix-chat-launcher');
     const panel=root.querySelector('.zenix-chat-panel');
     const messages=root.querySelector('.zenix-chat-messages');
