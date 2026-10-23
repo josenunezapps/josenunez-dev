@@ -111,6 +111,19 @@ Reglas:
 - No menciones clasificación de leads, perfiles internos ni análisis comercial.
 - Normalmente respondé en 1 a 4 frases.`;
 
+// Contexto extra solo para la web nueva en prueba (/zenix-next/). Si el pedido no trae "site",
+// el asistente responde exactamente como antes.
+const SITE_CONTEXT = {
+  "zenix-next": `Contexto de la web de Zenix AR desde la que te escriben:
+- Zenix AR desarrolla páginas y aplicaciones web, apps y sistemas a medida, automatizaciones e integraciones, y extensiones de Chrome.
+- Productos propios publicados: MiLibroPDF (app Android en Google Play para leer y escuchar PDF y EPUB) y DistraGuard (extensión de Chrome para controlar distracciones en YouTube).
+- En la misma página hay demos que se pueden probar en vivo, en la sección Apps: Zenix Caja (punto de venta), Zenix Cotiza (presupuestos con IVA que el cliente acepta por WhatsApp), Zenix Club (tarjeta de sellos digital) y Zenix Escáner (documentos a PDF con la cámara del celular).
+- Precios: no des montos. Explicá que dependen del alcance y que con una descripción breve el equipo arma una propuesta.
+- Plazos: dependen del proyecto; no prometas plazos exactos.
+- Para avanzar o hablar con alguien: WhatsApp +54 9 2901 471353, dejar los datos en este chat o usar el formulario de contacto.
+- No inventes clientes, funciones ni resultados.`
+};
+
 const ANALYSIS_PROMPT = `Analizá la conversación de un potencial cliente de Zenix AR y devolvé SOLO JSON válido.
 Usá únicamente datos explícitos. No inventes.
 Estructura: {"business":"","industry":"","city":"","projectType":"","need":"","features":[],"budget":"","timeline":"","urgency":"","classification":"Consulta","interest":"Bajo","summary":"","nextAction":""}
@@ -142,7 +155,9 @@ export async function onRequestPost(context) {
     return json({ success: true, reply: fallbackReply(message), mode: "guided", handoff: false, lead: currentProfile, actions: buildActions(currentProfile) });
   }
 
-  const chatMessages = [{ role: "system", content: CHAT_PROMPT }, ...history, { role: "user", content: message }];
+  const siteContext = typeof body.site === "string" && Object.prototype.hasOwnProperty.call(SITE_CONTEXT, body.site) ? SITE_CONTEXT[body.site] : "";
+  const systemPrompt = siteContext ? CHAT_PROMPT + "\n\n" + siteContext : CHAT_PROMPT;
+  const chatMessages = [{ role: "system", content: systemPrompt }, ...history, { role: "user", content: message }];
   const transcript = [...history, { role: "user", content: message }].map(item => `${item.role === "assistant" ? "Asistente" : "Visitante"}: ${item.content}`).join("\n");
   const analysisMessages = [{ role: "system", content: ANALYSIS_PROMPT }, { role: "user", content: "Estado previo:\n" + JSON.stringify(currentProfile) + "\n\nConversación:\n" + transcript }];
 

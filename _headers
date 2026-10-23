@@ -29,3 +29,9 @@
 # La demo debe recuperar su última versión en cada visita.
 /norte-aberturas-app-6p2d/*
   Cache-Control: no-store, max-age=0, must-revalidate
+
+# Versión nueva en prueba: no indexar, y permitir la cámara solo a las demos de Zenix (Escáner)
+/zenix-next/*
+  ! Permissions-Policy
+  Permissions-Policy: camera=(self "https://josenunezapps.github.io"), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  X-Robots-Tag: noindex, nofollow, noarchive
