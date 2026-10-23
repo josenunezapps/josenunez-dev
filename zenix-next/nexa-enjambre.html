@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#07060d">
+<title>Nexa · enjambres</title>
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<style>
+:root { --bg: #07060d; --panel: #13111f; --line: rgba(255,255,255,.09); --ink: #f3f1fa; --ink2: rgba(243,241,250,.72); --muted: rgba(243,241,250,.5); --vio: #8b5cf6; --vio2: #6d3df5; --cy: #22d3ee; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; padding: 28px 16px 60px; -webkit-font-smoothing: antialiased; }
+header { max-width: 980px; margin: 0 auto 26px; }
+h1 { font-size: 26px; letter-spacing: -.03em; font-weight: 800; }
+header p { color: var(--ink2); margin-top: 6px; }
+header a { color: #c4b5fd; }
+.global { margin-top: 16px; display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 99px; border: 1px solid rgba(139,92,246,.45); background: rgba(139,92,246,.12); color: #ddd2ff; font-weight: 650; font-size: 14px; font-family: inherit; cursor: pointer; }
+.global[aria-pressed="true"] { background: linear-gradient(135deg, var(--vio2), var(--vio)); color: #fff; border-color: transparent; }
+.grid { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.card { border: 1px solid var(--line); border-radius: 22px; background: radial-gradient(90% 60% at 50% 0%, rgba(109,61,245,.12), transparent 60%), var(--panel); padding: 18px; display: grid; gap: 14px; }
+.card h2 { font-size: 17px; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+.card h2 b { font-size: 12px; font-weight: 750; color: var(--bg); background: var(--cy); border-radius: 99px; padding: 2px 9px; }
+.card p { color: var(--ink2); font-size: 14px; }
+.stage { display: grid; place-items: center; height: 180px; border-radius: 16px; background: #0c0a16; border: 1px solid var(--line); }
+.mini { display: flex; align-items: center; gap: 12px; }
+.head { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line); background: rgba(16,14,27,.9); }
+.head strong { display: block; font-size: 15px; } .head > div { min-width: 0; } .head > div > span { display: block; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card.on .head > div > span::after { content: " · Respondiendo…"; color: #bff3fb; }
+.fab { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(139,92,246,.4); background: rgba(16,14,27,.85); flex: none; }
+.toggle { justify-self: start; height: 40px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--ink2); font-weight: 650; font-size: 13px; font-family: inherit; cursor: pointer; }
+.card.on .toggle { color: #fff; border-color: rgba(34,211,238,.5); background: rgba(34,211,238,.12); }
+canvas { display: block; flex: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Nexa · variantes del enjambre</h1>
+  <p>Todas son partículas en 3D dibujadas en tiempo real (canvas, sin librerías). Tocá "Simular respuesta" en cada una o el botón de abajo. <a href="nexa-opciones.html">← volver a las 9 ideas</a></p>
+  <button class="global" type="button" aria-pressed="false">Simular respuesta en todas</button>
+</header>
+<main class="grid" id="grid"></main>
+<script>
+(() => {
+  const TAU = Math.PI * 2, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const fib = n => Array.from({ length: n }, (_, i) => { const y = 1 - (i + .5) * 2 / n, r = Math.sqrt(1 - y * y), a = i * 2.39996; return { x: Math.cos(a) * r, y, z: Math.sin(a) * r, ph: Math.random() * TAU }; });
+  const VIO = [167, 139, 250], CY = [103, 232, 249], WHITE = [240, 236, 255];
+  const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+
+  // Cada variante: puntos iniciales y cómo se mueve cada punto (x, y, z en espacio unidad, antes de rotar).
+  const V = [
+    { n: 'Esfera viva', d: 'La original: una esfera de partículas que gira tranquila. Al responder late y respira con más fuerza.',
+      init: () => fib(90), pos: (p, t, k) => { const w = 1 + (.04 + k * .16) * Math.sin(t * (1.5 + k * 6) + p.ph); return [p.x * w, p.y * w, p.z * w]; } },
+
+    { n: 'Galaxia', d: 'Una galaxia espiral de dos brazos, inclinada. En reposo gira lenta; al responder los brazos se abren y gira rápido, como un pensamiento que se expande.',
+      init: () => Array.from({ length: 110 }, (_, i) => { const arm = i % 2, r = Math.pow(Math.random(), .7); return { r, a: arm * Math.PI + r * 3.4 + rnd(-.35, .35), h: rnd(-.06, .06), ph: Math.random() * TAU }; }),
+      spin: .5, tilt: 1.05,
+      pos: (p, t, k) => { const a = p.a - t * (.4 + k * 1.8) * (1.2 - p.r), r = p.r * (1 + k * .18 * Math.sin(t * 7 + p.ph)); return [Math.cos(a) * r, p.h * (1 + k * 3), Math.sin(a) * r]; } },
+
+    { n: 'Constelación', d: 'Una esfera de puntos unidos por hilos de luz, como una red neuronal viva. Al responder los hilos se encienden y pulsan.',
+      init: () => fib(46), lines: .62,
+      pos: (p, t, k) => { const w = 1 + (.03 + k * .1) * Math.sin(t * (1.2 + k * 5) + p.ph); return [p.x * w, p.y * w, p.z * w]; } },
+
+    { n: 'Toroide', d: 'Un anillo de energía (dona) por el que las partículas fluyen en círculo. Al responder el flujo se acelera y el anillo se retuerce.',
+      init: () => Array.from({ length: 120 }, () => ({ u: Math.random() * TAU, v: Math.random() * TAU, ph: Math.random() * TAU })), tilt: .9,
+      pos: (p, t, k) => { const u = p.u + t * (.25 + k * 1.4), v = p.v + t * (.6 + k * 2.6), R = .66, r = .26 + k * .07 * Math.sin(t * 6 + u * 3); return [(R + r * Math.cos(v)) * Math.cos(u), r * Math.sin(v), (R + r * Math.cos(v)) * Math.sin(u)]; } },
+
+    { n: 'Voz', d: 'La esfera se deforma con ondas que la recorren, como si hablara. En reposo apenas respira; al responder las ondas crecen y se mueven como una voz.',
+      init: () => fib(100),
+      pos: (p, t, k) => { const lat = Math.asin(p.y), lon = Math.atan2(p.z, p.x); const w = 1 + (.03 + k * .22) * Math.sin(lat * 4 - t * (1 + k * 7)) * Math.cos(lon * 2 + t * (.6 + k * 2)); return [p.x * w, p.y * w, p.z * w]; } },
+
+    { n: 'Metamorfosis', d: 'En reposo es una esfera; al responder las partículas se reorganizan en un anillo con ondas, como un aura que habla. Al terminar vuelven a la esfera.',
+      init: () => fib(96).map((p, i, a) => ({ ...p, ra: i / a.length * TAU })),
+      pos: (p, t, k) => { const w = 1 + .04 * Math.sin(t * 1.5 + p.ph); const s = [p.x * w, p.y * w, p.z * w];
+        const rr = 1 + .12 * Math.sin(p.ra * 6 + t * 8), ring = [Math.cos(p.ra + t * .8) * rr, .04 * Math.sin(p.ra * 3 + t * 5), Math.sin(p.ra + t * .8) * rr];
+        const e = k * k * (3 - 2 * k); return s.map((v, i) => v + (ring[i] - v) * e); } },
+
+    { n: 'Polvo de estrellas', d: 'Una nube suelta de partículas con estelas, como polvo cósmico orbitando un centro. Al responder se forma un remolino brillante.',
+      init: () => Array.from({ length: 80 }, () => ({ r: rnd(.25, 1), a: Math.random() * TAU, y: rnd(-.6, .6), s: rnd(.5, 1.4), ph: Math.random() * TAU })), trails: true, tilt: .5,
+      pos: (p, t, k) => { const a = p.a + t * p.s * (.5 + k * 2.6) / p.r * .5, r = p.r * (1 - k * .35), y = p.y * (1 - k * .65); return [Math.cos(a) * r, y + .05 * Math.sin(t + p.ph), Math.sin(a) * r]; } },
+
+    { n: 'Núcleo y satélites', d: 'Una esfera densa de partículas en el centro y tres anillos de partículas orbitando inclinados, como un átomo de luz. Al responder todo acelera y el núcleo late.',
+      init: () => [...fib(55).map(p => ({ ...p, core: 1 })), ...Array.from({ length: 54 }, (_, i) => ({ ring: i % 3, a: (i / 18 | 0) / 3 * TAU + Math.random() * .2 + (i % 18) / 18 * TAU, ph: Math.random() * TAU }))],
+      pos: (p, t, k) => { if (p.core) { const w = .45 * (1 + (.05 + k * .2) * Math.sin(t * (2 + k * 8) + p.ph)); return [p.x * w, p.y * w, p.z * w]; }
+        const a = p.a + t * (.7 + k * 2.4) * (p.ring === 1 ? -1 : 1), r = .95, x = Math.cos(a) * r, z = Math.sin(a) * r;
+        const tl = [.35, 1.2, 1.2][p.ring], rz = [0, 1.05, -1.05][p.ring];
+        const y1 = -z * Math.sin(tl), z1 = z * Math.cos(tl);
+        return [x * Math.cos(rz) - y1 * Math.sin(rz), x * Math.sin(rz) + y1 * Math.cos(rz), z1]; } },
+  ];
+
+  const grid = document.getElementById('grid');
+  const inst = [];
+  V.forEach((v, idx) => {
+    const card = document.createElement('article'); card.className = 'card';
+    card.innerHTML = `<h2><b>${String.fromCharCode(65 + idx)}</b> ${v.n}</h2><p>${v.d}</p><div class="stage"></div><div class="mini"><div class="head"><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"></div></div><button class="toggle" type="button">Simular respuesta</button>`;
+    grid.appendChild(card);
+    const pts = v.init();
+    const mk = (parent, size, before) => { const c = document.createElement('canvas'); const dpr = Math.min(2, devicePixelRatio || 1); c.width = c.height = Math.round(size * dpr); c.style.width = c.style.height = size + 'px';
+      before ? parent.insertBefore(c, parent.firstChild) : parent.appendChild(c); inst.push({ c, ctx: c.getContext('2d'), size, dpr, v, pts, card, vis: true, rot: Math.random() * TAU, k: 0 }); };
+    mk(card.querySelector('.stage'), 120); mk(card.querySelector('.head'), 40, true); mk(card.querySelector('.fab'), 38);
+    card.querySelector('.toggle').onclick = () => { const on = card.classList.toggle('on'); card.querySelector('.toggle').textContent = on ? 'Volver a reposo' : 'Simular respuesta'; };
+  });
+  const g = document.querySelector('.global');
+  g.onclick = () => { const on = g.getAttribute('aria-pressed') !== 'true'; g.setAttribute('aria-pressed', on); g.textContent = on ? 'Volver todas a reposo' : 'Simular respuesta en todas';
+    document.querySelectorAll('.card').forEach(c => { c.classList.toggle('on', on); c.querySelector('.toggle').textContent = on ? 'Volver a reposo' : 'Simular respuesta'; }); };
+
+  const io = new IntersectionObserver(es => es.forEach(e => { const s = inst.find(s => s.c === e.target); if (s) s.vis = e.isIntersecting; }));
+  inst.forEach(s => io.observe(s.c));
+
+  let last = performance.now(), T = 0;
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; if (!reduce) T += dt;
+    for (const s of inst) {
+      if (!s.vis) continue;
+      const on = s.card.classList.contains('on'); s.k += ((on ? 1 : 0) - s.k) * Math.min(1, dt * 4);
+      const v = s.v, k = s.k, { ctx, size, dpr } = s, Wd = size * dpr, cx = Wd / 2, R = Wd * .36, small = size < 60;
+      if (!reduce) s.rot += dt * (v.spin ?? .35) * (1 + k * 2.5);
+      if (v.trails && !reduce) { ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = `rgba(0,0,0,${.22 + k * .1})`; ctx.fillRect(0, 0, Wd, Wd); ctx.globalCompositeOperation = 'source-over'; }
+      else ctx.clearRect(0, 0, Wd, Wd);
+      const glow = ctx.createRadialGradient(cx, cx, 0, cx, cx, Wd * .5); glow.addColorStop(0, `rgba(139,92,246,${(v.trails ? .06 : .22) + k * .16})`); glow.addColorStop(1, 'rgba(139,92,246,0)');
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, Wd, Wd);
+      const cr = Math.cos(s.rot), sr = Math.sin(s.rot), tilt = v.tilt ?? .45, ct = Math.cos(tilt), st = Math.sin(tilt);
+      const P = s.pts.map(p => { const [x, y, z] = v.pos(p, T, k); let X = x * cr + z * sr, Z = -x * sr + z * cr, Y = y * ct - Z * st; Z = y * st + Z * ct; return [cx + X * R, cx + Y * R, (Z + 1) / 2]; });
+      if (v.lines) {
+        ctx.lineWidth = (small ? .5 : .7) * dpr;
+        for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+          const dx = P[i][0] - P[j][0], dy = P[i][1] - P[j][1], d = Math.hypot(dx, dy) / R; if (d > v.lines) continue;
+          const depth = (P[i][2] + P[j][2]) / 2, pulse = .5 + .5 * Math.sin(T * 6 + i * .7);
+          const a = (1 - d / v.lines) * (.12 + depth * .35) * (1 + k * (1.2 + pulse * 1.5));
+          const c = mix(VIO, CY, k * pulse); ctx.strokeStyle = `rgba(${c},${Math.min(1, a)})`; ctx.beginPath(); ctx.moveTo(P[i][0], P[i][1]); ctx.lineTo(P[j][0], P[j][1]); ctx.stroke();
+        }
+      }
+      P.sort((a, b) => a[2] - b[2]);
+      for (const [px, py, d] of P) {
+        const a = .25 + d * .75, rad = (small ? 1.05 : 1.6) * dpr * (.55 + d * .85) * (1 + k * .3);
+        const c = d > .55 ? mix(VIO, CY, Math.min(1, (d - .55) * 2.2)) : VIO; const c2 = k > .5 && d > .85 ? mix(c, WHITE, (k - .5)) : c;
+        ctx.fillStyle = `rgba(${c2},${a})`; ctx.beginPath(); ctx.arc(px, py, rad, 0, TAU); ctx.fill();
+      }
+    }
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
