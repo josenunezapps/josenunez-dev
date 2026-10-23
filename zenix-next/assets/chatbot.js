@@ -8,8 +8,8 @@
   const SITE = 'zenix-next';
   const WA = 'https://wa.me/5492901471353';
   const CONTACT_FORM = '/contacto.html';
-  // avatar de Nexa: esfera de plasma (textura propia + dos capas que giran en sentidos opuestos). Sin librerías.
-  const ORB = '<span class="nexa-orb" aria-hidden="true"><span class="nexa-halo"></span><span class="nexa-blob"><span class="nexa-tex t1"></span><span class="nexa-tex t2"></span><span class="nexa-rim"></span></span></span>';
+  // avatar de Nexa: esfera de partículas que se deforma con ondas, como una voz (canvas, sin librerías)
+  const ORB = '<span class="nexa-orb" aria-hidden="true"><canvas class="nexa-cv"></canvas></span>';
   const QUICK_DEFAULT = '<button type="button" data-message="Necesito una página web">Web</button><button type="button" data-message="Quiero una app o un sistema">App o sistema</button><button type="button" data-message="Quiero automatizar una tarea de mi negocio">Automatizar</button><button type="button" data-message="¿Cuánto cuesta un proyecto?">Precios</button>';
 
   const emptyProfile = () => ({
@@ -568,6 +568,65 @@
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && root.classList.contains('is-open')) setOpen(false);
   });
+
+
+  // ---------- Nexa: esfera de partículas "Voz" ----------
+  // 90 puntos sobre una esfera que gira; ondas la recorren y la deforman. En reposo respira suave;
+  // al responder (.nexa-active) las ondas crecen y todo se acelera. El cambio es continuo: cada esfera
+  // tiene su propio reloj que acelera y frena con una curva suave (sin saltos).
+  (function nexaVoice(){
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const TAU = Math.PI * 2, N = 90;
+    const pts = Array.from({ length: N }, (_, i) => { const y = 1 - (i + .5) * 2 / N, r = Math.sqrt(1 - y * y), a = i * 2.39996; return { x: Math.cos(a) * r, y, z: Math.sin(a) * r, lat: Math.asin(y), lon: Math.atan2(Math.sin(a) * r, Math.cos(a) * r) }; });
+    const VIO = [167, 139, 250], CY = [103, 232, 249], WHITE = [240, 236, 255];
+    const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    const orbs = [...root.querySelectorAll('.nexa-cv')].map(c => ({ c, ctx: c.getContext('2d'), inLauncher: !!c.closest('.zenix-chat-launcher') }));
+    const fit = () => { const dpr = Math.min(3, devicePixelRatio || 1); orbs.forEach(o => { const w = o.c.clientWidth || 38; o.c.width = o.c.height = Math.round(w * dpr); o.dpr = dpr; o.css = w; }); };
+    fit(); let rzT; addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(fit, 150); });
+    let kl = 0, k = 0, clk = 0, rot = 0, last = performance.now(), drawnK = -1, acc = 0;
+
+    function draw(o){
+      const { ctx, dpr } = o, W = o.c.width, cx = W / 2, R = W * .4;
+      ctx.clearRect(0, 0, W, W);
+      const glow = ctx.createRadialGradient(cx, cx, 0, cx, cx, W * .5);
+      glow.addColorStop(0, `rgba(139,92,246,${.24 + k * .16})`); glow.addColorStop(1, 'rgba(139,92,246,0)');
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, W);
+      const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(.45), st = Math.sin(.45);
+      const amp = .06 + k * .18, P = [];
+      for (const p of pts) {
+        const w = 1 + amp * Math.sin(p.lat * 4 - clk * 2.2) * Math.cos(p.lon * 2 + clk * .8);
+        const x = p.x * w, y = p.y * w, z = p.z * w;
+        let X = x * cr + z * sr, Z = -x * sr + z * cr; const Y = y * ct - Z * st; Z = y * st + Z * ct;
+        P.push([cx + X * R, cx + Y * R, (Z + 1) / 2]);
+      }
+      P.sort((a, b) => a[2] - b[2]);
+      const base = (o.css < 60 ? 1.05 : 1.6) * dpr;
+      for (const [px, py, d] of P) {
+        let c = d > .55 ? mix(VIO, CY, Math.min(1, (d - .55) * 2.2)) : VIO;
+        if (k > .5 && d > .85) c = mix(c, WHITE, k - .5);
+        ctx.fillStyle = `rgba(${c},${.25 + d * .75})`;
+        ctx.beginPath(); ctx.arc(px, py, base * (.55 + d * .85) * (1 + k * .3), 0, TAU); ctx.fill();
+      }
+    }
+
+    function frame(now){
+      requestAnimationFrame(frame);
+      const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now;
+      if (document.hidden) return;
+      const on = root.classList.contains('nexa-active');
+      kl = Math.max(0, Math.min(1, kl + (on ? dt : -dt) * 1.1)); k = kl * kl * (3 - 2 * kl);
+      if (!reduceMotion) { clk += dt * (1 + k * 2.2); rot += dt * .5 * (1 + k * 1.8); }
+      // ~40 cuadros por segundo alcanzan para algo tan chico y ahorran batería
+      acc += dt; if (acc < 1 / 40) return; acc = 0;
+      // con "reducir movimiento" solo se redibuja cuando cambia el estado
+      if (reduceMotion && drawnK === kl) return; drawnK = kl;
+      const open = root.classList.contains('is-open'), shy = root.classList.contains('is-shy');
+      for (const o of orbs) { if (o.inLauncher ? (!open && !shy) : open) draw(o); }
+    }
+    // primer dibujo para que el botón nunca aparezca vacío
+    orbs.forEach(draw);
+    requestAnimationFrame(frame);
+  })();
 
   // el temporizador de inactividad (chat-expiry.js) vuelve a poner las opciones de este diseño
   window.__zenixChatQuickHtml = QUICK_DEFAULT;

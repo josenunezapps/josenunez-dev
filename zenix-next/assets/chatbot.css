@@ -16,7 +16,6 @@
 .zenix-chat-launcher:hover { transform: translateY(-2px); border-color: rgba(34, 211, 238, .5); }
 .zenix-chat-launcher-ic { position: relative; width: 36px; height: 36px; display: grid; place-items: center; flex: none; color: #fff; }
 .zenix-chat-launcher-ic .nexa-orb { --o: 36px; transition: opacity .25s; }
-.zenix-chat-launcher .nexa-halo { inset: -14%; }
 .zenix-chat-launcher-ic > svg { position: absolute; width: 19px; height: 19px; transition: opacity .2s, transform .25s; }
 .zenix-chat-launcher .ic-chat { display: none; }
 .zenix-chat-launcher .ic-close { opacity: 0; transform: rotate(-45deg) scale(.8); }
@@ -25,36 +24,10 @@
 .zenix-chat-launcher-dot { display: none; }
 .zenix-chat.is-shy:not(.is-open) { transform: translateY(16px); opacity: 0; pointer-events: none; }
 
-/* ---------- Nexa: esfera de plasma ----------
-   Basada en el dibujo de Nexa (assets/nexa-orb.webp). Todo se anima con transform y opacity, sin recortes ni filtros:
-   - IDLE: el plasma gira despacio en dos capas opuestas, la forma se bambolea apenas y el halo respira.
-   - ACTIVE (.nexa-active): el plasma fluye más rápido, la esfera late y se deforma un poco más, y el halo se intensifica. */
-.nexa-orb { --o: 36px; position: relative; display: block; width: var(--o); height: var(--o); flex: none; isolation: isolate; animation: nexaFloat 6s ease-in-out infinite; }
-.nexa-halo { position: absolute; z-index: -1; inset: -26%; border-radius: 50%; background: radial-gradient(circle, rgba(139, 92, 246, .55) 0%, rgba(99, 102, 241, .22) 42%, rgba(34, 211, 238, .07) 58%, transparent 70%); animation: nexaBreath 5s ease-in-out infinite; }
-.nexa-blob { position: absolute; inset: 0; border-radius: 50%; isolation: isolate; animation: nexaWobble 8s ease-in-out infinite; }
-.nexa-tex { position: absolute; inset: 0; border-radius: 50%; background: #170b45 url(nexa-orb.webp) center / cover no-repeat; }
-.nexa-tex.t1 { animation: nexaSpin 22s linear infinite; }
-.nexa-tex.t2 { opacity: .32; mix-blend-mode: screen; animation: nexaSpinRev 30s linear infinite; }
-.nexa-rim { position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(216, 204, 255, .35), inset 0 0 5px 1px rgba(167, 139, 250, .55), 0 0 10px rgba(139, 92, 246, .55), 0 0 18px -4px rgba(34, 211, 238, .45); }
-
-.zenix-chat.nexa-active .nexa-orb { animation: nexaThrob 1.2s ease-in-out infinite; }
-.zenix-chat.nexa-active .nexa-halo { animation: nexaPulse 1.2s ease-in-out infinite; }
-.zenix-chat.nexa-active .nexa-blob { animation: nexaWobbleActive 1.8s ease-in-out infinite; }
-.zenix-chat.nexa-active .nexa-tex.t1 { animation-duration: 5s; }
-.zenix-chat.nexa-active .nexa-tex.t2 { animation-duration: 3.6s; opacity: .75; }
-/* lo que no se ve, no se anima */
-.zenix-chat:not(.is-open) .zenix-chat-panel .nexa-orb, .zenix-chat:not(.is-open) .zenix-chat-panel .nexa-orb *,
-.zenix-chat.is-shy:not(.is-open) .nexa-orb, .zenix-chat.is-shy:not(.is-open) .nexa-orb *,
-.zenix-chat.is-open .zenix-chat-launcher .nexa-orb, .zenix-chat.is-open .zenix-chat-launcher .nexa-orb * { animation-play-state: paused; }
-
-@keyframes nexaFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4%); } }
-@keyframes nexaBreath { 0%, 100% { transform: scale(.9); opacity: .65; } 50% { transform: scale(1.06); opacity: 1; } }
-@keyframes nexaPulse { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.25); opacity: 1; } }
-@keyframes nexaSpin { to { transform: rotate(360deg); } }
-@keyframes nexaSpinRev { from { transform: scaleX(-1) rotate(0deg); } to { transform: scaleX(-1) rotate(360deg); } }
-@keyframes nexaWobble { 0%, 100% { transform: rotate(0deg) scale(1, 1); } 25% { transform: rotate(10deg) scale(1.03, .975); } 50% { transform: rotate(0deg) scale(.98, 1.025); } 75% { transform: rotate(-10deg) scale(1.025, .98); } }
-@keyframes nexaWobbleActive { 0%, 100% { transform: rotate(0deg) scale(1, 1); } 25% { transform: rotate(14deg) scale(1.06, .95); } 50% { transform: rotate(0deg) scale(.96, 1.05); } 75% { transform: rotate(-14deg) scale(1.05, .96); } }
-@keyframes nexaThrob { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.07); } 55% { transform: scale(.97); } 78% { transform: scale(1.04); } }
+/* ---------- Nexa: esfera de partículas "Voz" ----------
+   Se dibuja en un canvas desde chatbot.js (90 partículas en 3D). Acá solo se fija el tamaño. */
+.nexa-orb { --o: 36px; position: relative; display: block; width: var(--o); height: var(--o); flex: none; }
+.nexa-cv { display: block; width: 100%; height: 100%; }
 
 /* panel */
 .zenix-chat-panel { position: absolute; right: 0; bottom: 62px; width: min(392px, calc(100vw - 32px)); height: min(600px, calc(100dvh - 110px));
@@ -128,8 +101,5 @@
 @media (prefers-reduced-motion: reduce) {
   .zenix-chat, .zenix-chat-panel, .zenix-chat-launcher, .zenix-chat-launcher-ic svg, .zenix-chat-send { transition: none; }
   .zenix-chat-typing span { animation: none; }
-  /* sin movimiento: la esfera queda quieta y el estado activo se nota solo por la luz */
-  .nexa-orb, .nexa-orb * { animation: none !important; }
-  .nexa-halo { opacity: .7; }
-  .zenix-chat.nexa-active .nexa-halo { opacity: 1; transform: scale(1.2); }
+  /* sin movimiento: la esfera queda quieta (lo maneja chatbot.js) */
 }

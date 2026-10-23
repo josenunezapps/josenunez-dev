@@ -18,7 +18,7 @@ header a { color: #c4b5fd; }
 .global { margin-top: 16px; display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 99px; border: 1px solid rgba(139,92,246,.45); background: rgba(139,92,246,.12); color: #ddd2ff; font-weight: 650; font-size: 14px; font-family: inherit; cursor: pointer; }
 .global[aria-pressed="true"] { background: linear-gradient(135deg, var(--vio2), var(--vio)); color: #fff; border-color: transparent; }
 .grid { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
-.card { border: 1px solid var(--line); border-radius: 22px; background: radial-gradient(90% 60% at 50% 0%, rgba(109,61,245,.12), transparent 60%), var(--panel); padding: 18px; display: grid; gap: 14px; }
+.card { min-width: 0; border: 1px solid var(--line); border-radius: 22px; background: radial-gradient(90% 60% at 50% 0%, rgba(109,61,245,.12), transparent 60%), var(--panel); padding: 18px; display: grid; gap: 14px; }
 .card h2 { font-size: 17px; letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
 .card h2 b { font-size: 12px; font-weight: 750; color: var(--bg); background: var(--cy); border-radius: 99px; padding: 2px 9px; }
 .card p { color: var(--ink2); font-size: 14px; }
