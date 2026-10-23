@@ -81,12 +81,58 @@ header p { color: var(--ink2); margin-top: 6px; }
 @keyframes beat { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.12); } 55% { transform: scale(.96); } 78% { transform: scale(1.06); } }
 @keyframes sweep { 0%, 55% { transform: translateX(-60%); } 100% { transform: translateX(60%); } }
 @keyframes blink { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+
+/* ===== 5 · Enjambre (canvas) ===== */
+canvas.av { display: block; }
+/* ===== 6 · Gota líquida (SVG con filtro "gooey") ===== */
+.v6 svg { inset: 0; width: 100%; height: 100%; overflow: visible; }
+.v6 .orbit { transform-origin: 24px 24px; animation: spin 6s linear infinite; }
+.v6 .orbit.b { animation-duration: 9s; animation-direction: reverse; }
+.v6 .orbit.c { animation-duration: 7.5s; }
+.v6 .sat { transform-box: fill-box; transform-origin: center; animation: breath 3s ease-in-out infinite; }
+.v6 .reach { transform-origin: 24px 24px; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+.on .v6 .orbit { animation-duration: 1.4s; } .on .v6 .orbit.b { animation-duration: 1.9s; } .on .v6 .orbit.c { animation-duration: 1.6s; }
+.on .v6 .reach { transform: scale(1.18); }
+.v6 .shell { inset: -8%; border-radius: 50%; background: radial-gradient(circle, rgba(139,92,246,.25), transparent 65%); animation: breath 4s ease-in-out infinite; }
+.on .v6 .shell { animation: beat 1s ease-in-out infinite; background: radial-gradient(circle, rgba(34,211,238,.3), transparent 65%); }
+
+/* ===== 7 · Eclipse ===== */
+.v7 .corona { inset: -6%; border-radius: 50%; background: conic-gradient(from 0deg, var(--vio), var(--cy), #c4b5fd, var(--vio2), var(--cy), var(--vio)); filter: blur(calc(var(--o) * .06)); opacity: .9; animation: spin 9s linear infinite; }
+.v7 .flare { inset: -18%; border-radius: 50%; background: radial-gradient(circle, rgba(139,92,246,.45) 35%, transparent 68%); animation: breath 5s ease-in-out infinite; }
+.v7 .moon { inset: 6%; border-radius: 50%; background: radial-gradient(circle at 62% 38%, #1a1530, #05040a 70%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset -2px 2px 6px rgba(196,181,253,.25); }
+.v7 .spark { left: 50%; top: 6%; width: 7%; height: 7%; margin-left: -3.5%; border-radius: 50%; background: #fff; box-shadow: 0 0 10px 3px rgba(255,255,255,.9), 0 0 18px 6px rgba(34,211,238,.6); }
+.v7 .sparkrot { inset: 0; animation: spin 9s linear infinite; }
+.on .v7 .corona { animation-duration: 1.6s; inset: -12%; } .on .v7 .sparkrot { animation-duration: 1.6s; }
+.on .v7 .flare { animation: beat 1s ease-in-out infinite; }
+.on .v7 .moon { inset: 9%; }
+.v7 .corona, .v7 .moon { transition: inset .5s cubic-bezier(.16,1,.3,1); }
+
+/* ===== 8 · Prisma 3D ===== */
+.v8 { perspective: calc(var(--o) * 4); }
+.v8 .cube { inset: 25%; transform-style: preserve-3d; animation: tumble 12s linear infinite; }
+.v8 .cube b { inset: 0; border: 1px solid rgba(196,181,253,.75); background: linear-gradient(135deg, rgba(139,92,246,.28), rgba(34,211,238,.12)); box-shadow: inset 0 0 calc(var(--o) * .08) rgba(139,92,246,.5); }
+.v8 .cube b:nth-child(1) { transform: translateZ(calc(var(--o) * .25)); } .v8 .cube b:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--o) * .25)); }
+.v8 .cube b:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--o) * .25)); } .v8 .cube b:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--o) * .25)); }
+.v8 .cube b:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--o) * .25)); } .v8 .cube b:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--o) * .25)); }
+.v8 .heart { inset: 40%; border-radius: 50%; background: radial-gradient(circle, #fff, #a5f3fc 40%, transparent 72%); animation: breath 3s ease-in-out infinite; }
+.v8 .aura { inset: 4%; border-radius: 50%; background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%); }
+.on .v8 .cube { animation-duration: 2.4s; } .on .v8 .cube b { border-color: rgba(103,232,249,.9); background: linear-gradient(135deg, rgba(34,211,238,.25), rgba(139,92,246,.2)); }
+.on .v8 .heart { animation: beat .8s ease-in-out infinite; }
+@keyframes tumble { from { transform: rotateX(-24deg) rotateY(0deg) rotateZ(10deg); } to { transform: rotateX(-24deg) rotateY(360deg) rotateZ(10deg); } }
+
+/* ===== 9 · Matriz de luz ===== */
+.v9 { border-radius: 50%; background: radial-gradient(circle, #120d24, #07060d 75%); box-shadow: inset 0 0 0 1px rgba(139,92,246,.4), 0 0 14px -4px rgba(139,92,246,.7); }
+.v9 i { width: 9%; height: 9%; margin: -4.5% 0 0 -4.5%; border-radius: 50%; background: #a78bfa; opacity: .18; animation: ripple 3.2s ease-in-out infinite; animation-delay: calc(var(--r) * .32s); }
+.v9 i.c { background: var(--cy); }
+.on .v9 i { animation: rippleOn .9s ease-in-out infinite; animation-delay: calc(var(--r) * .1s); }
+@keyframes ripple { 0%, 100% { opacity: .15; transform: scale(.7); } 40% { opacity: .95; transform: scale(1.1); } 70% { opacity: .3; } }
+@keyframes rippleOn { 0%, 100% { opacity: .2; transform: scale(.7); } 35% { opacity: 1; transform: scale(1.3); } }
 @media (prefers-reduced-motion: reduce) { .av, .av * { animation: none !important; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>Nexa · 4 ideas</h1>
+  <h1>Nexa · 9 ideas</h1>
   <p>Cada una tiene dos estados: en reposo y respondiendo. Tocá "Simular respuesta" en cada tarjeta, o el botón de abajo para ver todas a la vez.</p>
   <button class="global" type="button" aria-pressed="false">Simular respuesta en todas</button>
 </header>
@@ -119,12 +165,96 @@ header p { color: var(--ink2); margin-top: 6px; }
     <div class="mini"><div class="head"><span class="av v4"><img src="assets/logo-zx.webp" alt=""><span class="sweep"></span><span class="dot"></span></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v4"><img src="assets/logo-zx.webp" alt=""><span class="sweep"></span><span class="dot"></span></span></div></div>
     <button class="toggle" type="button">Simular respuesta</button>
   </article>
+  <article class="card">
+    <h2><b>5</b> Enjambre</h2>
+    <p>Una nube de 90 partículas que forman una esfera 3D girando. En reposo flotan tranquilas; al responder la esfera late, se expande y las partículas brillan como si pensara. Es "inteligencia" sin forma fija.</p>
+    <div class="stage"><canvas class="av v5" data-k="swarm"></canvas></div>
+    <div class="mini"><div class="head"><canvas class="av v5" data-k="swarm"></canvas><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><canvas class="av v5" data-k="swarm"></canvas></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>6</b> Gota líquida</h2>
+    <p>Un núcleo líquido con tres gotas que orbitan y se funden con él como mercurio violeta. Orgánico y vivo; al responder las gotas giran rápido y se estiran.</p>
+    <div class="stage"><span class="av v6"><span class="shell"></span><svg viewBox="0 0 48 48" data-goo><g class="goo"><g class="reach"><circle cx="24" cy="24" r="9"/><g class="orbit"><circle class="sat" cx="24" cy="12" r="5.5"/></g><g class="orbit b"><circle class="sat" cx="35" cy="28" r="4.5"/></g><g class="orbit c"><circle class="sat" cx="14" cy="31" r="5"/></g></g></g></svg></span></div>
+    <div class="mini"><div class="head"><span class="av v6"><span class="shell"></span><svg viewBox="0 0 48 48" data-goo><g class="goo"><g class="reach"><circle cx="24" cy="24" r="9"/><g class="orbit"><circle class="sat" cx="24" cy="12" r="5.5"/></g><g class="orbit b"><circle class="sat" cx="35" cy="28" r="4.5"/></g><g class="orbit c"><circle class="sat" cx="14" cy="31" r="5"/></g></g></g></svg></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v6"><span class="shell"></span><svg viewBox="0 0 48 48" data-goo><g class="goo"><g class="reach"><circle cx="24" cy="24" r="9"/><g class="orbit"><circle class="sat" cx="24" cy="12" r="5.5"/></g><g class="orbit b"><circle class="sat" cx="35" cy="28" r="4.5"/></g><g class="orbit c"><circle class="sat" cx="14" cy="31" r="5"/></g></g></g></svg></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>7</b> Eclipse</h2>
+    <p>Un disco oscuro con una corona de luz violeta y cyan girando detrás, y un destello que lo recorre. Muy elegante y misterioso; al responder la corona se expande y acelera.</p>
+    <div class="stage"><span class="av v7"><span class="flare"></span><span class="corona"></span><span class="moon"></span><span class="sparkrot"><span class="spark"></span></span></span></div>
+    <div class="mini"><div class="head"><span class="av v7"><span class="flare"></span><span class="corona"></span><span class="moon"></span><span class="sparkrot"><span class="spark"></span></span></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v7"><span class="flare"></span><span class="corona"></span><span class="moon"></span><span class="sparkrot"><span class="spark"></span></span></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>8</b> Prisma</h2>
+    <p>Un cubo de cristal en 3D que gira con un corazón de luz adentro. Geométrico y tecnológico; al responder gira rápido, se enciende en cyan y el corazón late.</p>
+    <div class="stage"><span class="av v8"><span class="aura"></span><span class="cube"><b></b><b></b><b></b><b></b><b></b><b></b></span><span class="heart"></span></span></div>
+    <div class="mini"><div class="head"><span class="av v8"><span class="aura"></span><span class="cube"><b></b><b></b><b></b><b></b><b></b><b></b></span><span class="heart"></span></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v8"><span class="aura"></span><span class="cube"><b></b><b></b><b></b><b></b><b></b><b></b></span><span class="heart"></span></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
+  <article class="card">
+    <h2><b>9</b> Matriz de luz</h2>
+    <p>Una pantalla circular de puntos de luz por donde pasan ondas desde el centro, como un sensor. Al responder las ondas se aceleran como si "escuchara y hablara".</p>
+    <div class="stage"><span class="av v9" data-k="matrix"></span></div>
+    <div class="mini"><div class="head"><span class="av v9" data-k="matrix"></span><div><strong>Nexa</strong><span>Asistente digital de Zenix AR</span></div></div><div class="fab"><span class="av v9" data-k="matrix"></span></div></div>
+    <button class="toggle" type="button">Simular respuesta</button>
+  </article>
 </main>
 <script>
   document.querySelectorAll('.toggle').forEach(b => b.onclick = () => { const c = b.closest('.card'); const on = c.classList.toggle('on'); b.textContent = on ? 'Volver a reposo' : 'Simular respuesta'; });
   const g = document.querySelector('.global');
   g.onclick = () => { const on = g.getAttribute('aria-pressed') !== 'true'; g.setAttribute('aria-pressed', on); g.textContent = on ? 'Volver todas a reposo' : 'Simular respuesta en todas';
     document.querySelectorAll('.card').forEach(c => { c.classList.toggle('on', on); c.querySelector('.toggle').textContent = on ? 'Volver a reposo' : 'Simular respuesta'; }); };
+
+  // ---- 9 · matriz: puntos dentro de un círculo, con retraso según la distancia al centro ----
+  document.querySelectorAll('[data-k=matrix]').forEach(m => {
+    const n = 7, h = '';
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const dx = x - 3, dy = y - 3, r = Math.hypot(dx, dy); if (r > 3.2) continue;
+      const i = document.createElement('i'); i.style.left = (14 + x * 12) + '%'; i.style.top = (14 + y * 12) + '%'; i.style.setProperty('--r', r.toFixed(2)); if (r < .5) i.className = 'c'; m.appendChild(i);
+    }
+  });
+  // ---- 6 · gota: filtro "gooey" y degradé con ids propios por instancia ----
+  document.querySelectorAll('[data-goo]').forEach((svg, k) => {
+    const id = 'g' + k;
+    svg.insertAdjacentHTML('afterbegin', `<defs><filter id="f${id}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2.6" result="b"/><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter><linearGradient id="l${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4b5fd"/><stop offset=".5" stop-color="#7c4dff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>`);
+    const g = svg.querySelector('.goo'); g.setAttribute('filter', `url(#f${id})`); g.setAttribute('fill', `url(#l${id})`);
+  });
+  // ---- 5 · enjambre: esfera de partículas en canvas, solo se dibuja lo que está a la vista ----
+  const swarms = [...document.querySelectorAll('canvas[data-k=swarm]')].map(c => {
+    const size = c.parentElement.classList.contains('stage') ? 110 : c.closest('.fab') ? 38 : 40;
+    const dpr = Math.min(2, devicePixelRatio || 1); c.width = c.height = size * dpr; c.style.width = c.style.height = size + 'px';
+    return { c, ctx: c.getContext('2d'), size, dpr, card: c.closest('.card'), vis: true, rot: 0, k: 0 };
+  });
+  const N = 90, pts = Array.from({ length: N }, (_, i) => { const y = 1 - (i + .5) * 2 / N, r = Math.sqrt(1 - y * y), a = i * 2.39996; return [Math.cos(a) * r, y, Math.sin(a) * r, Math.random() * 6.28]; });
+  const io = new IntersectionObserver(es => es.forEach(e => { const s = swarms.find(s => s.c === e.target); if (s) s.vis = e.isIntersecting; }));
+  swarms.forEach(s => io.observe(s.c));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let last = performance.now();
+  function draw(now) {
+    requestAnimationFrame(draw);
+    const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now; const t = now / 1000;
+    for (const s of swarms) {
+      if (!s.vis) continue;
+      const on = s.card.classList.contains('on'); s.k += ((on ? 1 : 0) - s.k) * Math.min(1, dt * 5);
+      if (!reduce) s.rot += dt * (.35 + s.k * 1.6);
+      const { ctx, size, dpr } = s, W = size * dpr, R = W * (.33 + s.k * .04 * Math.sin(t * 9)), cx = W / 2;
+      ctx.clearRect(0, 0, W, W);
+      const glow = ctx.createRadialGradient(cx, cx, 0, cx, cx, W * .5); glow.addColorStop(0, `rgba(139,92,246,${.28 + s.k * .2})`); glow.addColorStop(1, 'rgba(139,92,246,0)');
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, W, W);
+      const cr = Math.cos(s.rot), sr = Math.sin(s.rot), tilt = .45, ct = Math.cos(tilt), st = Math.sin(tilt);
+      for (const [x, y, z, ph] of pts) {
+        let X = x * cr + z * sr, Z = -x * sr + z * cr, Y = y * ct - Z * st; Z = y * st + Z * ct;
+        const wob = 1 + (reduce ? 0 : (.04 + s.k * .16) * Math.sin(t * (1.5 + s.k * 6) + ph));
+        const px = cx + X * R * wob, py = cx + Y * R * wob, d = (Z + 1) / 2;
+        const a = .25 + d * .75, rad = (size > 60 ? 1.6 : 1.1) * dpr * (.6 + d * .8) * (1 + s.k * .3);
+        ctx.fillStyle = d > .55 ? `rgba(${Math.round(103 + (1 - d) * 90)},${Math.round(232 - (1 - d) * 140)},249,${a})` : `rgba(167,139,250,${a})`;
+        ctx.beginPath(); ctx.arc(px, py, rad, 0, 6.2832); ctx.fill();
+      }
+    }
+  }
+  requestAnimationFrame(draw);
 </script>
 </body>
 </html>
