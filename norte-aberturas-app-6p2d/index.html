@@ -675,10 +675,112 @@ body{overflow-anchor:none}
 #admin-modal .admin-data-manager{margin:0}
 #admin-modal .modalbody{overscroll-behavior:contain;scrollbar-gutter:stable}
 @media(max-width:760px){#admin-modal .admin-return{margin-bottom:9px}#admin-modal .modalhead{gap:10px}}
+
+/* r58: fichas limpias, fotos completas y lectura consistente — Norte Aberturas */
+#catalogo .catalog .tile,#catalogo .swipe-track>.tile{
+ background:#fff;border:1px solid #dae3d9;border-radius:12px;overflow:hidden;
+ box-shadow:0 6px 20px #1b39270b;transition:border-color .2s,box-shadow .2s
+}
+@media(hover:hover){#catalogo .tile:hover{border-color:#9db6a0;box-shadow:0 12px 30px #1b392719}}
+#catalogo .catalog .tile-picture,#catalogo .swipe-track>.tile .tile-picture{
+ height:260px;padding:15px;display:flex;justify-content:center;align-items:center;
+ background:#f2f5f0;border-bottom:1px solid #e5ebe4
+}
+#catalogo .catalog .tile-picture img,#catalogo .swipe-track>.tile .tile-picture img{
+ display:block;width:100%;height:100%;max-width:100%;max-height:100%;
+ object-fit:contain!important;object-position:center!important;transform:none!important;filter:none
+}
+#catalogo .catalog .tile .tileinfo,#catalogo .swipe-track>.tile .tileinfo{padding:18px 20px 20px}
+#catalogo .catalog .tile .tileinfo .category,#catalogo .swipe-track>.tile .tileinfo .category{
+ font:800 11px/1.35 'DM Sans',Arial,sans-serif;letter-spacing:.08em;color:#64836d
+}
+#catalogo .catalog .tile .tileinfo h3,#catalogo .swipe-track>.tile .tileinfo h3{
+ font:800 19px/1.3 'DM Sans',Arial,sans-serif!important;letter-spacing:-.015em;
+ text-transform:none!important;color:#193c2b;min-height:49px;margin:9px 0;overflow-wrap:anywhere
+}
+#catalogo .catalog .tile .tileinfo p,#catalogo .swipe-track>.tile .tileinfo p{
+ font:400 13px/1.55 'DM Sans',Arial,sans-serif;min-height:40px;color:#657969;
+ display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin:0 0 10px
+}
+#catalogo .catalog .tile .tilebottom,#catalogo .swipe-track>.tile .tilebottom{
+ margin-top:auto;padding:11px 0 13px;border-top:1px solid #e9eee7
+}
+#catalogo .catalog .tile .tileinfo .price,#catalogo .swipe-track>.tile .tileinfo .price{
+ font:800 17px/1.3 'DM Sans',Arial,sans-serif;color:#214b34
+}
+#catalogo .catalog .tile .tileinfo .price.unspecified,#catalogo .swipe-track>.tile .tileinfo .price.unspecified{
+ font-size:14px;color:#92623c
+}
+#catalogo .catalog .tile .tile-details,#catalogo .swipe-track>.tile .tile-details{
+ display:block;width:100%;min-height:43px;padding:10px;margin:0 0 9px;
+ font:700 13px/1.3 'DM Sans',Arial,sans-serif;
+ color:#325a40;border:1px solid #d0dfd2;border-radius:7px;background:white
+}
+#catalogo .catalog .tile .tile-add,#catalogo .swipe-track>.tile .tile-add{
+ min-height:47px;padding:12px 14px;border-radius:7px;background:#234b36;
+ font:800 14px/1.2 'DM Sans',Arial,sans-serif!important
+}
+#catalogo .catalog .tile .tile-add:hover,#catalogo .swipe-track>.tile .tile-add:hover{background:#376d4d}
+#catalogo .catalog .tile .demo-tag,#catalogo .swipe-track>.tile .demo-tag{
+ font-size:10px;letter-spacing:.04em;padding:8px 10px;border-radius:5px
+}
+#catalogo .catalog .tile .tile-fav,#catalogo .swipe-track>.tile .tile-fav{
+ width:41px;height:41px;background:#fffef9f5;border:1px solid #d4e0d5
+}
+#catalogo .catalog .tile .tile-placeholder,#catalogo .swipe-track>.tile .tile-placeholder{
+ background:#f2f5f0;font-size:44px
+}
+/* Destacados: mismo lenguaje visual, sin recortar imágenes. */
+.shop-rail .shop-item{border-color:#dae3d9;border-radius:12px;box-shadow:0 6px 20px #1b392709}
+.shop-rail .shop-item .shop-img{
+ height:199px;padding:13px;display:flex;align-items:center;justify-content:center;
+ background:#f2f5f0;border-bottom:1px solid #e5ebe4
+}
+.shop-rail .shop-item .shop-img img{width:100%;height:100%;object-fit:contain!important;object-position:center!important}
+.shop-rail .shop-item .shop-cardbody{padding:15px}
+.shop-rail .shop-item .shop-cardbody h3{
+ font:800 18px/1.3 'DM Sans',Arial,sans-serif!important;
+ text-transform:none;letter-spacing:-.015em;min-height:46px;margin:8px 0 9px
+}
+.shop-rail .shop-item .shop-price{font-size:14px;color:#936640}
+.shop-rail .shop-item .shop-actions button{font-size:12px;min-height:44px}
+.shop-rail .shop-item .shop-add{background:#234b36}
+/* Ficha ampliada y panel administrativo */
+.detail-photo{background:#f2f5f0}
+.detail-photo img{object-fit:contain!important;object-position:center!important;padding:15px}
+.detail-copy p{font-size:14px;line-height:1.7}
+.detail-specs div{font-size:13px}
+#catalogo .sectiontop p,.shop-heading p{font-size:14px}
+#catalogo .search input,.shop-search-form input{font-size:14px}
+#catalogo .chip{font-size:13px;min-height:43px}
+#admin-modal .admin-title b{font-size:14px}
+#admin-modal .admin-title small{font-size:12px}
+#admin-modal .field label,#admin-modal .admin-new-category label{font-size:13px}
+#admin-modal .field input,#admin-modal .field select,#admin-modal .field textarea,
+#admin-modal .admin-category-formline input{font-size:14px}
+#admin-modal .admin-row .smallbtn{font-size:12px;min-height:40px}
+#admin-modal .admin-thumb img{object-fit:contain;background:#f2f5f0}
+@media(max-width:760px){
+ #catalogo .swipe-track>.tile{flex:0 0 clamp(236px,72vw,294px)}
+ #catalogo .swipe-track>.tile .tile-picture{height:214px;padding:12px}
+ #catalogo .swipe-track>.tile .tileinfo{padding:14px 15px 16px}
+ #catalogo .swipe-track>.tile .tileinfo h3{font-size:17px!important;min-height:44px}
+ #catalogo .swipe-track>.tile .tileinfo p{font-size:12px;line-height:1.5;min-height:36px}
+ #catalogo .swipe-track>.tile .tileinfo .price{font-size:16px}
+ #catalogo .swipe-track>.tile .tileinfo .price.unspecified{font-size:13px}
+ #catalogo .swipe-track>.tile .tile-details{font-size:12px;min-height:42px}
+ #catalogo .swipe-track>.tile .tile-add{font-size:13px!important;min-height:45px}
+ .shop-rail .shop-item .shop-img{height:180px}
+ .shop-rail .shop-item .shop-cardbody h3{font-size:17px!important}
+ .shop-rail .shop-item .shop-price{font-size:13px}
+ .shop-heading p{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){#catalogo .tile{transition:none!important}}
+
 </style>
 </head>
 <body>
-<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r57</span></div>
+<div class="topnote">DEMO COMERCIAL DE APP WEB · <strong>Zenix AR</strong> · NO ES LA TIENDA OFICIAL DE NORTE ABERTURAS · <span id="norte-app-build" aria-label="Revisión actual de la app">r58</span></div>
 <header class="sitehead">
   <div class="shell headin">
     <button type="button" id="site-menu-toggle" class="site-menu-toggle" aria-label="Abrir menú de navegación" aria-controls="site-menu-panel" aria-expanded="false"><span class="site-menu-bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -789,10 +891,10 @@ panel.querySelectorAll('[data-site-action]').forEach(el=>el.addEventListener('cl
 <section class="shop-categories" id="shop-categories-app"><div class="shell">
 <div class="shop-heading"><div><span class="micro">NORTE ABERTURAS · LÍNEAS DE PRODUCTOS</span><h2>Conocé lo que hacemos en Norte.</h2><p>Explorá puertas, ventanas, herrajes y aberturas a medida. Consultá materiales, medidas, terminaciones y envíos directamente con Norte Aberturas.</p></div></div>
 <div class="shop-category-grid">
-<button type="button" data-shop-app-cat="Puertas" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1768121697374-a1f2f729f94a?auto=format&fit=crop&w=1000&q=82" alt="Puerta de entrada de doble hoja, fotografía de referencia"><span class="pella-catcaption"><strong>Puertas</strong><small>Entradas con diseño y presencia · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
-<button type="button" data-shop-app-cat="Ventanas" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="pella-catcaption"><strong>Ventanas</strong><small>Luz y ventilación para cada ambiente · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
-<button type="button" data-shop-app-cat="Accesorios" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/965878/pexels-photo-965878.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Picaporte metálico moderno en puerta blanca, fotografía de referencia"><span class="pella-catcaption"><strong>Accesorios</strong><small>Herrajes y detalles de calidad · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
-<button type="button" data-shop-app-cat="A medida" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Casa contemporánea con grandes ventanales y aberturas de piso a techo, fotografía de referencia"><span class="pella-catcaption"><strong>A medida</strong><small>Soluciones para proyectos especiales · 10 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="Puertas" class="shop-cat"><img loading="lazy" src="https://images.unsplash.com/photo-1768121697374-a1f2f729f94a?auto=format&fit=crop&w=1000&q=82" alt="Puerta de entrada de doble hoja, fotografía de referencia"><span class="pella-catcaption"><strong>Puertas</strong><small data-shop-category-count="Puertas">Entradas con diseño y presencia · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="Ventanas" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/5691472/pexels-photo-5691472.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Ventana moderna y luminosa instalada en una vivienda, fotografía de referencia"><span class="pella-catcaption"><strong>Ventanas</strong><small data-shop-category-count="Ventanas">Luz y ventilación para cada ambiente · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="Accesorios" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/965878/pexels-photo-965878.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Picaporte metálico moderno en puerta blanca, fotografía de referencia"><span class="pella-catcaption"><strong>Accesorios</strong><small data-shop-category-count="Accesorios">Herrajes y detalles de calidad · 18 referencias</small><b aria-hidden="true">↗</b></span></button>
+<button type="button" data-shop-app-cat="A medida" class="shop-cat"><img loading="lazy" src="https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1000&q=82" alt="Casa contemporánea con grandes ventanales y aberturas de piso a techo, fotografía de referencia"><span class="pella-catcaption"><strong>A medida</strong><small data-shop-category-count="A medida">Soluciones para proyectos especiales · 10 referencias</small><b aria-hidden="true">↗</b></span></button>
 </div>
 <div class="shop-all-categories-section">
   <button type="button" id="shop-all-categories-toggle" class="shop-all-categories-toggle" aria-expanded="false" aria-controls="shop-all-categories-panel">
@@ -1204,7 +1306,17 @@ function renderAllCategoriesExplorer(){
  }).join('');
 }
 
+function syncShopCategoryCounts(){
+ const captions={Puertas:'Entradas con diseño y presencia',Ventanas:'Luz y ventilación para cada ambiente',Accesorios:'Herrajes y detalles de calidad','A medida':'Soluciones para proyectos especiales'};
+ document.querySelectorAll('[data-shop-category-count]').forEach(el=>{
+  const cat=el.dataset.shopCategoryCount;
+  const n=products.filter(p=>p.category===cat).length;
+  el.textContent=captions[cat]+' · '+n+' '+(n===1?'producto':'productos');
+ });
+}
+
 function renderAll(){
+ syncShopCategoryCounts();
  renderAppShowcase();
  renderAllCategoriesExplorer();
  // El catálogo completo no se monta hasta que el visitante lo pide.
