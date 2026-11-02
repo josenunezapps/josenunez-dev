@@ -1,0 +1,87 @@
+name: Publicar demo Doña Lupita en ruta discreta
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publicar-dl-vista.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zenix-dl-preview-copy
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar Zenix
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Descargar versión actual de Doña Lupita
+        run: git clone --depth 1 https://github.com/josenunezapps/DLupita.git "$RUNNER_TEMP/dlupita-original"
+      - name: Copiar web completa a la ruta no enlazada
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          import shutil
+          from pathlib import Path
+          source = Path(os.environ['RUNNER_TEMP']) / 'dlupita-original'
+          target = Path('dl-vista-7q4m')
+          if target.exists():
+              shutil.rmtree(target)
+          target.mkdir(parents=True)
+          shutil.copytree(source / 'assets', target / 'assets')
+          count = 0
+          for file in source.iterdir():
+              if file.is_file() and file.suffix.lower() in ('.html', '.css', '.js'):
+                  out = target / file.name
+                  if file.suffix.lower() == '.html':
+                      html = file.read_text(encoding='utf-8')
+                      html, n = re.subn(
+                          r'<head\b[^>]*>',
+                          lambda m: m.group(0) + '<meta name="robots" content="noindex,nofollow,noarchive">',
+                          html, count=1, flags=re.IGNORECASE
+                      )
+                      if n != 1:
+                          raise SystemExit(f'No se halló head en {file.name}')
+                      out.write_text(html, encoding='utf-8')
+                  else:
+                      shutil.copy2(file, out)
+                  count += 1
+          assert (target / 'index.html').is_file()
+          assert (target / 'carrito.html').is_file()
+          assert (target / 'assets' / 'portada.mp4').is_file()
+          assert (target / 'assets' / 'portada-poster.jpg').is_file()
+          print(f'Demo copiada: {count} archivos de código y recursos propios.')
+          PY
+      - name: Validar la copia antes de publicar
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          site = Path('dl-vista-7q4m')
+          pages = ('index.html', 'nosotros.html', 'productos.html', 'contacto.html', 'carrito.html', 'pizzas.html', 'empanadas.html', 'minutas.html', 'menu.html', 'bebidas.html')
+          for page in pages:
+              html=(site / page).read_text(encoding='utf-8')
+              assert 'noindex,nofollow,noarchive' in html, page
+              assert 'menu-overlay-v1.js' in html, page
+              assert 'favicon-dona-lupita.png' in html, page
+          assert 'assets/portada.mp4' in (site / 'index.html').read_text(encoding='utf-8')
+          assert 'pedido-whatsapp-v2.js' in (site / 'carrito.html').read_text(encoding='utf-8')
+          print('HTML, recursos y enlaces clave OK')
+          PY
+      - name: Publicar únicamente la carpeta oculta
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dl-vista-7q4m
+          if git diff --cached --quiet; then
+            echo "La demo ya estaba actualizada"
+          else
+            git commit -m "Publicar demo Doña Lupita sin enlazarla desde Zenix"
+            git push origin HEAD:main
+          fi
