@@ -85,3 +85,15 @@ jobs:
             git commit -m "Publicar demo Doña Lupita sin enlazarla desde Zenix"
             git push origin HEAD:main
           fi
+
+      - name: Comprobar enlaces públicos del dominio y Pages
+        run: |
+          for host in "https://zenix.com.ar" "https://josenunez.pages.dev"; do
+            printf 'Revisando %s/dl-vista-7q4m/\n' "$host"
+            curl -L -sS --connect-timeout 8 --max-time 20 -o /tmp/zenix-demo.html -w 'HTTP: %{http_code} | URL: %{url_effective}\n' "$host/dl-vista-7q4m/" || true
+            if grep -qi 'Doña Lupita' /tmp/zenix-demo.html 2>/dev/null; then
+              echo "Contenido de Doña Lupita detectado en $host"
+            else
+              echo "No se confirmó contenido en $host"
+            fi
+          done
