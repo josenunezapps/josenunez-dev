@@ -201,16 +201,23 @@ function renderAppShowcase(){
    {id:'shop-featured-app-rail',preferred:['p1','p4','p10','p6','p13','p27','p42','p57'],offset:0},
    {id:'shop-new-app-rail',preferred:['p15','p31','p49','p58','p23','p34','p46','p63'],offset:4}
  ];
+ // Cada carrusel muestra 8 productos: primero los elegidos y, si alguno se borró desde el panel,
+ // se completa con otros del catálogo sin repetir los que ya aparecen en el carrusel anterior.
+ const RAIL_SIZE=8,used=new Set();
  for(const group of groups){
   const container=$(group.id);if(!container)continue;
   const saved=container.scrollLeft;
-  const unique=group.preferred.map(id=>products.find(p=>p.id===id)).filter(Boolean);
-  if(unique.length<4){for(const product of products.slice(group.offset)){if(unique.length===4)break;if(!unique.some(p=>p.id===product.id))unique.push(product)}}
+  const unique=group.preferred.map(id=>products.find(p=>p.id===id)).filter(p=>p&&!used.has(p.id));
+  for(const product of products.slice(group.offset).concat(products.slice(0,group.offset))){
+   if(unique.length>=RAIL_SIZE)break;
+   if(!used.has(product.id)&&!unique.some(p=>p.id===product.id))unique.push(product);
+  }
+  unique.forEach(p=>used.add(p.id));
   container.removeAttribute('data-static-gallery');
   container.innerHTML=unique.map(p=>{
    const photo=safeImg(p.image);
    const placeholder=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
-   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="Referencia de '+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3>'+'<div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
+   return '<article class="shop-item" data-category="'+esc(p.category)+'"><div class="shop-img">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="'+esc(p.name)+'">':'<div class="tile-placeholder">'+placeholder+'</div>')+'<small>'+esc(p.category)+'</small></div><div class="shop-cardbody"><small>CATÁLOGO DEMOSTRATIVO</small><h3>'+esc(p.name)+'</h3>'+'<div class="shop-price">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</div><div class="shop-actions"><button type="button" class="shop-add" data-shop-app-add="'+esc(p.id)+'">🛒 Agregar</button><button type="button" class="shop-detail" data-shop-app-category="'+esc(p.category)+'" aria-label="Ver catálogo de '+esc(p.category)+'">Ver catálogo ↗</button></div></div></article>';
   }).join('');
   if(saved)container.scrollLeft=saved;
   container.querySelectorAll('[data-shop-app-add]').forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.shopAppAdd)));
@@ -341,7 +348,7 @@ function renderCatalog(){
  $('catalog').innerHTML=shownProducts.map(p=>{
  const image=safeImg(p.image);
  const label=p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':p.category==='Accesorios'?'🔩':'📐';
- return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3>'+'<p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
+ return '<article class="tile"><div class="tile-picture">'+(image?'<img loading="lazy" src="'+esc(image)+'" alt="'+esc(p.name)+'">':'<div class="tile-placeholder" aria-hidden="true">'+label+'</div>')+'<span class="demo-tag">Referencia</span><button type="button" class="tile-fav" data-favorite="'+esc(p.id)+'" aria-label="'+(favorites.has(p.id)?'Quitar de favoritos: ':'Guardar como favorito: ')+esc(p.name)+'" aria-pressed="'+favorites.has(p.id)+'">'+(favorites.has(p.id)?'♥':'♡')+'</button></div><div class="tileinfo"><span class="category">'+esc(p.category)+'</span><h3>'+esc(p.name)+'</h3>'+'<p>'+esc(p.description)+'</p><div class="tilebottom"><span class="price'+(p.price===null?' unspecified':'')+'">'+(p.price===null?'Precio a consultar':formatPrice(p.price))+'</span></div><button class="tile-details" type="button" data-detail="'+esc(p.id)+'">Ver detalles ↗</button><button class="btn btn-primary tile-add" type="button" data-add="'+esc(p.id)+'">🛒 Agregar al carrito</button></div></article>'
  }).join('');
  all('[data-add]',$('catalog')).forEach(b=>b.addEventListener('click',()=>addToCart(b.dataset.add)));
  all('[data-detail]',$('catalog')).forEach(b=>b.addEventListener('click',()=>openDetail(b.dataset.detail)));
@@ -445,7 +452,7 @@ function showPanel(which){hidePanels();$('overlay').hidden=false;$(which).hidden
 function openDetail(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  detailId=id;const image=safeImg(p.image);
- $('detail-photo').innerHTML=image?'<img src="'+esc(image)+'" alt="Imagen de referencia de '+esc(p.name)+'">':'<div class="detail-placeholder">'+(p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':'🔩')+'</div>';
+ $('detail-photo').innerHTML=image?'<img src="'+esc(image)+'" alt="'+esc(p.name)+'">':'<div class="detail-placeholder">'+(p.category==='Puertas'?'🚪':p.category==='Ventanas'?'🪟':'🔩')+'</div>';
  $('detail-cat').textContent=p.category;$('detail-title').textContent=p.name;
  $('detail-desc').textContent=(p.description||'Consultá por modelos, medidas y terminaciones disponibles.')+' Los productos reales se confirman con Norte Aberturas.';
  $('detail-price').textContent=p.price===null?'A consultar':formatPrice(p.price);
@@ -518,7 +525,7 @@ mobileCatalogMedia.addEventListener('change',()=>{if(document.body.classList.con
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 $('mobile-home').addEventListener('click',()=>{document.getElementById('inicio').scrollIntoView({behavior:'smooth'})});
 $('mobile-catalog').addEventListener('click',()=>{window.norteEnsureCatalog();window.norteScrollCatalog()});
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v='+NORTE_VERSION,{scope:'./',updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{}));
 // El panel de autogestión se descarga recién cuando alguien lo abre.
 const app={
  get products(){return products},set products(v){products=v},

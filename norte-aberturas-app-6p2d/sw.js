@@ -1,5 +1,8 @@
-// Norte Aberturas demo r35: nunca servir un HTML de una versión anterior.
-const CACHE='norte-pwa-demo-58';
+// Norte Aberturas · service worker de la demo.
+// La versión llega en la URL de registro (sw.js?v=rNN), definida una sola vez en js/tienda.js (NORTE_VERSION).
+// Nunca sirve HTML viejo: solo guarda el manifiesto y el ícono para poder instalar la app.
+const VERSION=new URL(self.location.href).searchParams.get('v')||'dev';
+const CACHE='norte-pwa-demo-'+VERSION;
 const ASSETS=['./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
