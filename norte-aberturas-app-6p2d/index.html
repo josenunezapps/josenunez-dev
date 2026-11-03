@@ -32,7 +32,7 @@
     <a class="brand" href="#inicio" aria-label="Norte Aberturas, inicio"><span class="mark">N</span><span><strong>NORTE</strong><small>ABERTURAS</small></span></a>
     
     <div class="header-search"><form id="shop-search-app-form" class="shop-search-form" role="search"><label for="shop-search-app" class="shop-hidden">Buscar en el catálogo</label><span aria-hidden="true">⌕</span><input id="shop-search-app" type="search" placeholder="¿Qué estás buscando? Puertas, ventanas, accesorios..." autocomplete="off"><button type="submit">Buscar ↗</button></form></div>
-<div class="headtools"><button type="button" class="btn btn-outline header-admin" id="admin-open">⚙ Panel demo</button><button type="button" class="btn btn-primary" id="cart-open">🛒 <span class="cart-label">Carrito</span><span class="cartnum" id="cart-count">0</span></button></div>
+<div class="headtools"><button type="button" class="btn btn-primary" id="cart-open">🛒 <span class="cart-label">Carrito</span><span class="cartnum" id="cart-count">0</span></button></div>
   </div>
 </header>
 <div id="site-menu-backdrop" class="site-menu-backdrop" aria-hidden="true"></div>
@@ -54,7 +54,6 @@
  <div class="site-menu-caption">AYUDA Y CONTACTO</div>
  <a href="#como-funciona" class="site-menu-link" data-site-nav><span class="site-menu-icon">ⓘ</span>Cómo funciona<span class="site-menu-end">↗</span></a>
  <a href="#informacion" class="site-menu-link" data-site-nav><span class="site-menu-icon">✉</span>Contacto <span class="site-menu-end">↗</span></a>
- <button type="button" class="site-menu-link" data-site-action="admin"><span class="site-menu-icon">⚙</span>Administrar catálogo <span class="site-menu-end">↗</span></button>
  </div>
  <div class="site-menu-bottom"><button type="button" class="site-menu-cart" data-site-action="cart"><span>🛒 &nbsp; Abrir mi carrito</span><span>↗</span></button>
  <a href="https://wa.me/5492901535229?text=%C2%A1Hola!%20Vi%20el%20cat%C3%A1logo%20de%20Norte%20Aberturas%20y%20quisiera%20consultar%20por%20sus%20modelos%2C%20precios%20y%20opciones%20de%20env%C3%ADo.%20%C2%A1Gracias!" target="_blank" rel="noopener noreferrer" class="site-menu-whatsapp" data-site-nav>Consultar por WhatsApp ↗</a>
@@ -165,80 +164,13 @@
 <div class="detail-head"><span class="micro">FICHA DE PRODUCTO · DEMOSTRACIÓN</span><button type="button" class="drawer-close" id="detail-close" aria-label="Cerrar ficha">×</button></div>
 <div class="detail-layout"><div id="detail-photo" class="detail-photo"></div><div class="detail-copy"><span class="micro" id="detail-cat"></span><h2 id="detail-title"></h2><p id="detail-desc"></p><div class="detail-specs"><div><b>Precio</b><span id="detail-price">A consultar</span></div><div><b>Medidas</b><span>Según modelo</span></div><div><b>Disponibilidad</b><span>A confirmar</span></div></div><button type="button" class="btn btn-primary" id="detail-add">🛒 Agregar al carrito</button><button type="button" class="btn btn-outline" id="detail-wa">Consultar este producto ↗</button><div class="related-products" id="detail-related"></div><p class="fine">Las imágenes y modelos son ilustrativos, sujetos a confirmación del fabricante.</p></div></div>
 </section>
-<section class="modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title" hidden>
- <div class="modalhead"><div><button type="button" class="admin-return" id="admin-back" hidden>← Volver al catálogo</button><span class="micro micro-ochre">Demostración · Autogestión</span><h2 id="admin-title">Panel de catálogo</h2></div><button type="button" class="drawer-close" id="admin-close" aria-label="Cerrar panel">×</button></div>
- <div class="modalbody">
-  <section class="admin-screen" id="admin-screen-home" data-admin-screen="home" aria-label="Catálogo y productos">
-   <div class="notice"><b>Modo de demostración:</b> podés agregar, editar y quitar productos para probar el panel, pero los cambios se guardan <b>solo en este navegador</b>. No se publican para otros clientes. La versión definitiva necesita una base de datos compartida y un acceso de administración seguro.</div>
-   <div class="admin-actions">
-    <button type="button" class="smallbtn strong" id="add-new">+ Nuevo producto</button>
-    <button type="button" class="smallbtn" id="add-category">＋ Crear apartado</button>
-    <button type="button" class="smallbtn" id="install-app">▣ Instalar app</button>
-    <button type="button" class="admin-gear-btn" id="admin-data-toggle" aria-label="Administración de datos" title="Administración de datos" aria-expanded="false" aria-controls="admin-data-manager"><svg viewBox="0 0 24 24" width="23" height="23" fill="currentColor" focusable="false" aria-hidden="true"><path fill-rule="evenodd" d="M10 1h4v2.5l1.9.8 1.8-1.8 2.8 2.8-1.8 1.8.8 1.9H22v4h-2.5l-.8 1.9 1.8 1.8-2.8 2.8-1.8-1.8-1.9.8V22h-4v-2.5l-1.9-.8-1.8 1.8-2.8-2.8 1.8-1.8-.8-1.9H2v-4h2.5l.8-1.9-1.8-1.8 2.8-2.8 1.8 1.8 1.9-.8z M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2z"/></svg></button>
-   </div>
-   <div class="admin-findbar"><label for="admin-product-search">Buscar en el catálogo</label><div class="admin-findline"><span aria-hidden="true">⌕</span><input type="search" id="admin-product-search" placeholder="Buscar puertas, ventanas, herrajes..." autocomplete="off"><button type="button" id="admin-clear-search" aria-label="Limpiar búsqueda">×</button></div><p id="admin-search-summary" aria-live="polite"></p></div>
-   <div id="admin-list" class="admin-category-list"></div>
-  </section>
-  <section class="admin-screen" id="admin-screen-product" data-admin-screen="product" aria-label="Crear o editar producto" hidden>
-   <form class="admin-form" id="admin-form">
-     <h3 id="admin-form-title">Agregar producto</h3>
-     <div class="admin-fields">
-       <div class="field full"><label for="admin-name">Nombre del producto *</label><input id="admin-name" maxlength="100" required placeholder="Ej.: Puerta de madera"></div>
-       <div class="field full"><label for="admin-code">Código del producto (opcional y único)</label><input id="admin-code" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ej.: PTA-001 o VENT-120"><small class="product-code-hint">Usá letras, números, guiones, barras, puntos o guion bajo. Si no tiene código, dejalo vacío.</small></div>
-       <div class="field"><label for="admin-category">Categoría *</label><select id="admin-category" required><option>Puertas</option><option>Ventanas</option><option>Accesorios</option><option>A medida</option></select></div>
-       <div class="field"><label for="admin-price">Precio orientativo (opcional, ARS)</label><input id="admin-price" type="number" min="0" max="999999999" step="1" placeholder="Dejar vacío si es a consultar"></div>
-       <div class="field full"><label for="admin-description">Descripción</label><textarea id="admin-description" maxlength="350" placeholder="Materiales, características, terminaciones..."></textarea></div>
-       <div class="field full"><label for="admin-image">URL de foto HTTPS (opcional)</label><input id="admin-image" type="url" maxlength="1500" placeholder="https://..."></div>
-       <div class="field full"><label for="admin-upload">O subir una foto desde el dispositivo (se comprime para la demo)</label><input id="admin-upload" type="file" accept="image/jpeg,image/png,image/webp"></div>
-     </div>
-     <p class="fine">Las fotos cargadas también quedan almacenadas solo en este dispositivo. Si la memoria local se llena, exportá una copia antes de hacer otros cambios.</p>
-     <div class="admin-form-actions"><button class="btn btn-primary" type="submit">Guardar producto</button><button class="btn btn-outline" type="button" id="cancel-edit">Cancelar</button></div>
-   </form>
-  </section>
-  <section class="admin-screen" id="admin-screen-category" data-admin-screen="category" aria-label="Crear apartado" hidden>
-   <form class="admin-new-category" id="admin-category-form">
-     <label for="admin-category-name">Nombre del nuevo apartado</label>
-     <div class="admin-category-formline"><input type="text" id="admin-category-name" maxlength="45" placeholder="Ej.: Portones, Mamparas, Rejas..." autocomplete="off" required><button type="submit" class="smallbtn strong">Crear apartado</button><button type="button" class="smallbtn" id="cancel-category">Cancelar</button></div>
-     <small>Podrás agrupar productos dentro de este apartado. Se guarda solamente en este navegador.</small>
-   </form>
-  </section>
-  <section class="admin-screen" id="admin-screen-data" data-admin-screen="data" aria-label="Administración de datos" hidden>
-   <div class="admin-data-manager" id="admin-data-manager">
-    <div class="admin-data-body">
-     <div class="admin-data-label">EXCEL · CARGA MASIVA</div>
-     <div class="admin-data-buttons">
-      <button type="button" class="smallbtn" id="export-excel">↓ Descargar catálogo Excel</button>
-      <button type="button" class="smallbtn" id="template-excel">↓ Descargar plantilla Excel</button>
-      <button type="button" class="smallbtn strong" id="import-excel">↑ Importar Excel</button>
-     </div>
-     <p class="admin-data-help">Usá una planilla .xlsx para agregar o actualizar productos. Completá código, nombre, categoría, precio, descripción y una <strong>URL HTTPS de foto</strong> si la tenés. Las fotos actuales se conservan cuando dejás esa columna vacía.</p>
-     <div class="admin-data-label">FOTOGRAFÍAS</div>
-     <div class="admin-data-buttons"><button type="button" class="smallbtn" id="import-photos">↑ Cargar fotos por código</button></div>
-     <p class="admin-data-help">Elegí varias fotos llamadas, por ejemplo, <strong>PTA-001.jpg</strong> y <strong>VEN-002.png</strong>. Se asignarán a los productos que tengan esos códigos. Las fotos se guardan localmente en esta demo.</p>
-     <div class="admin-data-label">INFORMES Y RESPALDOS</div>
-     <div class="admin-data-buttons">
-      <button type="button" class="smallbtn" id="export-pdf" title="Descargar el catálogo completo en PDF para administración">↓ Descargar PDF</button>
-      <button type="button" class="smallbtn" id="export-json">↓ Guardar copia JSON</button>
-      <button type="button" class="smallbtn" id="import-json">↑ Importar copia JSON</button>
-     </div>
-     <p class="admin-data-help">El JSON permite restaurar productos y fotos guardadas localmente. El Excel es para editar y cargar productos; no incluye fotografías incrustadas.</p>
-     <div class="admin-data-bottom"><button type="button" class="smallbtn danger" id="restore-defaults">Restaurar demo</button></div>
-     <input class="hidden-input" id="import-file" type="file" accept=".json,application/json">
-     <input class="hidden-input" id="excel-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-     <input class="hidden-input" id="photos-files" type="file" accept="image/jpeg,image/png,image/webp" multiple>
-    </div>
-
-   </div>
-  </section>
- </div>
-</section>
 <div class="toast" id="toast" aria-live="polite"></div>
 <nav class="bottomnav" aria-label="Menú de la aplicación">
 <button class="active" type="button" id="mobile-home"><span class="icon">⌂</span>Inicio</button>
 <button type="button" id="mobile-catalog"><span class="icon">▤</span>Catálogo</button>
 <button type="button" id="mobile-list"><span class="icon">🛒</span>Carrito</button>
-<button type="button" id="mobile-admin"><span class="icon">⚙</span>Panel demo</button>
 </nav>
+<script src="./js/nucleo.js"></script>
 <script src="./js/tienda.js"></script>
 </body>
 </html>

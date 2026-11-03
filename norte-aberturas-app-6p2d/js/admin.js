@@ -1,11 +1,11 @@
-/* Norte Aberturas · Panel de catálogo (autogestión de la demo).
-   Se descarga recién cuando alguien abre el panel, así la tienda carga más liviana.
-   Usa el estado y las utilidades que expone js/tienda.js en window.NorteApp. */
+/* Norte Aberturas · Panel de catálogo (autogestión), página admin/.
+   No se enlaza desde la tienda. Usa el núcleo de js/nucleo.js (window.NorteApp). */
 (function(app){
 'use strict';
 const {$,all,esc,safeImg,formatPrice,normalizeProductCode,isValidProductCode,hasDuplicateProductCodes,
  CATEGORIES,FIXED_CATEGORIES,STORE,CART_STORE,CATEGORY_STORE,fresh,cleanCategory,buildCategoryList,
- setCategories,syncAdminCategories,normalize,getStored,setStored,cleanCart,renderAll,toast}=app;
+ setCategories,syncAdminCategories,normalize,getStored,setStored,cleanCart,toast}=app;
+const renderAll=()=>app.renderAll();
 let editing=null,uploaded=null;
 const adminOpenGroups=new Set(),adminVisibleLimits=new Map();
 const ADMIN_SCREEN_TITLES={home:'Panel de catálogo',product:'Nuevo producto',category:'Crear apartado',data:'Administración de datos'};
@@ -114,7 +114,7 @@ function norteLoadPdfLibrary(){
  if(nortePdfLibraryPromise)return nortePdfLibraryPromise;
  nortePdfLibraryPromise=new Promise((resolve,reject)=>{
   const script=document.createElement('script');
-  script.src='./vendor/jspdf.umd.min.js';
+  script.src=new URL('vendor/jspdf.umd.min.js',app.ROOT).href;
   script.async=true;
   script.onload=()=>window.jspdf?.jsPDF?resolve(window.jspdf.jsPDF):reject(Error('La biblioteca de PDF no se pudo iniciar'));
   script.onerror=()=>reject(Error('No se pudo cargar el generador de PDF. Revisá la conexión a Internet.'));
@@ -290,7 +290,7 @@ function norteGetXLSX(){
  if(window.XLSX?.utils&&window.XLSX?.writeFile)return Promise.resolve(window.XLSX);
  if(norteXLSXPromise)return norteXLSXPromise;
  norteXLSXPromise=new Promise((resolve,reject)=>{
-  const script=document.createElement('script');script.src='./vendor/xlsx.full.min.js';script.async=true;
+  const script=document.createElement('script');script.src=new URL('vendor/xlsx.full.min.js',app.ROOT).href;script.async=true;
   script.onload=()=>window.XLSX?.utils&&window.XLSX?.writeFile?resolve(window.XLSX):reject(Error('El lector Excel no inició'));
   script.onerror=()=>reject(Error('No se pudo cargar el lector Excel de la app'));
   document.head.appendChild(script);
@@ -459,7 +459,6 @@ async function importJSON(e){
   app.products=next;adminOpenGroups.clear();adminVisibleLimits.clear();$('admin-product-search').value='';syncAdminCategories();cleanCart();renderAll();toast('Catálogo y apartados importados en este dispositivo');
  }catch(err){setCategories(before,[]);toast('No se pudo importar: '+err.message)}
 }
-async function promptInstall(){if(app.installPrompt){app.installPrompt.prompt();try{await app.installPrompt.userChoice}catch{}app.installPrompt=null}else toast('Para instalarla: menú del navegador → Agregar a pantalla de inicio')}
 $('add-new').addEventListener('click',()=>editProduct(null));
 $('admin-back').addEventListener('click',adminReturnHome);
 $('add-category').addEventListener('click',()=>{
@@ -508,7 +507,9 @@ $('photos-files').addEventListener('change',norteImportPhotos);
 $('import-json').addEventListener('click',()=>$('import-file').click());
 $('import-file').addEventListener('change',importJSON);
 $('restore-defaults').addEventListener('click',()=>{if(!confirm('¿Restaurar los 64 artículos de demostración? Se perderán los cambios locales no exportados.'))return;const next=fresh();if(!setStored(STORE,next))return;if(!setStored(CATEGORY_STORE,[]))return;setCategories(app.publishedCategories,next);app.products=next;adminOpenGroups.clear();adminVisibleLimits.clear();app.adminSelectedCategory='Puertas';$('admin-product-search').value='';syncAdminCategories();app.cart={};setStored(CART_STORE,app.cart);$('admin-form').hidden=true;renderAll();toast('Catálogo de demostración restaurado')});
-$('install-app').addEventListener('click',promptInstall);
 
-window.NorteAdmin={render:renderAdmin,setScreen:setAdminScreen};
+// En esta página el panel es lo único que se dibuja.
+app.renderAll=()=>renderAdmin();
+setAdminScreen('home');
+app.start();
 })(window.NorteApp);

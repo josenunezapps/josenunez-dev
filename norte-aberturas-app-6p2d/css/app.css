@@ -30,7 +30,6 @@ h1,h2,h3,p{margin-top:0}
 .btn-outline{background:transparent;color:var(--dark);border:1px solid #cad5cc}
 .headtools .btn{min-height:42px}
 .cartnum{display:inline-grid;place-items:center;border-radius:50%;min-width:21px;height:21px;background:#e6bf85;color:#17352b;font-size:10px;padding:0 4px}
-.header-admin{white-space:nowrap}
 .tagrow{align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 0}
 .tagrow span{border:1px solid #e1e6df;padding:9px 14px;font-size:11px;font-weight:800}
 .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -144,7 +143,6 @@ h1,h2,h3,p{margin-top:0}
 .bottomnav{display:none}
 .hidden-input{display:none}
 @media (max-width:1090px){
-.header-admin{display:none}
 .how-grid{gap:28px}
 .tile-picture{height:225px}
 }
@@ -582,7 +580,6 @@ body.site-menu-locked{overflow:hidden}
 .header-search .shop-search-form button{white-space:nowrap}
 .headtools{flex-shrink:0}
 @media (max-width:760px){
-.headtools .header-admin{display:none}
 .headtools .cart-label{display:none}
 .sitehead{height:auto;min-height:69px}
 .headin{height:auto;min-height:69px;padding-top:9px;padding-bottom:9px;flex-wrap:wrap;row-gap:8px}
@@ -929,3 +926,5 @@ body .admin-findline #admin-clear-search{min-width:36px;min-height:36px}
 body .footer .footerlinks a{display:inline-block;padding-block:10px}
 /* Títulos de carrito, ficha y panel con el mismo estilo que el formulario de consulta */
 #cart-drawer .drawer-header h2,#detail-modal .detail-copy h2,#admin-modal .modalhead h2{font-weight:500;text-transform:none;letter-spacing:-.02em}
+/* La barra inferior del celular tiene tres accesos (el panel vive aparte, en admin/) */
+body .bottomnav{grid-template-columns:repeat(3,1fr)}
