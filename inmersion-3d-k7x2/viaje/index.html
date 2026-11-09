@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zenix AR · Inmersión 3D · Viaje (demo privada)</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#07060d">
+<link rel="icon" href="../../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="../core.css?v=2">
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+
+<header class="top">
+  <a href="#c0" class="logo" aria-label="Zenix AR, volver al inicio">
+    <img src="../../assets/logo-zx.webp" alt="" width="36" height="36">
+    <span>Zenix<b>AR</b></span>
+  </a>
+  <span class="count" aria-hidden="true"><b id="cnum">01</b> / 07 · <i id="cname">Inicio</i></span>
+  <a class="btn wa sm" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20charlar%20un%20proyecto." target="_blank" rel="noopener">Hablemos</a>
+</header>
+<div class="bar" aria-hidden="true"><i id="bar"></i></div>
+<nav class="dots" id="dots" aria-label="Capítulos"></nav>
+<nav class="switch" aria-label="Versiones de la demo"><a href=".././">Teléfono 3D</a><a href="../viaje/" aria-current="page">Viaje 3D</a></nav>
+
+<main id="stage">
+  <section class="ch center" id="c0" data-name="Inicio">
+    <div class="in">
+      <p class="eyebrow">Zenix AR · Soluciones digitales</p>
+      <h1>Software hecho para resolver <em>problemas reales.</em></h1>
+      <p class="lead">Webs, apps y automatizaciones pensadas para hacer más simple tu negocio.</p>
+      <p class="hint"><span>Deslizá para avanzar</span><i></i></p>
+    </div>
+  </section>
+
+  <section class="ch" id="c1" data-name="Soluciones">
+    <div class="in">
+      <span class="kicker">Soluciones</span>
+      <h2>Qué podemos <em>hacer por vos.</em></h2>
+      <ul class="rows">
+        <li><b>Desarrollo web</b><span>Páginas y aplicaciones web que transmiten confianza y generan consultas.</span></li>
+        <li><b>Apps y sistemas</b><span>Herramientas digitales para resolver tareas concretas y ordenar procesos.</span></li>
+        <li><b>Automatización y extensiones</b><span>Menos tareas repetitivas, más simple el trabajo diario.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ch" id="c2" data-name="Nosotros">
+    <div class="in">
+      <span class="kicker">Nosotros</span>
+      <h2>Creamos software <em>para la vida real.</em></h2>
+      <p class="body"><b>No vendemos tecnología porque sí.</b> Primero entendemos qué necesitás resolver y después elegimos la herramienta adecuada: una web, una app, una automatización o una mejora sobre algo que ya existe.</p>
+    </div>
+  </section>
+
+  <section class="ch" id="c3" data-name="Apps">
+    <div class="in">
+      <span class="kicker">Apps para comercios</span>
+      <h2>Cuatro apps reales. <em>Para probar en vivo.</em></h2>
+      <ul class="rows two">
+        <li><b>Zenix Caja</b><span>Vendé, cobrá y cerrá la caja sin papeles.</span></li>
+        <li><b>Zenix Cotiza</b><span>Presupuestos que te aceptan por WhatsApp.</span></li>
+        <li><b>Zenix Club</b><span>Tarjeta de sellos digital para que vuelvan.</span></li>
+        <li><b>Zenix Escáner</b><span>Facturas y remitos en PDF con la cámara.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ch" id="c4" data-name="Proyectos">
+    <div class="in">
+      <span class="kicker">Proyectos</span>
+      <h2>Proyectos que ya <em>están funcionando.</em></h2>
+      <ul class="rows">
+        <li><b>MiLibroPDF</b><span>App Android para leer y escuchar PDF y EPUB. <a href="https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf" target="_blank" rel="noopener">Ver en Google Play ↗</a></span></li>
+        <li><b>DistraGuard</b><span>Extensión para controlar las distracciones en YouTube. <a href="https://chromewebstore.google.com/detail/distraguard/adgjbpgkeaeeflnolcejdofnmalghkcl" target="_blank" rel="noopener">Ver en Chrome Web Store ↗</a></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ch" id="c5" data-name="Cómo trabajamos">
+    <div class="in">
+      <span class="kicker">Cómo trabajamos</span>
+      <h2>De la idea a una <em>primera versión funcional.</em></h2>
+      <ol class="rows num">
+        <li><b>Te escuchamos</b><span>Nos contás qué querés resolver y definimos juntos el alcance.</span></li>
+        <li><b>Te mostramos una demo</b><span>Una primera versión funcional para probar antes de avanzar.</span></li>
+        <li><b>La usás y la mejoramos</b><span>La ajustamos con lo que aparezca en el uso real.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="ch center end" id="c6" data-name="Hablemos">
+    <div class="in">
+      <h2>Hagamos realidad <em>tu próximo proyecto.</em></h2>
+      <p class="lead">Contanos qué necesitás resolver y vemos juntos cuál es el camino más simple para hacerlo.</p>
+      <a class="btn wa lg" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20hacer%20realidad%20mi%20proyecto." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 20.5l1.2-4.3A8.5 8.5 0 1 1 8 19.5z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1.2-1 .9c-1-.4-2.2-1.6-2.6-2.6l.9-1-1.2-2z" fill="currentColor"/></svg> Hablemos por WhatsApp</a>
+      <p class="foot">© 2026 Zenix AR · Soluciones digitales · <a href="https://www.instagram.com/zenix.com.ar/" target="_blank" rel="noopener">Instagram</a></p>
+    </div>
+  </section>
+</main>
+
+<div id="spacer" aria-hidden="true"></div>
+<script src="../core.js?v=2" defer></script>
+<script src="viaje.js?v=2" defer></script>
+</body>
+</html>

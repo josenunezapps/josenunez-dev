@@ -96,3 +96,20 @@ html.fly .ch.end { align-items: flex-end; padding-bottom: clamp(48px, 9vh, 96px)
 }
 @media (max-height: 620px) { h2 { font-size: 28px; } .rows { margin-top: 14px; } .rows li { padding: 8px 0; } }
 @media (prefers-reduced-motion: reduce) { .hint i { animation: none; } .btn { transition: none; } }
+
+/* selector de versión (solo demo) */
+.switch { position: fixed; z-index: 10; left: clamp(12px, 3vw, 36px); bottom: calc(12px + env(safe-area-inset-bottom)); display: flex; gap: 4px; padding: 4px; border-radius: 99px;
+  background: rgba(14,12,24,.72); border: 1px solid var(--line); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 12px; font-weight: 600; }
+.switch a { padding: 6px 12px; border-radius: 99px; color: var(--muted); }
+.switch a[aria-current] { background: rgba(139,92,246,.28); color: var(--ink); }
+.ch p.one { margin-top: 14px; font-size: clamp(15.5px, 1.4vw, 18px); color: var(--ink2); }
+.ticks { margin-top: 18px; display: grid; gap: 8px; font-size: 14.5px; color: var(--ink2); }
+.ticks li { padding-left: 24px; position: relative; }
+.ticks li::before { content: ""; position: absolute; left: 2px; top: .5em; width: 10px; height: 5px; border-left: 2px solid var(--cy); border-bottom: 2px solid var(--cy); transform: rotate(-45deg); }
+.open { display: inline-block; margin-top: 18px; font-weight: 700; font-size: 14.5px; color: #a5f3fc; }
+@media (max-width: 760px) {
+  .switch { left: 50%; transform: translateX(-50%); bottom: auto; top: calc(62px + env(safe-area-inset-top)); font-size: 11px; white-space: nowrap; }
+  .switch a { padding: 5px 10px; }
+  .ticks { margin-top: 12px; gap: 5px; font-size: 13.5px; } .open { margin-top: 12px; }
+  h2 { font-size: clamp(26px, 7.4vw, 34px); }
+}
