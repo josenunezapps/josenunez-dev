@@ -78,7 +78,7 @@ h2 { font-size: clamp(31px, 4.6vw, 56px); }
 /* modo inmersivo (lo activa app.js) */
 html.fly #stage { position: fixed; inset: 0; z-index: 2; perspective: 1000px; overflow: hidden; pointer-events: none; }
 html.fly .ch { position: absolute; inset: 0; min-height: 0; opacity: 0; visibility: hidden; will-change: transform, opacity; transform-origin: 50% 50%; }
-html.fly .ch.live { pointer-events: auto; }
+html.fly .ch.live .in { pointer-events: auto; }
 html.fly .ch.end { align-items: flex-end; padding-bottom: clamp(48px, 9vh, 96px); }
 
 @media (max-width: 760px) {
@@ -108,7 +108,7 @@ html.fly .ch.end { align-items: flex-end; padding-bottom: clamp(48px, 9vh, 96px)
 .ticks li::before { content: ""; position: absolute; left: 2px; top: .5em; width: 10px; height: 5px; border-left: 2px solid var(--cy); border-bottom: 2px solid var(--cy); transform: rotate(-45deg); }
 .open { display: inline-block; margin-top: 18px; font-weight: 700; font-size: 14.5px; color: #a5f3fc; }
 @media (max-width: 760px) {
-  .switch { left: 50%; transform: translateX(-50%); bottom: auto; top: calc(62px + env(safe-area-inset-top)); font-size: 11px; white-space: nowrap; }
+  .switch { left: 50%; transform: translateX(-50%); bottom: auto; top: calc(56px + env(safe-area-inset-top)); font-size: 11px; white-space: nowrap; }
   .switch a { padding: 5px 10px; }
   .ticks { margin-top: 12px; gap: 5px; font-size: 13.5px; } .open { margin-top: 12px; }
   h2 { font-size: clamp(26px, 7.4vw, 34px); }

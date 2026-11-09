@@ -17,10 +17,10 @@
   function measure() {
     vw = window.innerWidth; vh = window.innerHeight;
     var mobile = F.small();
-    ph = mobile ? vh * 0.4 : Math.min(vh * 0.68, vw * 0.36 * 1.975);
+    ph = mobile ? vh * 0.38 : Math.min(vh * 0.68, vw * 0.36 * 1.975);
     pw = ph / 1.975;
     phone.style.setProperty('--pw', pw.toFixed(1) + 'px');
-    var X = mobile ? 0 : vw * 0.22, Y = mobile ? -vh * 0.165 : vh * 0.02, tilt = mobile ? 15 : 22;
+    var X = mobile ? 0 : vw * 0.22, Y = mobile ? -vh * 0.15 : vh * 0.02, tilt = mobile ? 15 : 22;
     keys = [{ x: X, y: Y, s: mobile ? 1 : 1.05, rx: 10, ry: -tilt - 10, rz: -5 }];
     for (var i = 1; i < LAST; i++) keys.push({ x: X, y: Y, s: 1, rx: 4, ry: 360 * i + (i % 2 ? -tilt : tilt * 0.85), rz: 0 });
     keys.push({ x: 0, y: 0, s: Math.max(vw / (pw * 0.936), vh / (pw * 1.91)) * 1.1, rx: 0, ry: 360 * LAST, rz: 0 });
@@ -30,6 +30,98 @@
   measure(); F.onResize(function () { measure(); resizeGL(); });
 
   var HUES = [0, 0, 150, 60, 200, 300, 0], hueNow = -1, scrNow = -1;
+
+  /* ---------- pantallas vivas: pequeñas secuencias animadas sobre las capturas reales ---------- */
+  function money(n) { return '$ ' + Math.round(n).toLocaleString('es-AR'); }
+  function count(el, from, to, ms) {
+    var t0 = performance.now();
+    (function step(now) { var k = Math.min(1, (now - t0) / ms); el.textContent = money(from + (to - from) * (1 - Math.pow(1 - k, 3))); if (k < 1 && el.isConnected) requestAnimationFrame(step); })(t0);
+  }
+  function tapAt(el, x, y) {
+    el.style.left = x + '%'; el.style.top = y + '%';
+    if (el.animate) el.animate([{ transform: 'scale(.3)', opacity: .7 }, { transform: 'scale(1.5)', opacity: 0 }], { duration: 520, easing: 'ease-out' });
+  }
+  function flyTo(el, x0, y0, x1, y1) {
+    el.style.left = x0 + '%'; el.style.top = y0 + '%';
+    var W0 = el.parentNode.clientWidth, H0 = el.parentNode.clientHeight;
+    if (el.animate) el.animate([{ transform: 'translate(0,0) scale(1.4)', opacity: 1 }, { transform: 'translate(' + ((x1 - x0) / 100 * W0) + 'px,' + ((y1 - y0) / 100 * H0) + 'px) scale(.5)', opacity: .2 }], { duration: 420, easing: 'cubic-bezier(.5,0,.8,.6)' });
+  }
+  var LIVE = {
+    caja: { html: '<i class="tap"></i><i class="fly"></i><div class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.5l2.2 10.5h10.2L20 7.5H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="16.5" cy="19" r="1.4"/></svg><span>Carrito vacío</span><b>$ 0</b></div>',
+      dur: 9200, reset: function (q) { q('.cart').className = 'cart'; q('span').textContent = 'Carrito vacío'; q('b').textContent = '$ 0'; },
+      steps: function (q) {
+        function add(t, x, y, label, a, b) {
+          return [[t, function () { tapAt(q('.tap'), x, y); flyTo(q('.fly'), x, y, 12, 87); }],
+            [t + 400, function () { q('span').textContent = label; count(q('b'), a, b, 450); q('.cart').classList.add('bump'); }],
+            [t + 620, function () { q('.cart').classList.remove('bump'); }]];
+        }
+        return add(900, 26, 30, '1 producto', 0, 3200).concat(add(2700, 26, 74, '2 productos', 3200, 8800), add(4500, 74, 30, '3 productos', 8800, 11700),
+          [[6100, function () { q('.cart').classList.add('pay'); q('span').textContent = 'Cobrar'; }]]);
+      } },
+    cotiza: { html: '<div class="num">$ 1.890.020</div><i class="bar"></i><div class="toast" style="top:9%"><b>✓</b>Tu cliente aceptó el presupuesto</div>',
+      dur: 8000, reset: function (q) { q('.num').className = 'num'; q('.num').textContent = '$ 1.890.020'; q('.bar').className = 'bar'; q('.toast').classList.remove('show'); },
+      steps: function (q) {
+        return [[1000, function () { q('.toast').classList.add('show'); }],
+          [1900, function () { q('.num').classList.add('up'); count(q('.num'), 1890020, 2376220, 1000); q('.bar').classList.add('up'); }],
+          [4600, function () { q('.toast').classList.remove('show'); }]];
+      } },
+    club: { html: '<i class="tap"></i><b class="cnt c1">5/8</b><b class="cnt c2">5/8</b><span class="stamp">+1 sello</span><div class="toast bot" style="bottom:9.5%"><b>✓</b>Sello sumado · le llega por WhatsApp</div>',
+      dur: 8000, reset: function (q) { q('.c1').className = 'cnt c1'; q('.c2').className = 'cnt c2'; q('.c1').textContent = q('.c2').textContent = '5/8'; q('.stamp').classList.remove('show'); q('.toast').classList.remove('show'); },
+      steps: function (q) {
+        function stamp(t, y, c) {
+          return [[t, function () { tapAt(q('.tap'), 50, y); }],
+            [t + 300, function () { q(c).textContent = '6/8'; q(c).classList.add('pop'); q('.stamp').style.top = (y - 1.4) + '%'; q('.stamp').classList.add('show'); }],
+            [t + 1300, function () { q('.stamp').classList.remove('show'); q(c).style.transform = 'none'; }]];
+        }
+        return stamp(900, 28.5, '.c1').concat(stamp(2900, 37.7, '.c2'), [[4400, function () { q('.toast').classList.add('show'); }], [6600, function () { q('.toast').classList.remove('show'); }]]);
+      } },
+    escaner: { html: '<i class="tap limey"></i><i class="scan"></i><div class="toast lime">PDF listo · 3 páginas</div>',
+      dur: 7600, reset: function (q) { q('.scan').classList.remove('go'); q('.toast').classList.remove('show'); },
+      steps: function (q) {
+        return [[800, function () { tapAt(q('.tap'), 68, 93.2); }], [1150, function () { q('.scan').classList.add('go'); }],
+          [3500, function () { q('.toast').classList.add('show'); }], [6000, function () { q('.toast').classList.remove('show'); }]];
+      } },
+    mili: { html: '<div class="toast bot eq"><span><i></i><i></i><i></i><i></i></span>Leyendo en voz alta</div>',
+      dur: 600000, reset: function (q) { q('.toast').classList.remove('show'); },
+      steps: function (q) { return [[700, function () { q('.toast').classList.add('show'); }]]; } }
+  };
+  var lives = screens.map(function (scr) {
+    var lv = scr.querySelector && scr.querySelector('.lv'); if (!lv) return null;
+    var def = LIVE[lv.dataset.app]; lv.innerHTML = def.html;
+    var q = function (sel) { return lv.querySelector(sel); }, timers = [], loop = 0;
+    function clear() { timers.forEach(clearTimeout); timers = []; }
+    function run() { clear(); def.reset(q); Array.prototype.forEach.call(lv.querySelectorAll('.cnt'), function (c) { c.style.transform = ''; }); def.steps(q).forEach(function (st) { timers.push(setTimeout(st[1], st[0])); }); }
+    return { start: function () { run(); clearInterval(loop); loop = setInterval(run, def.dur); }, stop: function () { clear(); clearInterval(loop); def.reset(q); } };
+  });
+  var liveNow = null;
+  function setLive(idx) { if (liveNow) liveNow.stop(); liveNow = lives[idx]; if (liveNow) liveNow.start(); }
+  document.addEventListener('visibilitychange', function () { if (liveNow) { if (document.hidden) liveNow.stop(); else liveNow.start(); } });
+
+  /* ---------- teléfono tocable: arrastrar para girar, toque para abrir la demo real ---------- */
+  var B = 'https://josenunezapps.github.io/DLupita/';
+  var LINKS = [null, B + 'zenix-caja/', B + 'zenix-cotiza/', B + 'zenix-club/', B + 'zenix-escaner/', 'https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf', null];
+  var tip = document.getElementById('tip');
+  var drag = { on: false, id: -1, x0: 0, y0: 0, t0: 0, ry: 0, rx: 0, by: 0, bx: 0, moved: 0 };
+  phone.addEventListener('pointerdown', function (e) {
+    if (e.button) return;
+    drag.on = true; drag.id = e.pointerId; drag.x0 = e.clientX; drag.y0 = e.clientY; drag.t0 = performance.now(); drag.by = drag.ry; drag.bx = drag.rx; drag.moved = 0;
+    try { phone.setPointerCapture(e.pointerId); } catch (err) {}
+    phone.classList.add('drag');
+  });
+  phone.addEventListener('pointermove', function (e) {
+    if (!drag.on || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    drag.moved = Math.max(drag.moved, Math.abs(dx), Math.abs(dy));
+    drag.ry = drag.by + dx * 0.55;
+    if (e.pointerType === 'mouse') drag.rx = Math.max(-40, Math.min(40, drag.bx - dy * 0.3));
+  });
+  function release(e, cancelled) {
+    if (!drag.on || e.pointerId !== drag.id) return;
+    drag.on = false; phone.classList.remove('drag');
+    if (!cancelled && drag.moved < 8 && performance.now() - drag.t0 < 450 && LINKS[scrNow]) window.open(LINKS[scrNow], '_blank', 'noopener');
+  }
+  phone.addEventListener('pointerup', function (e) { release(e, false); });
+  phone.addEventListener('pointercancel', function (e) { release(e, true); });
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   /* ---------- fondo WebGL: polvo en profundidad + anillo de partículas detrás del teléfono ---------- */
@@ -98,7 +190,8 @@
     gl.drawArrays(gl.POINTS, 0, RING);
   }
 
-  F.start(function (p, time) {
+  var offNow = false;
+  F.start(function (p, time, dt) {
     var s = Math.min(LAST - 1, Math.floor(p)), f = p - s, t = F.smooth(0.24, 0.76, f);
     var a = keys[s], b = keys[s + 1], dive = s + 1 === LAST ? t : 0;
     var tr = dive ? F.smooth(0, 0.58, t) : t, tz = dive ? F.smooth(0.42, 1, t) : t; // en el cierre: primero gira, después entra a la pantalla
@@ -108,11 +201,17 @@
     var ry = lerp(a.ry, b.ry, tr) + (Math.sin(time * 0.6) * 4 * MO + F.ptr.x * 22) * (1 - dive);
     var rx = lerp(a.rx, b.rx, t) + (Math.cos(time * 0.5) * 2 * MO - F.ptr.y * 14) * (1 - dive) + lift * 6;
     var rz = lerp(a.rz, b.rz, t);
+    if (!drag.on) { var k = Math.exp(-dt * 3.2); drag.ry *= k; drag.rx *= k; }   // al soltar vuelve solo a su lugar
+    ry += drag.ry * (1 - dive); rx += drag.rx * (1 - dive);
+    if ((dive > 0.25) !== offNow) { offNow = dive > 0.25; phone.classList.toggle('off', offNow); }
+    var near = Math.abs(p - Math.round(p)), ti = Math.round(p);
+    tip.style.opacity = (LINKS[ti] ? (1 - F.smooth(0.08, 0.24, near)) * 0.9 : 0).toFixed(3);
+    tip.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (y + ph / 2 + 16).toFixed(1) + 'px,0)';
     phone.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (lift * 90 * MO).toFixed(1) + 'px) rotateZ(' + rz.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(4) + ')';
     glare.style.backgroundPosition = (((ry % 360) + 360) % 360 / 360 * 140 - 20).toFixed(1) + '% 0';
 
     var idx = tr < 0.5 ? s : s + 1;
-    if (idx !== scrNow) { scrNow = idx; screens.forEach(function (el, i) { el.classList.toggle('on', i === idx); }); }
+    if (idx !== scrNow) { scrNow = idx; screens.forEach(function (el, i) { el.classList.toggle('on', i === idx); }); setLive(idx); }
     if (HUES[idx] !== hueNow) { hueNow = HUES[idx]; aura.style.filter = 'hue-rotate(' + hueNow + 'deg)'; }
     aura.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
     aura.style.opacity = (0.75 * (1 - dive)).toFixed(3);
