@@ -22,14 +22,17 @@
     phone.style.setProperty('--pw', pw.toFixed(1) + 'px');
     var X = mobile ? 0 : vw * 0.22, Y = mobile ? -vh * 0.15 : vh * 0.02, tilt = mobile ? 15 : 22;
     keys = [{ x: X, y: Y, s: mobile ? 1 : 1.05, rx: 10, ry: -tilt - 10, rz: -5 }];
-    for (var i = 1; i < LAST; i++) keys.push({ x: X, y: Y, s: 1, rx: 4, ry: 360 * i + (i % 2 ? -tilt : tilt * 0.85), rz: 0 });
+    for (var i = 1; i < LAST; i++) {
+      var tall = mobile && (i === 1 || i === LAST - 1);          // capítulos con mucho texto: en celular el teléfono se achica y sube
+      keys.push({ x: X, y: tall ? Y - ph * 0.11 : Y, s: tall ? 0.8 : 1, rx: 4, ry: 360 * i + (i % 2 ? -tilt : tilt * 0.85), rz: 0 });
+    }
     keys.push({ x: 0, y: 0, s: Math.max(vw / (pw * 0.936), vh / (pw * 1.91)) * 1.1, rx: 0, ry: 360 * LAST, rz: 0 });
     aura.style.width = aura.style.height = (ph * 1.7).toFixed(0) + 'px';
     aura.style.margin = (-ph * 0.85).toFixed(0) + 'px 0 0 ' + (-ph * 0.85).toFixed(0) + 'px';
   }
   measure(); F.onResize(function () { measure(); resizeGL(); });
 
-  var HUES = [0, 0, 150, 60, 200, 300, 0], hueNow = -1, scrNow = -1;
+  var HUES = [0, 20, 320, 0, 150, 60, 200, 300, 30, 0], hueNow = -1, scrNow = -1;
 
   /* ---------- pantallas vivas: pequeñas secuencias animadas sobre las capturas reales ---------- */
   function money(n) { return '$ ' + Math.round(n).toLocaleString('es-AR'); }
@@ -46,7 +49,39 @@
     var W0 = el.parentNode.clientWidth, H0 = el.parentNode.clientHeight;
     if (el.animate) el.animate([{ transform: 'translate(0,0) scale(1.4)', opacity: 1 }, { transform: 'translate(' + ((x1 - x0) / 100 * W0) + 'px,' + ((y1 - y0) / 100 * H0) + 'px) scale(.5)', opacity: .2 }], { duration: 420, easing: 'cubic-bezier(.5,0,.8,.6)' });
   }
+  var LOGO = '<img src="../assets/logo-zx.webp" alt="">';
+  function all(q, sel) { return Array.prototype.slice.call(q('.ui').querySelectorAll(sel)); }
   var LIVE = {
+    sol: { html: '<div class="ui"><div class="ui-h">' + LOGO + '<span>Soluciones</span></div>' +
+        '<div class="card"><img src="../assets/icon-web.svg" alt=""><div><b>Desarrollo web</b><small>Páginas y apps web</small></div></div>' +
+        '<div class="card"><img src="../assets/icon-android.svg" alt=""><div><b>Apps y sistemas</b><small>Herramientas a medida</small></div></div>' +
+        '<div class="card"><img src="../assets/icon-extension.svg" alt=""><div><b>Automatización</b><small>Menos tareas repetitivas</small></div></div>' +
+        '<div class="pill">Hablemos →</div></div>',
+      dur: 7600, reset: function (q) { all(q, '.card').forEach(function (c) { c.classList.remove('on'); }); },
+      steps: function (q) {
+        var c = all(q, '.card');
+        function only(i) { return function () { c.forEach(function (el, k) { el.classList.toggle('on', i < 0 || k === i); }); }; }
+        return [[800, only(0)], [2200, only(1)], [3600, only(2)], [5000, only(-1)]];
+      } },
+    nos: { html: '<div class="ui mid">' + LOGO + '<p class="q">Primero entendemos <em>qué necesitás resolver.</em></p>' +
+        '<div class="chips"><span>Web</span><span>App</span><span>Automatización</span><span>Mejora</span></div><small>Después elegimos la herramienta adecuada.</small></div>',
+      dur: 7200, reset: function (q) { all(q, '.chips span').forEach(function (c) { c.className = ''; }); },
+      steps: function (q) {
+        var c = all(q, '.chips span');
+        function only(i, cls) { return function () { c.forEach(function (el, k) { el.className = k === i ? cls : ''; }); }; }
+        return [[900, only(0, 'on')], [1500, only(1, 'on')], [2100, only(2, 'on')], [2700, only(3, 'on')], [3400, only(1, 'pick')]];
+      } },
+    como: { html: '<div class="ui"><div class="ui-h">' + LOGO + '<span>Tu proyecto</span></div><div class="stepper"><i class="line"><b></b></i>' +
+        '<div class="st"><span>01</span><div><b>Te escuchamos</b><small>Definimos el alcance</small></div></div>' +
+        '<div class="st"><span>02</span><div><b>Te mostramos una demo</b><small>Para probar antes de avanzar</small></div></div>' +
+        '<div class="st"><span>03</span><div><b>La usás y la mejoramos</b><small>Ajustes con el uso real</small></div></div></div>' +
+        '<div class="pill ok">✓ Primera versión lista</div></div>',
+      dur: 8000, reset: function (q) { all(q, '.st').forEach(function (c) { c.classList.remove('done'); }); q('.line b').style.height = '0%'; q('.pill').classList.remove('show'); },
+      steps: function (q) {
+        var c = all(q, '.st');
+        function done(i, h) { return function () { c[i].classList.add('done'); q('.line b').style.height = h + '%'; }; }
+        return [[800, done(0, 12)], [2300, done(1, 50)], [3800, done(2, 100)], [4700, function () { q('.pill').classList.add('show'); }]];
+      } },
     caja: { html: '<i class="tap"></i><i class="fly"></i><div class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.5l2.2 10.5h10.2L20 7.5H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="16.5" cy="19" r="1.4"/></svg><span>Carrito vacío</span><b>$ 0</b></div>',
       dur: 9200, reset: function (q) { q('.cart').className = 'cart'; q('span').textContent = 'Carrito vacío'; q('b').textContent = '$ 0'; },
       steps: function (q) {
@@ -99,7 +134,7 @@
 
   /* ---------- teléfono tocable: arrastrar para girar, toque para abrir la demo real ---------- */
   var B = 'https://josenunezapps.github.io/DLupita/';
-  var LINKS = [null, B + 'zenix-caja/', B + 'zenix-cotiza/', B + 'zenix-club/', B + 'zenix-escaner/', 'https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf', null];
+  var LINKS = [null, null, null, B + 'zenix-caja/', B + 'zenix-cotiza/', B + 'zenix-club/', B + 'zenix-escaner/', 'https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf', null, null];
   var tip = document.getElementById('tip');
   var drag = { on: false, id: -1, x0: 0, y0: 0, t0: 0, ry: 0, rx: 0, by: 0, bx: 0, moved: 0 };
   phone.addEventListener('pointerdown', function (e) {
@@ -127,7 +162,7 @@
   /* ---------- fondo WebGL: polvo en profundidad + anillo de partículas detrás del teléfono ---------- */
   var canvas = document.getElementById('gl'), gl = null, pDust, pRing, lD = {}, lR = {}, bDust, bRing;
   var DUST = F.coarse ? 600 : 1200, RING = F.coarse ? 2600 : 5200, W = 1, H = 1, FOV = 1.7320508, lost = false;
-  var COLS = [[.56, .38, 1], [.3, .85, .6], [.35, .6, 1], [.9, .45, .8], [.13, .8, .95], [.62, .45, 1], [.56, .38, 1]];
+  var COLS = [[.56, .38, 1], [.4, .55, 1], [.72, .45, 1], [.3, .85, .6], [.35, .6, 1], [.9, .45, .8], [.13, .8, .95], [.62, .45, 1], [.3, .75, .95], [.56, .38, 1]];
   function compile(vs, fs) {
     function sh(t, src) { var s = gl.createShader(t); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
     var p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p);

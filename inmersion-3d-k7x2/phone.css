@@ -49,8 +49,8 @@ div.scr:not(.splash) > img { position: absolute; inset: 0; width: 100%; height: 
 .cart.bump { transform: scale(1.035); }
 .cart.pay { background: #6d3df5; color: #fff; } .cart.pay b { color: #fff; }
 
-.num { position: absolute; left: 54%; top: 22.6%; width: 41%; height: 4.6%; display: flex; align-items: center; padding-left: 1.6%; background: #fff; font: 800 1.62em/1 var(--display); letter-spacing: -.02em; color: #14121f; transition: color .3s; }
-.num.up { color: #16a34a; }
+.lv .num { position: absolute; left: 54%; top: 22.6%; width: 41%; height: 4.6%; display: flex; align-items: center; padding-left: 1.6%; background: #fff; font: 800 1.62em/1 var(--display); letter-spacing: -.02em; color: #14121f; transition: color .3s; }
+.lv .num.up { color: #16a34a; }
 .lv .bar { position: absolute; left: 85%; width: 3.2%; bottom: 20.9%; height: 2.3%; background: #6d3df5; border-radius: .2em .2em 0 0; transition: height 1s cubic-bezier(.2,.8,.2,1); }
 .lv .bar.up { height: 7.5%; }
 
@@ -74,3 +74,31 @@ div.scr:not(.splash) > img { position: absolute; inset: 0; width: 100%; height: 
 @keyframes eq { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
 @media (prefers-reduced-motion: reduce) { .eq i, .scan.go::before { animation: none; } }
 @media (max-width: 760px) { .tip { font-size: 10px; } }
+
+/* pantallas propias para Soluciones, Nosotros y Cómo trabajamos */
+.ui { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 1.1em; padding: 15% 7% 8%; color: #f3f1fa;
+  background: radial-gradient(90% 55% at 50% 0%, #2a1c66, #0e0c18 70%); font-size: 1.12em; }
+.ui small { display: block; font-weight: 500; font-size: .82em; color: rgba(243,241,250,.6); margin-top: .25em; }
+.ui-h { display: flex; align-items: center; gap: .7em; font: 800 1.5em/1 var(--display); letter-spacing: -.02em; margin-bottom: .6em; }
+.ui-h img { width: 1.5em; height: 1.5em; }
+.ui .card { display: flex; align-items: center; gap: 1em; padding: 1.1em; border-radius: 1.2em; background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+  transition: background .35s, box-shadow .35s, transform .35s cubic-bezier(.2,.9,.3,1.3); }
+.ui .card img { width: 2.9em; height: 2.9em; padding: .55em; border-radius: .8em; background: #f3f1fa; flex: none; }
+.ui .card.on { background: rgba(139,92,246,.3); box-shadow: inset 0 0 0 1.5px #a78bfa, 0 .6em 2em rgba(139,92,246,.35); transform: scale(1.035); }
+.ui .pill { margin-top: auto; align-self: center; padding: .85em 1.6em; border-radius: 99em; background: #1fa855; color: #fff; font-weight: 700; }
+.ui .pill.ok { background: #16a34a; opacity: 0; transform: translateY(1em) scale(.9); transition: opacity .35s, transform .45s cubic-bezier(.2,.9,.3,1.4); }
+.ui .pill.ok.show { opacity: 1; transform: none; }
+.ui.mid { align-items: center; justify-content: center; text-align: center; gap: 1.5em; padding-top: 8%; }
+.ui.mid > img { width: 32%; }
+.ui .q { font: 800 1.75em/1.12 var(--display); letter-spacing: -.03em; }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .55em; }
+.chips span { padding: .55em 1em; border-radius: 99em; background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); font-size: .9em; transition: background .25s, color .25s, transform .3s cubic-bezier(.2,.9,.3,1.6); }
+.chips span.on { background: rgba(139,92,246,.45); }
+.chips span.pick { background: #22d3ee; color: #06202a; transform: scale(1.14); }
+.stepper { position: relative; display: grid; gap: 2em; padding-left: .2em; margin-top: .4em; }
+.stepper .line { position: absolute; left: 1.35em; top: 1.4em; bottom: 1.4em; width: .16em; background: rgba(255,255,255,.14); }
+.stepper .line b { display: block; width: 100%; height: 0; background: linear-gradient(180deg, #a78bfa, #22d3ee); transition: height .9s cubic-bezier(.3,.8,.3,1); }
+.st { position: relative; display: flex; align-items: center; gap: 1em; opacity: .5; transition: opacity .4s; }
+.st > span { flex: none; width: 2.6em; height: 2.6em; display: grid; place-items: center; border-radius: 50%; background: #1b1830; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.2); font: 800 .9em/1 var(--display); transition: background .4s, color .4s, transform .4s cubic-bezier(.2,.9,.3,1.6); }
+.st.done { opacity: 1; } .st.done > span { background: #22d3ee; color: #06202a; box-shadow: none; transform: scale(1.1); }
+@media (max-width: 760px) { html.fly .ch.end { padding-bottom: calc(86px + env(safe-area-inset-bottom)); } }

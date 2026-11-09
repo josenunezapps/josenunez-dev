@@ -57,7 +57,7 @@
     if (cur !== shown) {
       shown = cur;
       dots.forEach(function (b, i) { b.classList.toggle('on', i === cur); if (i === cur) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
-      cnum.textContent = '0' + (cur + 1);
+      cnum.textContent = (cur < 9 ? '0' : '') + (cur + 1);
       cname.textContent = chapters[cur].dataset.name;
     }
     barEl.style.transform = 'scaleX(' + (p / LAST).toFixed(4) + ')';

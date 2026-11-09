@@ -8,7 +8,8 @@
 <meta name="theme-color" content="#07060d">
 <link rel="icon" href="../assets/favicon.png" type="image/png">
 <link rel="stylesheet" href="core.css?v=3">
-<link rel="stylesheet" href="phone.css?v=4">
+<link rel="stylesheet" href="phone.css?v=6">
+<link rel="stylesheet" href="../assets/chatbot.css?v=20261023g">
 </head>
 <body>
 <canvas id="gl" aria-hidden="true"></canvas>
@@ -19,11 +20,14 @@
     <div class="front">
       <div class="screen" id="screen">
         <div class="scr splash"><img src="../assets/logo-zx.webp" alt=""><b>Zenix<span>AR</span></b></div>
+        <div class="scr"><div class="lv" data-app="sol"></div></div>
+        <div class="scr"><div class="lv" data-app="nos"></div></div>
         <div class="scr"><img src="../assets/preview-caja.webp" alt=""><div class="lv" data-app="caja"></div></div>
         <div class="scr"><img src="../assets/preview-cotiza.webp" alt=""><div class="lv" data-app="cotiza"></div></div>
         <div class="scr"><img src="../assets/preview-club.webp" alt=""><div class="lv" data-app="club"></div></div>
         <div class="scr"><img src="../assets/preview-escaner.webp" alt=""><div class="lv" data-app="escaner"></div></div>
         <div class="scr"><img src="../assets/mili-store-01.webp" alt=""><div class="lv" data-app="mili"></div></div>
+        <div class="scr"><div class="lv" data-app="como"></div></div>
         <div class="scr portal"></div>
         <div class="glare" id="glare"></div>
       </div>
@@ -38,7 +42,7 @@
     <img src="../assets/logo-zx.webp" alt="" width="36" height="36">
     <span>Zenix<b>AR</b></span>
   </a>
-  <span class="count" aria-hidden="true"><b id="cnum">01</b> / 07 · <i id="cname">Inicio</i></span>
+  <span class="count" aria-hidden="true"><b id="cnum">01</b> / 10 · <i id="cname">Inicio</i></span>
   <a class="btn wa sm" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20charlar%20un%20proyecto." target="_blank" rel="noopener">Hablemos</a>
 </header>
 <div class="bar" aria-hidden="true"><i id="bar"></i></div>
@@ -55,7 +59,27 @@
     </div>
   </section>
 
-  <section class="ch" id="c1" data-name="Caja">
+  <section class="ch" id="c1" data-name="Soluciones">
+    <div class="in">
+      <span class="kicker">Soluciones</span>
+      <h2>Qué podemos <em>hacer por vos.</em></h2>
+      <ul class="rows">
+        <li><b>Desarrollo web</b><span>Páginas y aplicaciones web que transmiten confianza y generan consultas.</span></li>
+        <li><b>Apps y sistemas</b><span>Herramientas digitales para resolver tareas concretas y ordenar procesos.</span></li>
+        <li><b>Automatización y extensiones</b><span>Menos tareas repetitivas, más simple el trabajo diario.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ch" id="c2" data-name="Nosotros">
+    <div class="in">
+      <span class="kicker">Nosotros</span>
+      <h2>Creamos software <em>para la vida real.</em></h2>
+      <p class="body"><b>No vendemos tecnología porque sí.</b> Primero entendemos qué necesitás resolver y después elegimos la herramienta adecuada: una web, una app, una automatización o una mejora sobre algo que ya existe.</p>
+    </div>
+  </section>
+
+  <section class="ch" id="c3" data-name="Caja">
     <div class="in">
       <span class="kicker">Zenix Caja</span>
       <h2>Vendé, cobrá y cerrá la caja <em>sin papeles.</em></h2>
@@ -65,7 +89,7 @@
     </div>
   </section>
 
-  <section class="ch" id="c2" data-name="Cotiza">
+  <section class="ch" id="c4" data-name="Cotiza">
     <div class="in">
       <span class="kicker">Zenix Cotiza</span>
       <h2>Presupuestos que te aceptan <em>por WhatsApp.</em></h2>
@@ -75,7 +99,7 @@
     </div>
   </section>
 
-  <section class="ch" id="c3" data-name="Club">
+  <section class="ch" id="c5" data-name="Club">
     <div class="in">
       <span class="kicker">Zenix Club</span>
       <h2>Que tus clientes vuelvan. <em>Y vuelvan.</em></h2>
@@ -85,7 +109,7 @@
     </div>
   </section>
 
-  <section class="ch" id="c4" data-name="Escáner">
+  <section class="ch" id="c6" data-name="Escáner">
     <div class="in">
       <span class="kicker">Zenix Escáner</span>
       <h2>Facturas y remitos en PDF, <em>con la cámara.</em></h2>
@@ -95,7 +119,7 @@
     </div>
   </section>
 
-  <section class="ch" id="c5" data-name="Proyectos">
+  <section class="ch" id="c7" data-name="Proyectos">
     <div class="in">
       <span class="kicker">Proyectos publicados</span>
       <h2>Productos que ya <em>están funcionando.</em></h2>
@@ -106,7 +130,19 @@
     </div>
   </section>
 
-  <section class="ch center end" id="c6" data-name="Hablemos">
+  <section class="ch" id="c8" data-name="Cómo trabajamos">
+    <div class="in">
+      <span class="kicker">Cómo trabajamos</span>
+      <h2>De la idea a una <em>primera versión funcional.</em></h2>
+      <ol class="rows num">
+        <li><b>Te escuchamos</b><span>Nos contás qué querés resolver y definimos juntos el alcance.</span></li>
+        <li><b>Te mostramos una demo</b><span>Una primera versión funcional para probar antes de avanzar.</span></li>
+        <li><b>La usás y la mejoramos</b><span>La ajustamos con lo que aparezca en el uso real.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="ch center end" id="c9" data-name="Hablemos">
     <div class="in">
       <img class="endlogo" src="../assets/logo-zx.webp" alt="" width="84" height="84">
       <h2>Hagamos realidad <em>tu próximo proyecto.</em></h2>
@@ -118,7 +154,9 @@
 </main>
 
 <div id="spacer" aria-hidden="true"></div>
-<script src="core.js?v=3" defer></script>
-<script src="phone.js?v=3" defer></script>
+<script src="core.js?v=5" defer></script>
+<script src="phone.js?v=6" defer></script>
+<script src="../assets/chatbot.js?v=20261023g" defer></script>
+<script src="../assets/chat-expiry.js?v=20261023g" defer></script>
 </body>
 </html>
