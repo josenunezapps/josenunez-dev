@@ -132,9 +132,8 @@
   function setLive(idx) { if (liveNow) liveNow.stop(); liveNow = lives[idx]; if (liveNow) liveNow.start(); }
   document.addEventListener('visibilitychange', function () { if (liveNow) { if (document.hidden) liveNow.stop(); else liveNow.start(); } });
 
-  /* ---------- teléfono tocable: arrastrar para girar, toque para abrir la demo real ---------- */
-  var B = 'https://josenunezapps.github.io/DLupita/';
-  var LINKS = [null, null, null, B + 'zenix-caja/', B + 'zenix-cotiza/', B + 'zenix-club/', B + 'zenix-escaner/', 'https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf', null, null];
+  /* ---------- teléfono tocable: arrastrar para girar ---------- */
+  var TIP = [0, 0, 0, 1, 1, 1, 1, 1, 0, 0];   // capítulos donde se muestra la ayuda
   var tip = document.getElementById('tip');
   var drag = { on: false, id: -1, x0: 0, y0: 0, t0: 0, ry: 0, rx: 0, by: 0, bx: 0, moved: 0 };
   phone.addEventListener('pointerdown', function (e) {
@@ -153,7 +152,6 @@
   function release(e, cancelled) {
     if (!drag.on || e.pointerId !== drag.id) return;
     drag.on = false; phone.classList.remove('drag');
-    if (!cancelled && drag.moved < 8 && performance.now() - drag.t0 < 450 && LINKS[scrNow]) window.open(LINKS[scrNow], '_blank', 'noopener');
   }
   phone.addEventListener('pointerup', function (e) { release(e, false); });
   phone.addEventListener('pointercancel', function (e) { release(e, true); });
@@ -240,7 +238,7 @@
     ry += drag.ry * (1 - dive); rx += drag.rx * (1 - dive);
     if ((dive > 0.25) !== offNow) { offNow = dive > 0.25; phone.classList.toggle('off', offNow); }
     var near = Math.abs(p - Math.round(p)), ti = Math.round(p);
-    tip.style.opacity = (LINKS[ti] ? (1 - F.smooth(0.08, 0.24, near)) * 0.9 : 0).toFixed(3);
+    tip.style.opacity = (TIP[ti] ? (1 - F.smooth(0.08, 0.24, near)) * 0.9 : 0).toFixed(3);
     tip.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (y + ph / 2 + 16).toFixed(1) + 'px,0)';
     phone.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (lift * 90 * MO).toFixed(1) + 'px) rotateZ(' + rz.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(4) + ')';
     glare.style.backgroundPosition = (((ry % 360) + 360) % 360 / 360 * 140 - 20).toFixed(1) + '% 0';
