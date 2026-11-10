@@ -1,7 +1,7 @@
 /* Zenix AR · Opción 1: teléfono 3D con las apps reales, guiado por scroll. */
 (function () {
   'use strict';
-  var F = window.Fly, LAST = F.LAST, MO = F.reduced ? 0.2 : 1;
+  var F = window.Fly, LAST = F.LAST, MO = F.reduced ? 0 : 1;
   var phone = document.getElementById('phone'), aura = document.getElementById('aura'), glare = document.getElementById('glare');
   var screens = Array.prototype.slice.call(document.querySelectorAll('#screen .scr'));
 
@@ -24,9 +24,9 @@
     keys = [{ x: X, y: Y, s: mobile ? 1 : 1.05, rx: 10, ry: -tilt - 10, rz: -5 }];
     for (var i = 1; i < LAST; i++) {
       var tall = mobile && (i === 1 || i === LAST - 1);          // capítulos con mucho texto: en celular el teléfono se achica y sube
-      keys.push({ x: X, y: tall ? Y - ph * 0.11 : Y, s: tall ? 0.8 : 1, rx: 4, ry: 360 * i + (i % 2 ? -tilt : tilt * 0.85), rz: 0 });
+      keys.push({ x: X, y: tall ? Y - ph * 0.11 : Y, s: tall ? 0.8 : 1, rx: 4, ry: (F.reduced ? 0 : 360 * i) + (i % 2 ? -tilt : tilt * 0.85), rz: 0 });
     }
-    keys.push({ x: 0, y: 0, s: Math.max(vw / (pw * 0.936), vh / (pw * 1.91)) * 1.1, rx: 0, ry: 360 * LAST, rz: 0 });
+    keys.push({ x: 0, y: 0, s: Math.max(vw / (pw * 0.936), vh / (pw * 1.91)) * 1.1, rx: 0, ry: F.reduced ? 0 : 360 * LAST, rz: 0 });
     aura.style.width = aura.style.height = (ph * 1.7).toFixed(0) + 'px';
     aura.style.margin = (-ph * 0.85).toFixed(0) + 'px 0 0 ' + (-ph * 0.85).toFixed(0) + 'px';
   }
@@ -225,14 +225,14 @@
 
   var offNow = false;
   F.start(function (p, time, dt) {
-    var s = Math.min(LAST - 1, Math.floor(p)), f = p - s, t = F.smooth(0.24, 0.76, f);
+    var s = Math.min(LAST - 1, Math.floor(p)), f = p - s, t = F.smooth(0.08, 0.92, f);
     var a = keys[s], b = keys[s + 1], dive = s + 1 === LAST ? t : 0;
     var tr = dive ? F.smooth(0, 0.58, t) : t, tz = dive ? F.smooth(0.42, 1, t) : t; // en el cierre: primero gira, después entra a la pantalla
     var sc = Math.exp(lerp(Math.log(a.s), Math.log(b.s), tz));
-    var x = lerp(a.x, b.x, t), y = lerp(a.y, b.y, t) + Math.sin(time * 0.9) * 6 * MO * (1 - dive);
+    var x = lerp(a.x, b.x, t), y = lerp(a.y, b.y, t) + Math.sin(time * 0.65) * 3 * MO * (1 - dive);
     var lift = Math.sin(Math.PI * t) * (1 - dive);               // en cada giro el teléfono se acerca un poco
-    var ry = lerp(a.ry, b.ry, tr) + (Math.sin(time * 0.6) * 4 * MO + F.ptr.x * 22) * (1 - dive);
-    var rx = lerp(a.rx, b.rx, t) + (Math.cos(time * 0.5) * 2 * MO - F.ptr.y * 14) * (1 - dive) + lift * 6;
+    var ry = lerp(a.ry, b.ry, tr) + (Math.sin(time * 0.45) * 1.6 * MO + F.ptr.x * 10 * MO) * (1 - dive);
+    var rx = lerp(a.rx, b.rx, t) + (Math.cos(time * 0.4) * 1 * MO - F.ptr.y * 6 * MO) * (1 - dive) + lift * 3 * MO;
     var rz = lerp(a.rz, b.rz, t);
     if (!drag.on) { var k = Math.exp(-dt * 3.2); drag.ry *= k; drag.rx *= k; }   // al soltar vuelve solo a su lugar
     ry += drag.ry * (1 - dive); rx += drag.rx * (1 - dive);
@@ -240,12 +240,14 @@
     var near = Math.abs(p - Math.round(p)), ti = Math.round(p);
     tip.style.opacity = (TIP[ti] ? (1 - F.smooth(0.08, 0.24, near)) * 0.9 : 0).toFixed(3);
     tip.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (y + ph / 2 + 16).toFixed(1) + 'px,0)';
-    phone.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (lift * 90 * MO).toFixed(1) + 'px) rotateZ(' + rz.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(4) + ')';
+    phone.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + (lift * 45 * MO).toFixed(1) + 'px) rotateZ(' + rz.toFixed(2) + 'deg) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(4) + ')';
     glare.style.backgroundPosition = (((ry % 360) + 360) % 360 / 360 * 140 - 20).toFixed(1) + '% 0';
 
     var idx = tr < 0.5 ? s : s + 1;
     if (idx !== scrNow) { scrNow = idx; screens.forEach(function (el, i) { el.classList.toggle('on', i === idx); }); setLive(idx); }
-    if (HUES[idx] !== hueNow) { hueNow = HUES[idx]; aura.style.filter = 'hue-rotate(' + hueNow + 'deg)'; }
+    var hueDelta = ((HUES[s + 1] - HUES[s] + 540) % 360) - 180;
+    var nextHue = HUES[s] + hueDelta * t;
+    if (Math.abs(nextHue - hueNow) > 0.1) { hueNow = nextHue; aura.style.filter = 'hue-rotate(' + hueNow.toFixed(2) + 'deg)'; }
     aura.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0)';
     aura.style.opacity = (0.75 * (1 - dive)).toFixed(3);
 
