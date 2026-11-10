@@ -14,13 +14,39 @@
 
   var seg = 1, vw = 0, target = 0, prog = 0, resizers = [];
   function layout(force) {
-    if (!force && window.innerWidth === vw) return; // en celular la barra del navegador cambia el alto: no recalcular
+    if (!force && window.innerWidth === vw) return false; // en celular la barra del navegador cambia el alto: no recalcular
     vw = window.innerWidth;
     seg = Math.round(window.innerHeight * 1.25);
     spacer.style.height = (seg * LAST + window.innerHeight) + 'px';
+    return true;
   }
   function readScroll() { target = Math.max(0, Math.min(LAST, window.scrollY / seg)); }
-  function goTo(i) { target = prog = Math.max(0, Math.min(LAST, i)); window.scrollTo({ top: target * seg, behavior: 'instant' }); panels(prog); }
+  var jumpTimer = 0, jumpAnimations = [];
+  function cancelJump() {
+    clearTimeout(jumpTimer); jumpTimer = 0;
+    jumpAnimations.forEach(function (a) { a.cancel(); }); jumpAnimations = [];
+  }
+  function goTo(i) {
+    cancelJump();
+    var destination = Math.max(0, Math.min(LAST, i));
+    var layers = [document.getElementById('stage'), document.querySelector('.rig')];
+    function arrive() {
+      target = prog = destination;
+      window.scrollTo({ top: target * seg, behavior: 'instant' }); panels(prog);
+      jumpTimer = 0;
+      jumpAnimations.forEach(function (a) { a.cancel(); }); jumpAnimations = [];
+      if (!reduced) layers.forEach(function (el) {
+        jumpAnimations.push(el.animate([{opacity:0},{opacity:1}], {duration:320,easing:'cubic-bezier(.22,1,.36,1)'}));
+      });
+    }
+    if (reduced || !layers[0].animate || Math.abs(destination-prog)<0.01) { arrive(); return; }
+    layers.forEach(function (el) {
+      jumpAnimations.push(el.animate([{opacity:1},{opacity:0}], {duration:140,fill:'forwards',easing:'ease-in'}));
+    });
+    jumpTimer = setTimeout(arrive, 145);
+  }
+  window.addEventListener('wheel', cancelJump, {passive:true});
+  window.addEventListener('touchstart', cancelJump, {passive:true});
   function smooth(a, b, x) { x = Math.max(0, Math.min(1, (x - a) / (b - a))); return x * x * (3 - 2 * x); }
 
   chapters.forEach(function (ch, i) {
@@ -35,7 +61,7 @@
 
   root.classList.add('fly');
   layout(true); readScroll(); prog = target;
-  function onResize(force) { layout(force); readScroll(); resizers.forEach(function (f) { f(); }); }
+  function onResize(force) { var position = target; if (!layout(force)) return; cancelJump(); window.scrollTo({top:position * seg,behavior:'instant'}); readScroll(); resizers.forEach(function (f) { f(); }); }
   window.addEventListener('scroll', readScroll, { passive: true });
   window.addEventListener('resize', function () { onResize(false); });
   window.addEventListener('orientationchange', function () { setTimeout(function () { onResize(true); }, 250); });
@@ -80,7 +106,8 @@
         clock += dt;
         prog += (target - prog) * (1 - Math.exp(-dt * (reduced ? 30 : 7)));
         if (Math.abs(target - prog) < 0.0004) prog = target;
-        ptr.x += (ptr.tx - ptr.x) * 0.06; ptr.y += (ptr.ty - ptr.y) * 0.06;
+        var pointerEase = 1 - Math.exp(-dt * 4);
+        ptr.x += (ptr.tx - ptr.x) * pointerEase; ptr.y += (ptr.ty - ptr.y) * pointerEase;
         panels(prog);
         onFrame(prog, clock, dt);
       }
