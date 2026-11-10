@@ -46,3 +46,17 @@
 }
 @media(max-height:700px) and (max-width:760px){.h1s{font-size:30px}.ch .lead{font-size:14px}.hint.left{display:none}.kicker{margin-bottom:10px}.ticks{font-size:12px}.ch p.one{font-size:14px}.hero-actions{margin-top:12px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Acentos naranja · prueba visual aislada. */
+:root{--orange:#ff9a45;--orange-light:#ffc28a}
+.btn.primary,.product-actions .open{background:linear-gradient(125deg,#ffae60,#f0782b);border-color:rgba(255,205,159,.55);color:#281205;box-shadow:0 8px 32px -12px rgba(255,132,50,.75)}
+.eyebrow,.kicker{color:var(--orange-light)}
+h1 em,h2 em{background-image:linear-gradient(105deg,#c4b5fd 0%,#f4b1b3 45%,#ff9a45 100%)}
+.bar>i{background:linear-gradient(90deg,#8b5cf6,#ff9a45)}
+.dots button.on::before{background:var(--orange);box-shadow:0 0 14px rgba(255,154,69,.65)}
+.ticks li::before{border-color:var(--orange)}
+.quick-nav a:hover,.quick-nav a:focus-visible{background:rgba(255,154,69,.14);color:#ffd2ac}
+.view-screen:hover,.btn.secondary:hover{background:rgba(255,154,69,.09);border-color:rgba(255,154,69,.4)}
+.hint i{background:linear-gradient(180deg,var(--orange),transparent)}
+.switch a[aria-current]{background:rgba(255,154,69,.17);color:#ffd2ac}
+#c7 .project-card{border-color:rgba(255,154,69,.22);background:linear-gradient(120deg,rgba(255,154,69,.07),rgba(139,92,246,.06))}
