@@ -46,3 +46,8 @@
 /inmersion-3d-k7x2/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-cache
+
+# TurnoFácil (demo de turnos): ruta no enlazada, sin indexar y siempre la última versión.
+/turnofacil/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0, must-revalidate
