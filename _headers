@@ -51,3 +51,8 @@
 /turnofacil/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store, max-age=0, must-revalidate
+
+# TurnoFácil, demo personalizada de Mery Sosa: ruta no enlazada, sin indexar y siempre la última versión.
+/turnofacil-mery-4k7q/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0, must-revalidate
