@@ -4,10 +4,6 @@
   const desktop = () => matchMedia('(min-width: 961px)').matches;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const mobile = matchMedia('(max-width: 960px), (pointer: coarse)').matches;
-  // las apps viven en GitHub Pages: desde ahí (o en local) se usan rutas relativas; en zenix.com.ar, la URL completa
-  const APPS = /github\.io$|^localhost$|^127\.|^$/.test(location.hostname) ? '../' : 'https://josenunezapps.github.io/DLupita/';
-  $$('.step').forEach(st => { st.querySelector('.open').href = APPS + st.dataset.open; });
-
   // título: cada palabra entra con un pequeño retraso
   const h1 = $('.split');
   h1.innerHTML = h1.textContent.split(' ').map((w, i) => `<span class="w"><span style="--d:${i * 70 + 120}ms">${w}</span></span>`).join(' ');
@@ -63,36 +59,20 @@
     requestAnimationFrame(frame);
   })();
 
-  // ---------- teléfono con apps en vivo ----------
+  // ---------- muestras visuales estáticas ----------
+  // Solo muestran previews: no cargan iframes, no abren demos y no navegan a otra página.
   const W = 390, H = 844;
-  function makeFrame(src, title) {
-    const f = document.createElement('iframe');
-    f.src = src; f.title = title; f.loading = 'lazy'; f.width = W; f.height = H;
-    f.setAttribute('allow', 'camera; clipboard-write');
-    return f;
-  }
   function fitPhone(screen) {
     if (!screen.clientWidth) return;
     const s = screen.clientWidth / W;
-    screen.style.setProperty('--s', s); screen.style.height = H * s + 'px';
+    screen.style.setProperty('--s', s);
+    screen.style.height = H * s + 'px';
   }
-  // cada app tiene su propio teléfono. En PC se carga sola al acercarse; en celular, al tocar (ahorra datos).
-  const load = (step, sc) => {
-    if (sc.querySelector('iframe')) return;
-    const f = makeFrame(APPS + step.dataset.src, step.querySelector('.num').textContent); f.loading = 'eager';
-    sc.appendChild(f); requestAnimationFrame(() => f.classList.add('show'));
-    sc.querySelector('.tap')?.remove();
-  };
-  const lazy = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting && desktop()) { const step = e.target.closest('.step'); load(step, e.target); lazy.unobserve(e.target); }
-  }), { rootMargin: '300px 0px' });
   $$('.step').forEach(step => {
-    const holder = step.querySelector('.m-phone'), name = step.querySelector('.num').textContent;
-    holder.innerHTML = `<div class="phone small"><div class="island"></div><div class="screen m-screen"><div class="status"><span>9:41</span><i>●●● ▮</i></div><img class="preview" src="assets/preview-${step.dataset.app}.webp" alt="Vista previa de ${name}" width="585" height="1194" loading="lazy" decoding="async"><button class="tap"><span>▶</span>Tocá para probar ${name}</button></div></div><div class="phone-label">${name} · en vivo</div>`;
-    const sc = holder.querySelector('.m-screen');
-    fitPhone(sc);
-    sc.querySelector('.tap').onclick = () => load(step, sc);
-    lazy.observe(sc);
+    const holder = step.querySelector('.m-phone');
+    const name = step.querySelector('.num').textContent;
+    holder.innerHTML = `<div class="phone small"><div class="island"></div><div class="screen m-screen"><div class="status"><span>9:41</span><i>●●● ▮</i></div><img class="preview" src="assets/preview-${step.dataset.app}.webp" alt="Muestra de ${name}" width="585" height="1194" loading="lazy" decoding="async"></div></div><div class="phone-label">${name} · muestra</div>`;
+    fitPhone(holder.querySelector('.m-screen'));
   });
   addEventListener('resize', () => $$('.m-screen').forEach(fitPhone));
 
