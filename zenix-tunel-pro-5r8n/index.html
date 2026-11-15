@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zenix AR · Software hecho para resolver problemas reales (demo privada)</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="description" content="Webs, apps y automatizaciones pensadas para hacer más simple tu negocio.">
+<meta name="theme-color" content="#05040a">
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="preload" href="../assets/logo-zx.webp" as="image">
+<link rel="stylesheet" href="app.css?v=1">
+</head>
+<body class="is-loading">
+
+<!-- Preloader -->
+<div class="loader" id="loader" aria-hidden="true">
+  <img class="loader-logo" src="../assets/logo-zx.webp" alt="">
+  <div class="loader-num"><span id="loaderNum">000</span></div>
+  <div class="loader-bar"><i id="loaderBar"></i></div>
+  <p class="loader-tag">Entrando a Zenix AR</p>
+</div>
+
+<!-- Fondo 3D -->
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="bg-fallback" aria-hidden="true"></div>
+<div class="bg-shade" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Navegación -->
+<header class="nav" id="nav">
+  <a class="brand" href="/" aria-label="Zenix AR, ir al sitio">
+    <img src="../assets/logo-zx.webp" alt="" width="30" height="30">
+    <span>Zenix<b>AR</b></span>
+  </a>
+  <nav class="nav-links" aria-label="Secciones">
+    <a href="#soluciones">Soluciones</a>
+    <a href="#comercios">Apps</a>
+    <a href="#productos">Productos</a>
+    <a href="#proceso">Proceso</a>
+  </nav>
+  <a class="nav-cta magnetic" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20contarles%20un%20proyecto." target="_blank" rel="noopener" data-cursor="Hablemos"><span>Hablemos</span></a>
+</header>
+
+<aside class="rail" aria-hidden="true">
+  <span class="rail-num" id="railNum">00</span>
+  <span class="rail-track"><i id="railBar"></i></span>
+  <span class="rail-label">Profundidad</span>
+</aside>
+
+<main id="top">
+
+  <!-- 1 · Hero -->
+  <section class="hero" data-scene="0">
+    <p class="eyebrow scramble" data-text="Zenix AR · Soluciones digitales">Zenix AR · Soluciones digitales</p>
+    <h1 class="split">Software hecho para resolver <em>problemas reales.</em></h1>
+    <p class="lead reveal">Webs, apps y automatizaciones pensadas para hacer más simple tu negocio.</p>
+    <div class="ctas reveal">
+      <a class="btn btn-solid magnetic" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20contarles%20un%20proyecto." target="_blank" rel="noopener" data-cursor="Hablemos"><span>Contanos tu proyecto</span></a>
+      <a class="btn btn-ghost magnetic" href="#soluciones" data-cursor="Entrar"><span>Entrar al túnel</span></a>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><i></i><span>Scrolleá</span></div>
+  </section>
+
+  <!-- 2 · Manifiesto -->
+  <section class="manifesto" data-scene="1">
+    <p class="kicker scramble" data-text="Nosotros">Nosotros</p>
+    <p class="mf-text" id="manifesto">No vendemos tecnología porque sí. Primero entendemos qué necesitás resolver y después elegimos la herramienta adecuada: una web, una app, una automatización o una mejora sobre algo que ya existe.</p>
+  </section>
+
+  <!-- 3 · Soluciones -->
+  <section class="sol" id="soluciones" data-scene="2">
+    <header class="sec-h">
+      <p class="kicker scramble" data-text="01 · Soluciones">01 · Soluciones</p>
+      <h2 class="split">Qué podemos <em>hacer por vos.</em></h2>
+    </header>
+    <div class="sol-grid">
+      <article class="glass tilt reveal">
+        <span class="g-idx">/01</span>
+        <img class="g-ico" src="../assets/icon-web.svg" alt="" width="40" height="40">
+        <h3>Desarrollo web</h3>
+        <p>Páginas y aplicaciones web pensadas para transmitir confianza, mostrar mejor lo que hacés y generar consultas.</p>
+        <a class="g-link" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Necesito%20una%20p%C3%A1gina%20web." target="_blank" rel="noopener">Hablemos <span>→</span></a>
+      </article>
+      <article class="glass tilt reveal">
+        <span class="g-idx">/02</span>
+        <img class="g-ico" src="../assets/icon-android.svg" alt="" width="40" height="40">
+        <h3>Apps y sistemas</h3>
+        <p>Aplicaciones y herramientas digitales para resolver tareas concretas, ordenar procesos y crear nuevos productos.</p>
+        <a class="g-link" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20una%20app%20o%20sistema." target="_blank" rel="noopener">Hablemos <span>→</span></a>
+      </article>
+      <article class="glass tilt reveal">
+        <span class="g-idx">/03</span>
+        <img class="g-ico" src="../assets/icon-extension.svg" alt="" width="40" height="40">
+        <h3>Automatización y extensiones</h3>
+        <p>Automatizaciones, integraciones y extensiones que reducen tareas repetitivas y hacen más simple el trabajo diario.</p>
+        <a class="g-link" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20automatizar%20una%20tarea." target="_blank" rel="noopener">Hablemos <span>→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 4 · Apps para comercios (teléfono fijo + pasos) -->
+  <section class="shops" id="comercios" data-scene="3">
+    <header class="sec-h">
+      <p class="kicker scramble" data-text="02 · Apps para comercios">02 · Apps para comercios</p>
+      <h2 class="split">Cuatro muestras reales. <em>Así pueden verse.</em></h2>
+    </header>
+    <div class="shops-wrap">
+      <div class="phone-stick">
+        <div class="phone" id="phone">
+          <div class="ph-screen">
+            <img class="on" src="../assets/preview-caja.webp" alt="Pantalla de Zenix Caja" width="585" height="1194">
+            <img src="../assets/preview-cotiza.webp" alt="Pantalla de Zenix Cotiza" width="585" height="1194" loading="lazy">
+            <img src="../assets/preview-club.webp" alt="Pantalla de Zenix Club" width="585" height="1194" loading="lazy">
+            <img src="../assets/preview-escaner.webp" alt="Pantalla de Zenix Escáner" width="585" height="1194" loading="lazy">
+          </div>
+          <i class="ph-notch"></i>
+          <i class="ph-glare"></i>
+        </div>
+        <div class="ph-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="steps">
+        <article class="step" data-i="0">
+          <span class="st-tag">Zenix Caja</span>
+          <h3>Vendé, cobrá y cerrá la caja sin papeles.</h3>
+          <p>Punto de venta para almacenes, kioscos y despensas.</p>
+          <ul><li>Efectivo, débito, crédito, transferencia o QR</li><li>Control de stock con lector de códigos</li><li>Arqueo de caja y ventas del día</li></ul>
+        </article>
+        <article class="step" data-i="1">
+          <span class="st-tag">Zenix Cotiza</span>
+          <h3>Presupuestos profesionales que te aceptan por WhatsApp.</h3>
+          <p>Armalo en un minuto, mandalo con un link y tu cliente lo acepta desde el celular.</p>
+          <ul><li>IVA discriminado o precio final</li><li>PDF listo para firmar</li><li>Seguimiento: enviado, aceptado, vencido</li></ul>
+        </article>
+        <article class="step" data-i="2">
+          <span class="st-tag">Zenix Club</span>
+          <h3>Que tus clientes vuelvan. Y vuelvan.</h3>
+          <p>Tarjeta de sellos digital que le llega al cliente por WhatsApp. Sin instalar nada.</p>
+          <ul><li>Un sello en un toque</li><li>Avisa qué clientes dejaron de venir</li><li>Cumpleaños y días de sellos dobles</li></ul>
+        </article>
+        <article class="step" data-i="3">
+          <span class="st-tag">Zenix Escáner</span>
+          <h3>Facturas y remitos en PDF, con la cámara del celular.</h3>
+          <p>Detecta la hoja, la endereza, le saca las sombras y arma el PDF.</p>
+          <ul><li>Disparo automático</li><li>Varias páginas en un solo PDF</li><li>Las fotos no salen de tu teléfono</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Productos propios -->
+  <section class="products" id="productos" data-scene="4">
+    <header class="sec-h">
+      <p class="kicker scramble" data-text="03 · Proyectos">03 · Proyectos</p>
+      <h2 class="split">Proyectos que ya <em>están funcionando.</em></h2>
+    </header>
+    <div class="prod-grid">
+      <article class="glass prod reveal">
+        <div class="prod-h">
+          <img src="../assets/milibropdf-icon.webp" alt="Ícono de MiLibroPDF" width="64" height="64" loading="lazy">
+          <div><h3>MiLibroPDF</h3><p class="meta">App publicada · Android · Gratis</p></div>
+        </div>
+        <p>Lector de libros en PDF y EPUB que también te los lee en voz alta.</p>
+        <div class="marquee" aria-label="Capturas de MiLibroPDF">
+          <div class="mq-track">
+            <img src="../assets/mili-store-01.webp" alt="Captura 1 de MiLibroPDF" loading="lazy"><img src="../assets/mili-store-02.webp" alt="Captura 2 de MiLibroPDF" loading="lazy"><img src="../assets/mili-store-03.webp" alt="Captura 3 de MiLibroPDF" loading="lazy"><img src="../assets/mili-store-04.webp" alt="Captura 4 de MiLibroPDF" loading="lazy"><img src="../assets/mili-store-05.webp" alt="Captura 5 de MiLibroPDF" loading="lazy"><img src="../assets/mili-store-06.webp" alt="Captura 6 de MiLibroPDF" loading="lazy">
+            <img src="../assets/mili-store-01.webp" alt="" loading="lazy"><img src="../assets/mili-store-02.webp" alt="" loading="lazy"><img src="../assets/mili-store-03.webp" alt="" loading="lazy"><img src="../assets/mili-store-04.webp" alt="" loading="lazy"><img src="../assets/mili-store-05.webp" alt="" loading="lazy"><img src="../assets/mili-store-06.webp" alt="" loading="lazy">
+          </div>
+        </div>
+        <a class="badge magnetic" href="https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf" target="_blank" rel="noopener" data-cursor="Abrir"><span><small>Disponible en</small>Google Play</span></a>
+      </article>
+      <article class="glass prod reveal">
+        <div class="prod-h">
+          <img src="../assets/distraguard-icon.webp" alt="Ícono de DistraGuard" width="64" height="64" loading="lazy">
+          <div><h3>DistraGuard</h3><p class="meta">Extensión disponible · Chrome</p></div>
+        </div>
+        <p>Extensión de Chrome para bloquear distracciones y mantener el foco.</p>
+        <div class="prod-shot"><img src="../assets/img/section-distraguard.webp" alt="Vista de DistraGuard" loading="lazy" width="1180" height="510"></div>
+        <a class="badge magnetic" href="https://chromewebstore.google.com/detail/distraguard/adgjbpgkeaeeflnolcejdofnmalghkcl" target="_blank" rel="noopener" data-cursor="Abrir"><span><small>Disponible en</small>Chrome Web Store</span></a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 6 · Proceso -->
+  <section class="process" id="proceso" data-scene="5">
+    <header class="sec-h">
+      <p class="kicker scramble" data-text="04 · Cómo trabajamos">04 · Cómo trabajamos</p>
+      <h2 class="split">De la idea a una <em>primera versión funcional.</em></h2>
+    </header>
+    <ol class="proc" id="proc">
+      <i class="proc-line"><b id="procLine"></b></i>
+      <li class="reveal"><span class="pn">01</span><h3>Te escuchamos</h3><p>Nos contás qué querés resolver, con tus palabras. Definimos juntos el alcance y la mejor herramienta.</p></li>
+      <li class="reveal"><span class="pn">02</span><h3>Te mostramos una demo</h3><p>Armamos una primera versión funcional para que la veas y la pruebes antes de avanzar.</p></li>
+      <li class="reveal"><span class="pn">03</span><h3>La usás y la mejoramos</h3><p>La ponés en marcha y la ajustamos con lo que aparezca en el uso real.</p></li>
+    </ol>
+  </section>
+
+  <!-- 7 · Salida del túnel -->
+  <section class="exit" data-scene="6">
+    <div class="exit-logo" id="exitLogo"><img src="../assets/logo-zx.webp" alt="Logo de Zenix AR" width="512" height="512"></div>
+    <h2 class="split">Hagamos realidad tu <em>próximo proyecto.</em></h2>
+    <p class="lead reveal">Escribinos y te respondemos por WhatsApp.</p>
+    <div class="ctas reveal">
+      <a class="btn btn-solid btn-xl magnetic" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20contarles%20un%20proyecto." target="_blank" rel="noopener" data-cursor="Hablemos"><span>Hablemos por WhatsApp</span></a>
+    </div>
+    <footer class="foot">
+      <span>© Zenix AR</span>
+      <a href="https://www.instagram.com/zenix.com.ar/" target="_blank" rel="noopener">Instagram</a>
+      <a href="/">Sitio</a>
+      <a href="#top" id="toTop">Volver arriba ↑</a>
+    </footer>
+  </section>
+</main>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span id="cursorLabel"></span></div>
+
+<script src="app.js?v=1"></script>
+</body>
+</html>
