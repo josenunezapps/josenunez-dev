@@ -1,6 +1,6 @@
 // Proxy same-origin hacia el servidor de TurnoFácil (Supabase Edge Function).
 // Mantiene las cookies de sesión en el dominio propio.
-const UPSTREAM = "https://rmmmrmoccviynghakpbe.supabase.co/functions/v1/tf/api/";
+const UPSTREAM = "https://rmmmrmoccviynghakpbe.supabase.co/functions/v1/tf/";
 
 export async function onRequest({ request, params }) {
   const url = new URL(request.url);
