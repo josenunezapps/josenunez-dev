@@ -17,15 +17,6 @@
   ! Permissions-Policy
   Permissions-Policy: camera=(self "https://josenunezapps.github.io"), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
 
-/servicios.html
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
-
-/sobre-mi.html
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
-
-/contacto.html
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
-
 /api/*
   Cache-Control: no-store
   X-Content-Type-Options: nosniff
@@ -35,11 +26,6 @@
 /zenix-next/*
   ! Permissions-Policy
   Permissions-Policy: camera=(self "https://josenunezapps.github.io"), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-  X-Robots-Tag: noindex, nofollow, noarchive
-  Cache-Control: no-cache
-
-# Demo privada de inmersión 3D: no indexar y traer siempre la última versión
-/inmersion-3d-k7x2/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-cache
 
