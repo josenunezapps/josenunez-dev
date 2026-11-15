@@ -44,6 +44,10 @@
   Cache-Control: no-cache
 
 # TurnoFácil (demo de turnos): ruta no enlazada, sin indexar y siempre la última versión.
+/home-futurista-x9p2/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-cache
+
 /zenix-tunel-pro-5r8n/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-cache
