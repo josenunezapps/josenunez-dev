@@ -44,6 +44,10 @@
   Cache-Control: no-cache
 
 # TurnoFácil (demo de turnos): ruta no enlazada, sin indexar y siempre la última versión.
+/tunel-zx-9h3w/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-cache
+
 /turnofacil/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store, max-age=0, must-revalidate

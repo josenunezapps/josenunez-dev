@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zenix AR · Túnel ZX (demo privada)</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="theme-color" content="#06050b">
+<link rel="icon" href="../assets/favicon.png" type="image/png">
+<link rel="stylesheet" href="tunel.css?v=1">
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-num"><span id="loaderNum">0</span></div>
+  <div class="loader-bar"><i id="loaderBar"></i></div>
+  <div class="loader-tag">Zenix AR</div>
+</div>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="fallback" id="fallback" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="/" aria-label="Zenix AR, volver al sitio">
+    <img src="../assets/logo-zx.webp" alt="" width="34" height="34">
+    <span>Zenix<b>AR</b></span>
+  </a>
+  <a class="nav-cta" href="https://wa.me/5492901471353" target="_blank" rel="noopener" data-cursor="Hablemos">WhatsApp</a>
+</header>
+
+<div class="progress" aria-hidden="true"><i id="progress"></i></div>
+
+<main class="stage">
+  <section class="ch" data-from="0" data-to="0.15">
+    <p class="kicker">Desarrollo de software</p>
+    <h1 class="split">Construimos el software que tu negocio <em>necesita</em>.</h1>
+    <p class="lead">Webs, apps, automatizaciones y productos propios. Bajá para entrar.</p>
+    <button class="btn" id="enter" data-cursor="Entrar">Entrar</button>
+  </section>
+
+  <section class="ch" data-from="0.2" data-to="0.38">
+    <p class="kicker">01 · Webs y apps</p>
+    <h2 class="split">Páginas que <em>venden</em>, apps que se usan.</h2>
+    <div class="cards">
+      <article class="card"><h3>Páginas web</h3><p>Rápidas, claras y pensadas para que te contacten.</p></article>
+      <article class="card"><h3>Apps móviles y web</h3><p>Herramientas a medida para el día a día de tu negocio.</p></article>
+    </div>
+  </section>
+
+  <section class="ch" data-from="0.43" data-to="0.61">
+    <p class="kicker">02 · Automatizaciones</p>
+    <h2 class="split">Menos tareas a mano, <em>más tiempo</em> para vos.</h2>
+    <div class="cards">
+      <article class="card"><h3>Automatizaciones</h3><p>Procesos repetitivos que pasan a hacerse solos.</p></article>
+      <article class="card"><h3>Extensiones</h3><p>Funciones nuevas directo en el navegador.</p></article>
+    </div>
+  </section>
+
+  <section class="ch" data-from="0.66" data-to="0.82">
+    <p class="kicker">03 · Productos propios</p>
+    <h2 class="split">También creamos lo <em>nuestro</em>.</h2>
+    <div class="cards">
+      <article class="card"><h3>MiLibroPDF</h3><p>Lector de PDF y EPUB con voz, en Google Play.</p></article>
+      <article class="card"><h3>DistraGuard</h3><p>Extensión para enfocarte, en la Chrome Web Store.</p></article>
+    </div>
+  </section>
+
+  <section class="ch final" data-from="0.9" data-to="1.01">
+    <img class="final-logo" src="../assets/logo-zx.webp" alt="Logo Zenix AR">
+    <h2 class="split">Hagamos realidad tu <em>proyecto</em>.</h2>
+    <a class="btn btn-solid" href="https://wa.me/5492901471353" target="_blank" rel="noopener" data-cursor="Hablemos">Hablemos por WhatsApp</a>
+  </section>
+</main>
+
+<div class="scroll-space" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span id="cursorLabel"></span></div>
+
+<script src="tunel.js?v=1"></script>
+</body>
+</html>
