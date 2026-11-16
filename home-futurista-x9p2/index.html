@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="preload" href="../assets/logo-zx.webp" as="image">
-<link rel="stylesheet" href="app.css?v=1">
+<link rel="stylesheet" href="app.css?v=2">
 <link rel="stylesheet" href="../assets/chatbot.css?v=20261023g">
 </head>
 <body class="is-loading">
@@ -24,9 +24,6 @@
   <div class="ld-bar"><i id="ldBar"></i></div>
 </div>
 
-<!-- ============ Fondo ============ -->
-<canvas id="space" aria-hidden="true"></canvas>
-<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i></div>
 <div class="scan" aria-hidden="true"></div>
 
 <!-- ============ Navegación ============ -->
@@ -62,54 +59,17 @@
       <li><button data-go="3"><span>Proyectos</span></button></li>
     </ol>
 
-    <!-- Escena 3D -->
-    <div class="stage" id="stage" aria-hidden="true">
-      <div class="rig" id="rig">
-
-        <!-- Hologramas de apps -->
-        <div class="holo" data-h="0"><div class="holo-in"><header><b>Zenix Caja</b><span>POS</span></header><img src="../assets/preview-caja.webp" alt=""><footer>Ventas · Stock · Arqueo</footer></div></div>
-        <div class="holo" data-h="1"><div class="holo-in"><header><b>Zenix Cotiza</b><span>PDF</span></header><img src="../assets/preview-cotiza.webp" alt=""><footer>Presupuestos · IVA · WhatsApp</footer></div></div>
-        <div class="holo" data-h="2"><div class="holo-in"><header><b>Zenix Club</b><span>CRM</span></header><img src="../assets/preview-club.webp" alt=""><footer>Sellos · Clientes · Avisos</footer></div></div>
-        <div class="holo" data-h="3"><div class="holo-in"><header><b>Zenix Escáner</b><span>CAM</span></header><img src="../assets/preview-escaner.webp" alt=""><footer>Cámara · PDF · Privado</footer></div></div>
-        <div class="holo holo-wide" data-h="4"><div class="holo-in"><header><b>DistraGuard</b><span>Chrome</span></header><img src="../assets/img/section-distraguard.webp" alt=""><footer>Extensión publicada en Chrome Web Store</footer></div></div>
-
-        <!-- Celular por capas -->
-        <div class="phone" id="phone">
-          <div class="ly ly-back" data-l="0">
-            <img class="back-logo" src="../assets/logo-zx.webp" alt="">
-            <i class="cam"><b></b><b></b></i>
-            <span class="ly-tag"><em>05</em>Zenix AR<small>Producto terminado</small></span>
-          </div>
-          <div class="ly ly-board" data-l="1">
-            <i class="chip c1"><b>ZX</b></i><i class="chip c2"></i><i class="chip c3"></i><i class="chip c4"></i>
-            <svg class="traces" viewBox="0 0 280 590" preserveAspectRatio="none"><path d="M40 120 H120 V200 H200 M60 300 H150 V260 H240 M140 360 V460 H70 M200 420 V520 H120 M90 80 V40 H210 M230 140 V330"/></svg>
-            <span class="ly-tag"><em>04</em>Automatización<small>Procesos que corren solos</small></span>
-          </div>
-          <div class="ly ly-code" data-l="2">
-            <pre id="layerCode"></pre>
-            <span class="ly-tag"><em>03</em>Código a medida<small>Apps y sistemas</small></span>
-          </div>
-          <div class="ly ly-screen" data-l="3"><div class="scr-wrap">
-            <div class="scr scr-boot on" data-s="boot"><pre id="bootCode"></pre></div>
-            <div class="scr scr-splash" data-s="splash"><img src="../assets/logo-zx.webp" alt=""><b>ZENIX<span>AR</span></b><small>Soluciones digitales</small></div>
-            <div class="scr" data-s="caja"><img src="../assets/preview-caja.webp" alt=""></div>
-            <div class="scr" data-s="cotiza"><img src="../assets/preview-cotiza.webp" alt=""></div>
-            <div class="scr" data-s="club"><img src="../assets/preview-club.webp" alt=""></div>
-            <div class="scr" data-s="escaner"><img src="../assets/preview-escaner.webp" alt=""></div>
-            <div class="scr" data-s="mili1"><img src="../assets/mili-store-01.webp" alt="" loading="lazy"></div>
-            <div class="scr" data-s="mili2"><img src="../assets/mili-store-02.webp" alt="" loading="lazy"></div>
-            <div class="scr" data-s="mili3"><img src="../assets/mili-store-03.webp" alt="" loading="lazy"></div>
-            </div>
-            <span class="ly-tag"><em>02</em>Web y apps<small>Lo que ves y usás</small></span>
-          </div>
-          <div class="ly ly-glass" data-l="4">
-            <i class="notch"></i>
-            <span class="ly-tag"><em>01</em>Diseño<small>Interfaces claras</small></span>
-          </div>
-        </div>
-        <div class="phone-shadow" id="phoneShadow"></div>
-      </div>
+    <!-- Escena 3D (WebGL) -->
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <img class="fallback-phone" src="../assets/preview-caja.webp" alt="" aria-hidden="true">
+    <div class="tags" aria-hidden="true">
+      <span class="tg"><em>05</em>Zenix AR<small>Producto terminado</small></span>
+      <span class="tg"><em>04</em>Automatización<small>Procesos que corren solos</small></span>
+      <span class="tg"><em>03</em>Código a medida<small>Apps y sistemas</small></span>
+      <span class="tg"><em>02</em>Web y apps<small>Lo que ves y usás</small></span>
+      <span class="tg"><em>01</em>Diseño<small>Interfaces claras</small></span>
     </div>
+    <div class="flash" id="flash" aria-hidden="true"></div>
 
     <!-- Textos por capítulo -->
     <div class="copy">
@@ -166,7 +126,7 @@
         <a class="ask" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20ver%20la%20demo%20de%20Zenix%20Esc%C3%A1ner." target="_blank" rel="noopener">Pedí la demo →</a>
       </div>
 
-      <div class="cp" data-a="0.79" data-b="1.01">
+      <div class="cp" data-a="0.79" data-b="0.9">
         <p class="kicker"><i></i>03 · Proyectos</p>
         <h2>Proyectos que ya <span class="grad">están funcionando.</span></h2>
         <div class="prods">
@@ -180,8 +140,11 @@
           </a>
         </div>
       </div>
+    <div class="cp cp-dive" data-a="0.965" data-b="1.01">
+      <p class="kicker"><i></i>04 · Tu turno<i></i></p>
+      <h2>Tu próximo proyecto <span class="grad">empieza acá.</span></h2>
     </div>
-
+    </div>
     <div class="hint" id="hint" aria-hidden="true"><span>Scrolleá</span><i></i></div>
   </div>
 </section>
@@ -220,7 +183,7 @@
 </section>
 </main>
 
-<script src="app.js?v=1"></script>
+<script type="module" src="app3d.js?v=1"></script>
 <script src="../assets/chatbot.js?v=20261023g" defer></script>
 <script src="../assets/chat-expiry.js?v=20261023g" defer></script>
 </body>
