@@ -69,6 +69,52 @@
 @media(max-width:1160px){#products.products{grid-template-columns:repeat(2,minmax(0,1fr))}#products .product h3{font-size:23px}#products .product .amount{font-size:26px}#products .product .desc-toggle{font-size:13px}}
 @media(max-width:710px){#products.products{grid-template-columns:1fr;gap:17px;max-width:480px;margin-inline:auto}#products .product{padding:12px;border-radius:22px}#products .product .pimage{aspect-ratio:1.5}#products .product .details{padding:15px 12px 8px}#products .product h3{font-size:clamp(22px,6vw,30px)}#products .product .amount{font-size:clamp(24px,6.5vw,33px)}#products .product p.product-subtitle{font-size:14px;min-height:0}#products .product .desc-toggle{font-size:13px;padding:11px;min-height:60px}#products .product .add-to-selection{min-height:68px;font-size:24px}#products .product .pricenote{font-size:12px}#products .product .description-panel>p{font-size:13px}#products .product .spec strong,#products .product .spec>span{font-size:11px}}
 @media(max-width:370px){#products .product .amount{font-size:21px}#products .product .p-price-accordion{gap:5px}#products .product .desc-toggle{font-size:11px;padding:7px}#products .product .desc-toggle svg{width:15px;height:15px}#products .product .spec strong,#products .product .spec>span{font-size:9px}}
+
+/* COMPARACIÓN CON REFERENCIAS: CERRADA precio a la derecha, botón descripción ancho completo;
+   ABIERTA precio a la izquierda, descripción a la derecha y características desplegadas */
+#products.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
+#products .product{padding:12px;background:#fff;border:1px solid #edf0f2;border-radius:24px;box-shadow:0 12px 32px #1b263113;min-width:0;overflow:hidden}
+#products .product .pimage{aspect-ratio:1.52;height:auto;min-height:0;border-radius:18px;overflow:hidden}
+#products .product .pimage img{object-fit:cover;width:100%;height:100%;filter:none}
+#products .product .promoTag{top:13px;left:13px;padding:10px 14px;border-radius:10px;background:linear-gradient(150deg,#f50819,#b70010);font:900 12px 'Manrope',sans-serif}
+#products .product .details{padding:15px 10px 8px;display:grid;grid-template-columns:minmax(0,1fr) minmax(105px,36%);grid-template-areas:"sku price" "title price" "sub price" "toggle toggle" "panel panel" "note note" "add add";column-gap:11px;align-items:center;min-width:0}
+#products .product .sku{grid-area:sku;font:600 12px 'Manrope',sans-serif;color:#888e94;min-width:0;align-self:end}
+#products .product h3{grid-area:title;min-height:0;min-width:0;font:900 clamp(18px,1.9vw,25px)/1.12 'Manrope',sans-serif;letter-spacing:-.055em;color:#151b21;margin:4px 0 7px;overflow-wrap:anywhere}
+#products .product p.product-subtitle{grid-area:sub;min-height:0;font-size:12px;line-height:1.45;color:#787d84;margin:0;align-self:start}
+#products .product .p-price-accordion{display:contents}
+#products .product .pricedata{grid-area:price;min-width:0;border-left:1px solid #dadde1;padding-left:11px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;align-self:stretch}
+#products .product .amount{font:900 clamp(18px,1.95vw,28px)/1.12 'Manrope',sans-serif;letter-spacing:-.065em;color:#d20a1b;white-space:nowrap;margin:0}
+#products .product .unit{color:#777d84;font-size:12px;line-height:1.3;margin-top:4px}
+#products .product .desc-toggle{grid-area:toggle;display:flex;align-items:center;justify-content:space-between;width:100%;min-width:0;min-height:59px;margin-top:18px;border:1px solid #d6d9de;border-radius:13px;background:linear-gradient(#fff,#f7f7f9);color:#171d25;font:800 14px 'Manrope',sans-serif;gap:9px;padding:11px 16px}
+#products .product .desc-toggle:hover{background:#fff9f9;border-color:#bc8e94}
+#products .product .desc-toggle svg{flex:none;width:22px;height:22px}
+#products .product .desc-toggle svg:first-child{color:#cf0b1b}
+#products .product .desc-toggle svg:last-child{margin-left:auto;transition:transform .2s}
+#products .product .desc-toggle[aria-expanded=true] svg:last-child{transform:rotate(180deg)}
+#products .product .description-panel{grid-area:panel;background:#f6f7f9;border-radius:15px;margin:13px 0 0;padding:17px 13px;min-width:0}
+#products .product .description-panel>p{font-size:12px;line-height:1.7;color:#29313a;margin:0 0 15px}
+#products .product .specgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #dfe1e5;padding-top:15px}
+#products .product .spec{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;min-width:0;padding:0 3px;border-right:1px solid #e0e2e5}
+#products .product .spec:last-child{border:0}
+#products .product .specicon{color:#d10a1c;line-height:0}
+#products .product .specicon svg{width:23px;height:23px}
+#products .product .spec strong{font:800 10px/1.3 'Manrope',sans-serif;color:#252c34;overflow-wrap:anywhere}
+#products .product .spec>span{font-size:10px;line-height:1.35;color:#566069;overflow-wrap:anywhere}
+#products .product .pricenote{grid-area:note;border-top:1px solid #e3e5e7;font-size:11px;line-height:1.45;color:#995057;padding:13px 0 0;margin:18px 0 14px}
+#products .product .add-to-selection{grid-area:add;display:grid;grid-template-columns:30% 70%;justify-items:center;align-items:center;width:100%;min-height:62px;border:0;border-radius:16px;padding:0;background:linear-gradient(#fa071b,#c90015);color:white;box-shadow:0 9px 20px #be001b33;font:900 clamp(18px,1.85vw,24px) 'Manrope',sans-serif;letter-spacing:-.04em}
+#products .product .add-to-selection:hover{background:linear-gradient(#f92332,#b50012)}
+#products .product .cart-symbol{display:grid;place-items:center;width:100%;height:33px;border-right:1px solid #ffffff76}
+#products .product .cart-symbol svg{width:30px;height:30px}
+#products .product .add-text{white-space:nowrap}
+#products .product.expanded .details{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"sku sku" "title title" "sub sub" "price toggle" "panel panel" "note note" "add add"}
+#products .product.expanded p.product-subtitle{margin-bottom:17px}
+#products .product.expanded .pricedata{border-left:0;border-right:1px solid #d8dbe0;padding:0 11px 0 0}
+#products .product.expanded .desc-toggle{margin-top:0;padding:9px 12px;min-height:61px;gap:5px;font-size:clamp(11px,1.1vw,14px)}
+#products .product.expanded .desc-toggle svg:first-child{display:none}
+#products .product.expanded .desc-toggle svg:last-child{width:20px;height:20px}
+@media(max-width:1160px){#products.products{grid-template-columns:repeat(2,minmax(0,1fr))}#products .product h3{font-size:23px}#products .product .amount{font-size:26px}}
+@media(max-width:710px){#products.products{grid-template-columns:1fr;gap:18px;max-width:490px;margin-inline:auto}#products .product{padding:12px;border-radius:23px}#products .product .pimage{aspect-ratio:1.5}#products .product .details{padding:16px 12px 9px;column-gap:10px}#products .product .sku{font-size:13px}#products .product h3{font-size:clamp(23px,5.9vw,30px)}#products .product p.product-subtitle{font-size:13px}#products .product .amount{font-size:clamp(22px,5.6vw,31px)}#products .product .desc-toggle{min-height:61px;font-size:16px}#products .product.expanded .desc-toggle{font-size:clamp(12px,3.5vw,16px)}#products .product .pricenote{font-size:12px}#products .product .add-to-selection{font-size:24px;min-height:68px}#products .product .description-panel>p{font-size:13px}}
+@media(max-width:370px){#products .product .details{grid-template-columns:minmax(0,1fr) minmax(103px,38%);column-gap:7px}#products .product .amount{font-size:20px}#products .product.expanded .desc-toggle{font-size:11px;padding:7px}}
 </style></head><body>
 <div class="notice"><div class="wrap"><strong><span class="dot"></span> Río Grande · Tierra del Fuego</strong><div class="secondary">Materiales para la construcción · Dos sucursales en la ciudad</div><a href="https://wa.me/542964494926" target="_blank" rel="noopener">WhatsApp: +54 9 2964 49-4926 ↗</a></div></div>
 <header class="sitehead"><div class="wrap headinner"><a class="identity" href="#inicio" aria-label="Continental Maderas, inicio"><span class="brandmark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M5 28 12 10h8l-7 18zM16 28l6-18h7l7 18h-8l-3-10-3 10z" fill="#171b1d"/></svg></span><span class="identitytext"><strong>Continental Maderas</strong><span>CONSTRUYENDO SUEÑOS</span></span></a><nav class="desktopnav" aria-label="Navegación principal"><a href="#inicio">Inicio</a><a href="#categorias">Categorías</a><a href="#catalogo">Productos</a><a href="#nosotros">La empresa</a><a href="#sucursales">Sucursales</a></nav><div class="headtools"><button class="cartbtn" id="openCart" aria-label="Abrir selección">▧ <span>Mi selección</span> <span class="cartcount" id="cartCount">0</span></button><a class="pill small" href="https://wa.me/542964494926?text=Hola%2C%20quisiera%20consultar%20por%20materiales" target="_blank" rel="noopener">Consultá por WhatsApp ↗</a><button class="menutoggle" id="menuToggle" aria-expanded="false" aria-label="Abrir menú">☰</button></div></div><nav class="mobilemenu wrap" id="mobileMenu" aria-label="Menú móvil"><a href="#inicio">Inicio</a><a href="#categorias">Categorías</a><a href="#catalogo">Productos</a><a href="#nosotros">La empresa</a><a href="#sucursales">Sucursales</a></nav></header>
@@ -201,7 +247,7 @@ return `<article class="product" data-pid="${esc(p.id)}">
 }
 function render(){let res=PRODUCTS.filter(p=>(state.cat==='Todas las categorías'||p.cat===state.cat)&&norm([p.name,p.sub,p.cat,p.type,p.id].join(' ')).includes(norm(state.query)));if(state.sort==='name')res.sort((a,b)=>a.name.localeCompare(b.name,'es'));else if(state.sort==='priceAsc')res.sort((a,b)=>(a.price===null?Infinity:a.price)-(b.price===null?Infinity:b.price));else if(state.sort==='priceDesc')res.sort((a,b)=>(b.price===null?-Infinity:b.price)-(a.price===null?-Infinity:a.price));$('#products').innerHTML=res.map(productCard).join('');$('#resultCount').textContent=res.length+' producto'+(res.length===1?'':'s')+' de referencia';$('#emptyState').hidden=res.length>0;makeFilters()}
 $('#searchInput').addEventListener('input',e=>{state.query=e.target.value;render()});$('#sortSelect').addEventListener('change',e=>{state.sort=e.target.value;render()});$('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;state.cat=b.dataset.filter;render()});
-$('#products').addEventListener('click',e=>{const toggle=e.target.closest('[data-desc]');if(toggle){const panel=document.getElementById('desc-'+toggle.dataset.desc);if(panel){const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));panel.hidden=!open}return}const add=e.target.closest('[data-add]');if(add){addItem(add.dataset.add);return}const view=e.target.closest('[data-view]');if(view)openDetail(view.dataset.view)});
+$('#products').addEventListener('click',e=>{const toggle=e.target.closest('[data-desc]');if(toggle){const panel=document.getElementById('desc-'+toggle.dataset.desc);if(panel){const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));panel.hidden=!open;toggle.closest('.product').classList.toggle('expanded',open)}return}const add=e.target.closest('[data-add]');if(add){addItem(add.dataset.add);return}const view=e.target.closest('[data-view]');if(view)openDetail(view.dataset.view)});
 $('#products').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const v=e.target.closest('[data-view]');if(v){e.preventDefault();openDetail(v.dataset.view)}}});
 $$('[data-catlink]').forEach(a=>a.addEventListener('click',()=>{state.cat=a.dataset.catlink==='all'?'Todas las categorías':a.dataset.catlink;state.query='';$('#searchInput').value='';render()}));
 $('#resetFilters').onclick=()=>{state.cat='Todas las categorías';state.query='';$('#searchInput').value='';render()};
