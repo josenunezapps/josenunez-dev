@@ -181,6 +181,26 @@
  #products .product.expanded .desc-toggle{font-size:11px}
  #products .product .details{column-gap:6px}
 }
+
+/* Solo botón Descripción: -50% de altura (43–44px -> 22px), en ambos estados */
+#products .product .desc-toggle,
+#products .product.expanded .desc-toggle{
+  box-sizing:border-box;
+  min-height:22px;
+  height:22px;
+  padding:0 8px;
+  border-radius:7px;
+  font-size:11px;
+  line-height:1;
+  gap:5px;
+}
+#products .product .desc-toggle svg,
+#products .product.expanded .desc-toggle svg,
+#products .product.expanded .desc-toggle svg:last-child{
+  width:14px;
+  height:14px;
+}
+#products .product.expanded .desc-toggle{margin-top:0}
 </style></head><body>
 <div class="notice"><div class="wrap"><strong><span class="dot"></span> Río Grande · Tierra del Fuego</strong><div class="secondary">Materiales para la construcción · Dos sucursales en la ciudad</div><a href="https://wa.me/542964494926" target="_blank" rel="noopener">WhatsApp: +54 9 2964 49-4926 ↗</a></div></div>
 <header class="sitehead"><div class="wrap headinner"><a class="identity" href="#inicio" aria-label="Continental Maderas, inicio"><span class="brandmark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M5 28 12 10h8l-7 18zM16 28l6-18h7l7 18h-8l-3-10-3 10z" fill="#171b1d"/></svg></span><span class="identitytext"><strong>Continental Maderas</strong><span>CONSTRUYENDO SUEÑOS</span></span></a><nav class="desktopnav" aria-label="Navegación principal"><a href="#inicio">Inicio</a><a href="#categorias">Categorías</a><a href="#catalogo">Productos</a><a href="#nosotros">La empresa</a><a href="#sucursales">Sucursales</a></nav><div class="headtools"><button class="cartbtn" id="openCart" aria-label="Abrir selección">▧ <span>Mi selección</span> <span class="cartcount" id="cartCount">0</span></button><a class="pill small" href="https://wa.me/542964494926?text=Hola%2C%20quisiera%20consultar%20por%20materiales" target="_blank" rel="noopener">Consultá por WhatsApp ↗</a><button class="menutoggle" id="menuToggle" aria-expanded="false" aria-label="Abrir menú">☰</button></div></div><nav class="mobilemenu wrap" id="mobileMenu" aria-label="Menú móvil"><a href="#inicio">Inicio</a><a href="#categorias">Categorías</a><a href="#catalogo">Productos</a><a href="#nosotros">La empresa</a><a href="#sucursales">Sucursales</a></nav></header>
