@@ -81,7 +81,7 @@ function renderCart(){
 const PHOTO_SETS={
   pizzas:[
     'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=850&q=82',
-    'https://img.carta.menu/storage/media/company_gallery/4568481/conversions/contribution_gallery.jpg',
+    'assets/pizza_compartir.webp',
     'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=850&q=82',
     'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=850&q=82',
     'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=850&q=82',
