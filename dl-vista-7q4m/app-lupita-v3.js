@@ -162,3 +162,5 @@ document.addEventListener('DOMContentLoaded',()=>{
  document.querySelectorAll('[data-menu]').forEach(b=>b.addEventListener('click',()=>{const isOpen=overlay.classList.toggle('open');b.setAttribute('aria-expanded',String(isOpen))}));
  document.addEventListener('keydown',e=>{if(e.key==='Escape')overlay?.classList.remove('open')});
 });
+// Portada: si el navegador no arrancó el video solo, lo intenta de nuevo al cargar y al primer toque.
+(function(){const v=document.querySelector('main.full video');if(!v)return;v.muted=true;const go=()=>{const p=v.play();if(p&&p.catch)p.catch(()=>{})};if(v.readyState>=2)go();else v.addEventListener('canplay',go,{once:true});['touchstart','click','scroll'].forEach(ev=>window.addEventListener(ev,go,{once:true,passive:true}));document.addEventListener('visibilitychange',()=>{if(!document.hidden)go()})})();
