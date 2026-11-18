@@ -1,9 +1,9 @@
 /* Doña Lupita - categorías, variedades y lista de consulta */
 const CATEGORIES = [
-  {id:'pizzas',name:'Pizzas',description:'A la piedra, en horno de barro',image:'https://img.carta.menu/storage/media/company_gallery/4568481/conversions/contribution_gallery.jpg',href:'pizzas.html'},
-  {id:'empanadas',name:'Empanadas',description:'Al horno o fritas; sabores tradicionales',image:'https://media-cdn.tripadvisor.com/media/photo-s/19/35/fc/58/empanadas-de-carne-queijo.jpg',href:'empanadas.html'},
-  {id:'minutas',name:'Minutas',description:'Milanesas y sándwiches',image:'https://media.0221.com.ar/p/0e7d23a2d078151f83c22f0948dfcb80/adjuntos/357/imagenes/100/247/0100247840/1400x0/smart/milanesas-2.jpg',href:'minutas.html'},
-  {id:'menu',name:'Menú',description:'Platos caseros y del día',image:'https://infomiba.com.ar/uploads/noticias/5/2024/11/20241101144534_sorrentinos-rellenos-de-jamon-y-queso-con-salsa-marinara.jpg',href:'menu.html'},
+  {id:'pizzas',name:'Pizzas',description:'A la piedra, en horno de barro',image:'assets/categorias/horno-dona-lupita-recreado.webp',href:'pizzas.html'},
+  {id:'empanadas',name:'Empanadas',description:'Al horno o fritas; sabores tradicionales',image:'assets/empanadas/carne-cuchillo.webp',href:'empanadas.html'},
+  {id:'minutas',name:'Minutas',description:'Milanesas y sándwiches',image:'assets/minutas/mila-napolitana.webp',href:'minutas.html'},
+  {id:'menu',name:'Menú',description:'Platos caseros y del día',image:'assets/menu/sorrentinos-corregidos.webp',href:'menu.html'},
   {id:'papas-fritas',name:'Papas fritas',description:'Papas y acompañamientos',image:'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=850&q=80',href:'papas-fritas.html'},
   {id:'bebidas',name:'Bebidas',description:'Sin alcohol y cervezas',image:'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=850&q=80',href:'bebidas.html'}
 ];
