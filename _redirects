@@ -1,0 +1,6 @@
+# La app de Sebastián González se mudó a su subdominio
+/Sebastiancolorista             https://sebastiancolorista.zenix.com.ar/ 301
+/Sebastiancolorista/            https://sebastiancolorista.zenix.com.ar/ 301
+/Sebastiancolorista/*           https://sebastiancolorista.zenix.com.ar/:splat 301
+/sebastiancolorista             https://sebastiancolorista.zenix.com.ar/ 301
+/sebastiancolorista/*           https://sebastiancolorista.zenix.com.ar/:splat 301
