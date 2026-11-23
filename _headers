@@ -64,3 +64,7 @@
 /Sebastiancolorista/admin/*
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-cache
+
+# Demo Sebastián: siempre revisar si hay versión nueva (evita ver una versión vieja)
+/Sebastiancolorista/*
+  Cache-Control: no-cache

@@ -329,7 +329,7 @@ body{padding-bottom:84px}
 <div class="overlay" id="gallery-overlay" role="presentation"><div class="modal gallery-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-title"><button class="close" type="button" aria-label="Cerrar galería" data-close><svg><use href="#i-close" /></svg></button><p class="eyebrow">NUESTRO ESPACIO</p><h2 id="gallery-title">Un lugar para tu estilo</h2><p>Imágenes de muestra. </p><div class="gallery-grid"><div style="background-image:url('img/g1.jpg'),linear-gradient(125deg,#6b4e32,#151515)" role="img" aria-label="Color"></div><div style="background-image:url('img/g2.jpg'),linear-gradient(125deg,#6b4e32,#151515)" role="img" aria-label="Balayage"></div><div style="background-image:url('img/g3.jpg'),linear-gradient(125deg,#6b4e32,#151515)" role="img" aria-label="Corte de cabello"></div></div></div></div>
 <div class="mbar m-only" id="mbar"><div class="mbar-info" id="mbar-info"></div><button type="button" class="button" id="mbar-btn">SIGUIENTE</button></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="sg-store.js"></script>
+<script src="sg-store.js?v=3"></script>
 <script>
 (()=>{
 'use strict';
@@ -503,7 +503,7 @@ document.addEventListener('click',e=>{
  if(e.target.closest('#show-my-turns')){showMyBookings(currentBooking?.phone||'',currentBooking?.id||'');return}
  if(e.target.closest('#my-bookings-top')){showMyBookings();return}
  if(e.target.closest('#my-bookings-link')){e.preventDefault();showMyBookings();return}
- const ownCancel=e.target.closest('[data-cancel-own]');if(ownCancel){const id=ownCancel.dataset.cancelOwn,phone=el('lookup-phone')?.value||'',code=el('lookup-code')?.value||'';const all=readList(BOOKING_KEY),b=all.find(x=>x.id===id&&x.phone.replace(/\D/g,'')===phone.replace(/\D/g,''));if(!b)return toast('No se encontró ese turno');if(!confirm('¿Cancelar este turno?'))return;b.status='cancelled';if(writeList(BOOKING_KEY,all)){toast('Turno cancelado');showMyBookings(phone,code);render()}else showMyBookings(phone,code);return}
+ const ownCancel=e.target.closest('[data-cancel-own]');if(ownCancel){const id=ownCancel.dataset.cancelOwn,phone=el('lookup-phone')?.value||'',code=el('lookup-code')?.value||'';const all=readList(BOOKING_KEY),b=all.find(x=>x.id===id&&x.phone.replace(/\D/g,'')===phone.replace(/\D/g,''));if(!b)return toast('No se encontró ese turno');const sn=services.find(z=>z.id===b.serviceId)?.name||'tu turno';sgConfirm({title:'¿Cancelar tu turno?',text:`Vas a cancelar tu turno de ${sn} con Sebastián González el ${formatDate(fromKey(b.date))} a las ${b.time} h. El horario va a quedar libre para otra persona.`,ok:'SÍ, CANCELAR',cancel:'NO, MANTENER',danger:true}).then(ok=>{if(!ok)return;b.status='cancelled';if(writeList(BOOKING_KEY,all)){toast('Turno cancelado');showMyBookings(phone,code);render()}else showMyBookings(phone,code)});return}
 });
 el('prev-month').addEventListener('click',()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);renderCalendar()});
 el('next-month').addEventListener('click',()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);renderCalendar()});

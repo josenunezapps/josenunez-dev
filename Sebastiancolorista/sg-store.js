@@ -103,6 +103,41 @@
   };
   window.SGS = SGS;
 
+  // ===== Diálogos propios (reemplazan los de Chrome: "zenix.com.ar dice…") =====
+  (function () {
+    var css = '.sgd-wrap{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:18px;backdrop-filter:blur(4px);animation:sgdf .15s ease}' +
+      '@keyframes sgdf{from{opacity:0}to{opacity:1}}' +
+      '.sgd{width:min(100%,400px);background:#181716;border:1px solid #4a3a2b;border-radius:12px;padding:24px 22px 20px;box-shadow:0 30px 90px #000;color:#f4f1ec;font-family:"DM Sans",Arial,sans-serif}' +
+      '.sgd small{display:block;color:#c9a06f;font-size:10.5px;letter-spacing:.18em;font-weight:700;margin-bottom:8px}' +
+      '.sgd h3{margin:0 0 8px;font-family:"Playfair Display",Georgia,serif;font-size:22px;font-weight:600;line-height:1.25}' +
+      '.sgd p{margin:0 0 18px;color:#b9b1a7;font-size:13.5px;line-height:1.6;white-space:pre-line}' +
+      '.sgd .acts{display:flex;gap:10px}.sgd button{flex:1;min-height:44px;border-radius:6px;font-weight:700;font-size:12px;letter-spacing:.05em;cursor:pointer;font-family:inherit}' +
+      '.sgd .no{background:#262626;border:1px solid #3a3a3a;color:#f4f1ec}.sgd .yes{background:#bf9462;border:1px solid #bf9462;color:#17110b}.sgd .yes.danger{background:#b4473a;border-color:#b4473a;color:#fff}';
+    function addCss() { if (document.getElementById('sgd-css')) return; var st = document.createElement('style'); st.id = 'sgd-css'; st.textContent = css; document.head.appendChild(st); }
+    function open(o, withCancel) {
+      addCss();
+      return new Promise(function (resolve) {
+        var w = document.createElement('div'); w.className = 'sgd-wrap';
+        var esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+        w.innerHTML = '<div class="sgd" role="alertdialog" aria-modal="true"><small>SEBASTIÁN GONZÁLEZ · ESTILISTA</small>' +
+          (o.title ? '<h3>' + esc(o.title) + '</h3>' : '') + (o.text ? '<p>' + esc(o.text) + '</p>' : '') +
+          '<div class="acts">' + (withCancel ? '<button type="button" class="no">' + esc(o.cancel || 'CANCELAR') + '</button>' : '') +
+          '<button type="button" class="yes' + (o.danger ? ' danger' : '') + '">' + esc(o.ok || 'ACEPTAR') + '</button></div></div>';
+        var done = function (v) { w.remove(); document.removeEventListener('keydown', key); resolve(v); };
+        var key = function (e) { if (e.key === 'Escape') done(false); };
+        w.querySelector('.yes').addEventListener('click', function () { done(true); });
+        var no = w.querySelector('.no'); if (no) no.addEventListener('click', function () { done(false); });
+        w.addEventListener('click', function (e) { if (e.target === w) done(false); });
+        document.addEventListener('keydown', key);
+        document.body.appendChild(w);
+        setTimeout(function () { (no || w.querySelector('.yes')).focus(); }, 20);
+      });
+    }
+    window.sgConfirm = function (o) { return open(typeof o === 'string' ? { title: o } : o, true); };
+    window.sgAlert = function (o) { return open(typeof o === 'string' ? { text: o } : o, false); };
+    window.alert = function (msg) { var m = String(msg || ''); var nl = m.indexOf('\n'); window.sgAlert(nl > 0 && nl < 60 ? { title: m.slice(0, nl), text: m.slice(nl + 1) } : { text: m }); };
+  })();
+
   if (!ADMIN) return;
 
   // ================= Panel: ingreso, primer cambio de contraseña, recuperación y cuenta =================
