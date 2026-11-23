@@ -126,10 +126,10 @@ async function newSession(env) {
 }
 
 // ---------- mails ----------
-function mailLayout(title, intro, rows, button) {
+function mailLayout(title, intro, rows, button, preview = "") {
   const rowsHtml = rows.map(([k, v]) => `<tr><td style="padding:8px 0;color:#8a8178;font-size:13px;width:130px;vertical-align:top;border-bottom:1px solid #f0ece6">${esc(k)}</td><td style="padding:8px 0;color:#1d1a17;font-size:14px;font-weight:600;border-bottom:1px solid #f0ece6">${v}</td></tr>`).join("");
   const btn = button ? `<p style="margin:26px 0 6px"><a href="${button[1]}" style="background:#bf9462;color:#17110b;text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.04em;padding:13px 22px;border-radius:6px;display:inline-block">${esc(button[0])}</a></p>` : "";
-  return `<!doctype html><html><body style="margin:0;background:#f4f1ec;font-family:Arial,Helvetica,sans-serif">
+  return `<!doctype html><html><body style="margin:0;background:#f4f1ec;font-family:Arial,Helvetica,sans-serif"><div style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preview || title)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
 <div style="max-width:520px;margin:0 auto;padding:28px 18px">
 <div style="background:#0d0d0d;border-radius:12px 12px 0 0;padding:22px 26px"><div style="color:#bf9462;font-size:11px;letter-spacing:.2em;font-weight:700">APP DE TURNOS</div><div style="color:#f4f1ec;font-size:20px;font-family:Georgia,serif;margin-top:4px">${BUSINESS} · Estilista y colorista</div></div>
 <div style="background:#fff;border-radius:0 0 12px 12px;padding:26px">
@@ -160,13 +160,14 @@ async function notifyOwner(env, kind, b, svcName) {
   const title = isNew ? "Tenés un turno nuevo" : "Se canceló un turno";
   const intro = isNew ? "Reservaron desde tu página. El turno ya está en tu agenda y ese horario quedó ocupado." : "Cancelaron este turno desde tu página. El horario volvió a quedar libre para otra reserva.";
   const subject = `${isNew ? "Nuevo turno" : "Turno cancelado"}: ${svcName} · ${prettyDate(b.date)} ${b.time} h`;
-  return sendMail(env, to, subject, mailLayout(title, intro, rows, ["ABRIR MI PANEL", SITE + "/admin/"]), b.email);
+  const preview = `${b.name} ${isNew ? "reservó" : "canceló"} ${svcName} para el ${prettyDate(b.date)} a las ${b.time} h`;
+  return sendMail(env, to, subject, mailLayout(title, intro, rows, ["ABRIR MI PANEL", SITE + "/admin/"], preview), b.email);
 }
 async function mailClient(env, b, svcName) {
   if (!isEmail(b.email)) return false;
   const rows = [["Servicio", esc(svcName)], ["Día", esc(prettyDate(b.date))], ["Hora", esc(b.time) + " h"], ["Dirección", "Rodríguez Peña 1168, Recoleta"], ["Nº de turno", esc(b.id)]];
   return sendMail(env, b.email, `Tu turno con ${BUSINESS}: ${prettyDate(b.date)} ${b.time} h`,
-    mailLayout("¡Tu turno está confirmado!", `Hola ${esc(b.name)}, te esperamos. Si necesitás cancelar, entrá en "Mis turnos" con tu teléfono y este número de turno, hasta ${CANCEL_LIMIT_HOURS} h antes.`, rows, ["VER MIS TURNOS", SITE + "/"]));
+    mailLayout("¡Tu turno está confirmado!", `Hola ${esc(b.name)}, te esperamos. Si necesitás cancelar, entrá en "Mis turnos" con tu teléfono y este número de turno, hasta ${CANCEL_LIMIT_HOURS} h antes.`, rows, ["VER MIS TURNOS", SITE + "/"], `Te esperamos el ${prettyDate(b.date)} a las ${b.time} h en Rodríguez Peña 1168, Recoleta`));
 }
 
 // ---------- datos ----------
@@ -333,7 +334,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
         const token = randomToken();
         await env.SG_DB.batch([kvSet(env, "reset_hash", await sha256(token)), kvSet(env, "reset_expires", Date.now() + 3600000), kvSet(env, "reset_sent", Date.now())]);
         later(sendMail(env, email, "Recuperar la contraseña de tu app de turnos",
-          mailLayout("¿Olvidaste tu contraseña?", "Recibimos un pedido para cambiar la contraseña de tu panel de turnos. Tocá el botón para crear una nueva. El enlace vence en 1 hora. Si no fuiste vos, ignorá este mail: tu contraseña actual sigue funcionando.", [], ["CREAR NUEVA CONTRASEÑA", `${SITE}/admin/?reset=${token}`])));
+          mailLayout("¿Olvidaste tu contraseña?", "Recibimos un pedido para cambiar la contraseña de tu panel de turnos. Tocá el botón para crear una nueva. El enlace vence en 1 hora. Si no fuiste vos, ignorá este mail: tu contraseña actual sigue funcionando.", [], ["CREAR NUEVA CONTRASEÑA", `${SITE}/admin/?reset=${token}`], "Creá una contraseña nueva para tu panel de turnos. El enlace vence en 1 hora.")));
       }
       const hint = isEmail(email) ? email.replace(/^(.).*(@.*)$/, "$1•••$2") : "";
       return json({ ok: true, hint });
@@ -371,7 +372,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
           env.SG_DB.prepare("DELETE FROM sessions WHERE token!=?").bind(token),
         ]);
         later(sendMail(env, email, "Tu app de turnos ya está lista",
-          mailLayout("¡Tu app de turnos ya está lista!", "Configuraste tu nueva contraseña. Desde ahora vas a recibir en este mail un aviso cada vez que reserven o cancelen un turno desde tu página.", [["Tu página", `<a href="${SITE}/" style="color:#9a6b38">zenix.com.ar/Sebastiancolorista</a>`], ["Tu panel", `<a href="${SITE}/admin/" style="color:#9a6b38">zenix.com.ar/Sebastiancolorista/admin</a>`], ["Celular de recuperación", esc(phone)]], ["ABRIR MI PANEL", SITE + "/admin/"])));
+          mailLayout("¡Tu app de turnos ya está lista!", "Configuraste tu nueva contraseña. Desde ahora vas a recibir en este mail un aviso cada vez que reserven o cancelen un turno desde tu página.", [["Tu página", `<a href="${SITE}/" style="color:#9a6b38">zenix.com.ar/Sebastiancolorista</a>`], ["Tu panel", `<a href="${SITE}/admin/" style="color:#9a6b38">zenix.com.ar/Sebastiancolorista/admin</a>`], ["Celular de recuperación", esc(phone)]], ["ABRIR MI PANEL", SITE + "/admin/"], "Desde ahora te avisamos por acá cada turno nuevo o cancelado")));
         return json({ ok: true });
       }
 
