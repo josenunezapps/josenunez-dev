@@ -196,6 +196,51 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 .works-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
 .works-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid #2f2a25;display:block}
 @media(max-width:740px){.works-grid{grid-template-columns:repeat(3,1fr);gap:6px}.works-head h2{font-size:24px}.works-head .button{min-height:38px;font-size:10px;padding:0 12px}}
+.m-only{display:none}
+@media(max-width:740px){
+.m-only{display:block}
+body{padding-bottom:84px}
+.hero{min-height:0}.hero-inner{padding-top:26px;padding-bottom:74px}.hero h1{font-size:36px;margin-bottom:12px}.hero .eyebrow{font-size:10px;letter-spacing:.16em;margin-bottom:8px}.hero-description{font-size:13px;line-height:1.6;margin-bottom:18px}.hero .button{min-height:44px;min-width:0}
+.booking{margin-top:-46px;padding:16px 14px 14px}
+.booking-head{display:none}.booking-customer-actions{display:none}.steps{display:none}
+.mpro{display:flex;align-items:center;gap:11px;padding:2px 0 14px;border-bottom:1px solid #2a2a2a}
+.mpro img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid var(--gold)}
+.mpro div{flex:1;min-width:0;display:grid;line-height:1.3}.mpro strong{font-size:14px;font-weight:600}.mpro small{color:var(--muted);font-size:11px}
+.mlink{border:1px solid #3a3a3a;background:#1d1d1d;color:#ddd5cb;border-radius:99px;padding:6px 12px;font-size:11px;font-weight:600}
+.msteps{display:flex;align-items:center;gap:6px;margin:14px 0 12px}
+.msteps button{border:0;background:none;color:#8e8a84;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:0;white-space:nowrap}
+.msteps b{width:22px;height:22px;border-radius:50%;border:1px solid #444;display:grid;place-items:center;font-size:11px}
+.msteps button.on{color:#f2eee8}.msteps button.on b,.msteps button.done b{background:var(--gold);border-color:var(--gold);color:#17110b}
+.msteps span{flex:1;height:1px;background:#353535;min-width:8px}
+.columns{border:0;background:none;display:block}
+.column{border:0!important;padding:0;background:none!important}
+#barberos,#resumen{display:none}
+.booking[data-view="1"] #fechas{display:none}.booking[data-view="2"] #servicios{display:none}
+.column-title{margin-bottom:10px;font-size:13px}
+.cats{flex-wrap:nowrap;overflow-x:auto;margin:0 -14px 10px;padding:0 14px 2px;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}.cat{white-space:nowrap;flex-shrink:0;padding:7px 13px;font-size:11.5px}
+.selection-list{gap:6px}.select-card{min-height:48px;padding:8px 12px}.card-copy strong{font-size:13px}.card-copy small{font-size:11px}
+.mini-note{margin-top:10px}
+#fechas .calendar-head,#fechas .cal-week,#calendar{display:none}
+.mdays{display:flex;gap:7px;overflow-x:auto;margin:0 -14px;padding:2px 14px 4px;scrollbar-width:none;scroll-snap-type:x proximity}.mdays::-webkit-scrollbar{display:none}
+.mday{flex:0 0 58px;scroll-snap-align:start;border:1px solid #363636;background:#1a1a1a;color:#ddd8d1;border-radius:8px;padding:7px 0 6px;display:grid;gap:1px;text-align:center;text-transform:capitalize}
+.mday small{font-size:10px;color:#9a948c}.mday b{font-size:18px;font-weight:600;line-height:1.2}
+.mday.selected{background:var(--gold);border-color:var(--gold);color:#140e08}.mday.selected small{color:#3a2a18}
+.time-label{margin:16px 0 8px}
+.time-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.time{min-height:38px;font-size:12px}.time:disabled{display:none}
+.demo-note{font-size:10.5px;padding-top:12px}
+.works{margin-top:22px}.works-grid img{border-radius:5px}
+.msobre{margin-top:22px;background:#161616;border:1px solid #242424;border-radius:8px;padding:16px;display:grid;gap:12px}
+.msobre .mpro{border:0;padding:0}.msobre .mpro img{width:56px;height:56px}.msobre .eyebrow{font-size:10px;margin:0 0 2px}.msobre .pro-quote{font-size:16px}
+.benefits{margin:18px auto;padding:14px 16px;grid-template-columns:1fr!important;gap:12px}
+.benefit,.benefit:nth-child(odd){border-right:0!important;padding:0!important;gap:12px;align-items:center}.benefit>svg{width:22px!important;height:22px!important}.benefit p{display:none}.benefit strong{margin:0}
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;align-items:center;gap:12px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(18,18,18,.97);border-top:1px solid #3a2f24;backdrop-filter:blur(8px)}
+.mbar-info{flex:1;min-width:0;display:grid;line-height:1.3}.mbar-info strong{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mbar-info small{color:var(--gold-light);font-size:11.5px}
+.mbar .button{min-height:44px;padding:0 14px;font-size:11px;flex-shrink:0}.mbar .button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.mdays{position:relative;scroll-padding-inline:14px}
+.header .button{display:none}
+.footer{padding:24px 0 96px}.footer-grid{grid-template-columns:1fr 1fr!important;gap:18px;padding-bottom:18px}.footer-grid>div:nth-child(2),.footer-grid>div:nth-child(3){display:none}.footer-grid>div:first-child{grid-column:1/-1}.footer-grid>div:first-child p{display:none}.footer .brand{margin-bottom:4px}.footer .social{display:none}.footer h3{margin:0 0 8px}
+}
+
 </style>
 </head>
 <body>
@@ -239,6 +284,8 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
     </div></section>
     <section class="shell booking" id="reservas" aria-labelledby="booking-title">
       <div class="booking-head"><div><h2 id="booking-title">Agendá tu horario</h2><span class="accent-rule"></span></div><div class="opening"><svg><use href="#i-clock" /></svg><span><small>HORARIO DE ATENCIÓN</small><strong>MAR – VIE: 10 a 18 h · SÁB: 10 a 16 h</strong></span></div></div>
+      <div class="mpro m-only"><img src="img/sebastian.jpg" alt=""><div><strong>Sebastián González</strong><small>Estilista · Colorista · 22 años</small></div><button id="my-bookings-m" class="mlink" type="button">Mis turnos</button></div>
+      <div class="msteps m-only" aria-label="Pasos de la reserva"><button type="button" data-mstep="1" class="on"><b>1</b>Servicio</button><span></span><button type="button" data-mstep="2"><b>2</b>Día y hora</button><span></span><button type="button" data-mstep="3"><b>3</b>Tus datos</button></div>
       <div class="booking-customer-actions"><button id="my-bookings-top" class="button secondary" type="button">CONSULTAR MIS TURNOS</button></div><div class="steps" aria-label="Etapas de la reserva">
         <button type="button" class="step active" data-step="1"><span class="step-circle">1</span><span class="step-label">Servicio<small>Elegí un servicio</small></span></button>
         <button type="button" class="step" data-step="2"><span class="step-circle">2</span><span class="step-label">Profesional<small>Tu estilista</small></span></button>
@@ -253,12 +300,13 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
   <div class="pro-tags"><span>Rubios</span><span>Balayage</span><span>Corrección de color</span><span>Fantasías</span><span>Alisados</span></div>
   <a class="button outline pro-ig" href="https://instagram.com/sebascolorista" target="_blank" rel="noopener">VER MÁS EN INSTAGRAM <svg><use href="#i-right" /></svg></a>
 </div></section>
-        <section class="column" id="fechas" aria-label="Elegí fecha y horario"><h3 class="column-title"><svg><use href="#i-calendar" /></svg>Elegí la fecha</h3><div class="calendar-head"><button type="button" class="cal-arrow" id="prev-month" aria-label="Mes anterior"><svg><use href="#i-left" /></svg></button><span class="month-title" id="month-label"></span><button type="button" class="cal-arrow" id="next-month" aria-label="Mes siguiente"><svg><use href="#i-right" /></svg></button></div><div class="cal-week" aria-hidden="true"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><div class="cal-grid" id="calendar" role="group" aria-label="Días disponibles"></div><h4 class="time-label">Elegí un horario</h4><div class="time-grid" id="times" role="group" aria-label="Horarios disponibles de la agenda demo"></div></section>
+        <section class="column" id="fechas" aria-label="Elegí fecha y horario"><h3 class="column-title"><svg><use href="#i-calendar" /></svg>Elegí la fecha</h3><div class="calendar-head"><button type="button" class="cal-arrow" id="prev-month" aria-label="Mes anterior"><svg><use href="#i-left" /></svg></button><span class="month-title" id="month-label"></span><button type="button" class="cal-arrow" id="next-month" aria-label="Mes siguiente"><svg><use href="#i-right" /></svg></button></div><div class="cal-week" aria-hidden="true"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><div class="cal-grid" id="calendar" role="group" aria-label="Días disponibles"></div><div class="mdays m-only" id="mdays" role="group" aria-label="Próximos días disponibles"></div><h4 class="time-label">Elegí un horario</h4><div class="time-grid" id="times" role="group" aria-label="Horarios disponibles de la agenda demo"></div></section>
         <section class="column" id="resumen" aria-label="Resumen de la reserva"><h3 class="column-title"><svg><use href="#i-clipboard" /></svg>Resumen del turno</h3><div class="summary" id="summary"></div><div class="summary-total"><span>Total</span><b id="total"></b></div><button class="button confirm" id="confirm-button" type="button">CONFIRMAR TURNO DEMO</button><div class="summary-foot"><svg><use href="#i-shield" /></svg>Agenda de demostración · Sin sincronización entre dispositivos</div></section>
       </div>
       <div class="demo-note"><svg><use href="#i-info" /></svg><span><strong>Plantilla de demostración.</strong> Demo personalizada por Zenix AR para Sebastián González. Los turnos de prueba quedan en este navegador y no son reservas reales.</span></div>
     </section>
     <section class="shell works" id="trabajos" aria-label="Trabajos"><div class="works-head"><div><p class="eyebrow">TRABAJOS</p><h2>Color que se nota</h2></div><a class="button outline" href="https://instagram.com/sebascolorista" target="_blank" rel="noopener">@SEBASCOLORISTA <svg><use href="#i-right" /></svg></a></div><div class="works-grid"><img src="img/w1.jpg" alt="Balayage" loading="lazy"><img src="img/w2.jpg" alt="Iluminación" loading="lazy"><img src="img/w3.jpg" alt="Fantasías de color" loading="lazy"><img src="img/w4.jpg" alt="Alisado" loading="lazy"><img src="img/w5.jpg" alt="Brushing" loading="lazy"><img src="img/w6.jpg" alt="Corte dama" loading="lazy"></div></section>
+    <section class="shell msobre m-only" aria-label="Sobre Sebastián"><div class="mpro big"><img src="img/sebastian.jpg" alt=""><div><p class="eyebrow">SOBRE SEBASTIÁN</p><strong>Colorista hace 22 años</strong><small>Rodríguez Peña 1168 · Recoleta</small></div></div><p class="pro-quote">“Creo versiones premium para mujeres que buscan destacar.”</p><div class="pro-tags"><span>Rubios</span><span>Balayage</span><span>Corrección de color</span><span>Fantasías</span><span>Alisados</span></div></section>
     <section class="shell benefits" aria-label="Beneficios">
       <div class="benefit"><svg><use href="#i-calendar" /></svg><div><strong>Reservá las 24 hs</strong><p>Elegí servicio, día y horario desde el celu, sin esperar respuesta.</p></div></div>
       <div class="benefit"><svg><use href="#i-award" /></svg><div><strong>22 años de experiencia</strong><p>Especialista en rubios, balayage y corrección de color.</p></div></div>
@@ -276,6 +324,7 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 </div>
 <div class="overlay" id="reservation-overlay" role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button class="close" type="button" aria-label="Cerrar" data-close><svg><use href="#i-close" /></svg></button><div id="modal-content"></div></div></div>
 <div class="overlay" id="gallery-overlay" role="presentation"><div class="modal gallery-modal" role="dialog" aria-modal="true" aria-labelledby="gallery-title"><button class="close" type="button" aria-label="Cerrar galería" data-close><svg><use href="#i-close" /></svg></button><p class="eyebrow">NUESTRO ESPACIO</p><h2 id="gallery-title">Un lugar para tu estilo</h2><p>Imágenes de muestra. </p><div class="gallery-grid"><div style="background-image:url('img/g1.jpg'),linear-gradient(125deg,#6b4e32,#151515)" role="img" aria-label="Color"></div><div style="background-image:url('img/g2.jpg'),linear-gradient(125deg,#6b4e32,#151515)" role="img" aria-label="Balayage"></div><div style="background-image:url('img/g3.jpg'),linear-gradient(125deg,#6b4e32,#151515)" role="img" aria-label="Corte de cabello"></div></div></div></div>
+<div class="mbar m-only" id="mbar"><div class="mbar-info" id="mbar-info"></div><button type="button" class="button" id="mbar-btn">SIGUIENTE</button></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (()=>{
@@ -380,7 +429,16 @@ function renderSummary(){
  el('confirm-button').style.opacity=state.time?'1':'.45';
 }
 function renderSteps(){document.querySelectorAll('[data-step]').forEach(b=>{const n=Number(b.dataset.step);b.classList.toggle('active',n===state.activeStep);b.classList.toggle('done',n<state.activeStep)})}
-function render(){if(service()?.active===false)state.service=services.find(x=>x.active!==false)?.id||state.service;if(barber()?.active===false)state.barber=barbers.find(x=>x.active!==false)?.id||state.barber;if(!slotList(state.date).some(x=>!x.disabled)){let d=fromKey(state.date);for(let i=0;i<75;i++){d.setDate(d.getDate()+1);if(d>maxDate)break;if(slotList(key(d)).some(x=>!x.disabled)){state.date=key(d);month=new Date(d.getFullYear(),d.getMonth(),1);break}}}renderServices();renderBarbers();renderCalendar();renderTimes();renderSummary();renderSteps();persist()}
+function render(){if(service()?.active===false)state.service=services.find(x=>x.active!==false)?.id||state.service;if(barber()?.active===false)state.barber=barbers.find(x=>x.active!==false)?.id||state.barber;if(!slotList(state.date).some(x=>!x.disabled)){let d=fromKey(state.date);for(let i=0;i<75;i++){d.setDate(d.getDate()+1);if(d>maxDate)break;if(slotList(key(d)).some(x=>!x.disabled)){state.date=key(d);month=new Date(d.getFullYear(),d.getMonth(),1);break}}}renderServices();renderBarbers();renderCalendar();renderTimes();renderSummary();renderSteps();renderMobile();persist()}
+let mstep=1;const mq=matchMedia('(max-width:740px)');
+const shortDate=d=>{const w=new Intl.DateTimeFormat('es-AR',{weekday:'short'}).format(d).replace('.','');return w.charAt(0).toUpperCase()+w.slice(1)+' '+d.getDate()};
+function renderMobile(){const bk=el('reservas');if(bk)bk.dataset.view=mstep;document.querySelectorAll('[data-mstep]').forEach(b=>{const n=Number(b.dataset.mstep);b.classList.toggle('on',n===mstep);b.classList.toggle('done',n<mstep)});
+ let days='',d=new Date(start),n=0;for(let i=0;i<75&&n<21;i++){if(validDay(d)){const dk=key(d),free=slotList(dk).some(t=>!t.disabled);if(free){n++;const sel=dk===state.date;days+=`<button type="button" class="mday ${sel?'selected':''}" data-date="${dk}" aria-pressed="${sel}"><small>${new Intl.DateTimeFormat('es-AR',{weekday:'short'}).format(d).replace('.','')}</small><b>${d.getDate()}</b><small>${new Intl.DateTimeFormat('es-AR',{month:'short'}).format(d).replace('.','')}</small></button>`}}d.setDate(d.getDate()+1)}
+ const md=el('mdays');if(md){const keep=md.scrollLeft;md.innerHTML=days;const sel=md.querySelector('.selected');md.scrollLeft=keep;if(sel&&(sel.offsetLeft<md.scrollLeft||sel.offsetLeft+sel.offsetWidth>md.scrollLeft+md.clientWidth))md.scrollLeft=Math.max(0,sel.offsetLeft-20)}
+ const s=service(),info=el('mbar-info'),btn=el('mbar-btn');if(!s||!info)return;
+ if(mstep===1){info.innerHTML=`<strong>${s.name}</strong><small>${price(s)} · ${s.duration} min</small>`;btn.textContent='ELEGIR DÍA Y HORA';btn.disabled=false}
+ else{info.innerHTML=`<strong>${s.name} · ${price(s)}</strong><small>${state.time?shortDate(fromKey(state.date))+' · '+state.time+' h':'Elegí un horario'}</small>`;btn.textContent='CONTINUAR';btn.disabled=!state.time}}
+function goM(n){mstep=n;renderMobile();el('reservas').scrollIntoView({behavior:'smooth',block:'start'})}
 function activate(n){state.activeStep=n;renderSteps()}
 function openModal(id){lastFocus=document.activeElement;el(id).classList.add('open');document.body.style.overflow='hidden';el(id).querySelector('.close')?.focus()}
 function closeModals(){for(const o of document.querySelectorAll('.overlay'))o.classList.remove('open');document.body.style.overflow='';if(lastFocus?.focus)lastFocus.focus()}
@@ -414,6 +472,9 @@ async function copyText(){try{await navigator.clipboard.writeText(currentText);t
 function downloadText(){const data=new Blob([currentText],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(data);const a=document.createElement('a');a.href=u;a.download='solicitud-turno.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000)}
 function contact(){const w=CONFIG.whatsapp.replace(/\D/g,'');if(w)window.open(`https://wa.me/${w}`,'_blank','noopener,noreferrer');else toast('Para activar WhatsApp, configurá el número en CONFIG.whatsapp')}
 document.addEventListener('click',e=>{
+ const ms=e.target.closest('[data-mstep]');if(ms){const n=Number(ms.dataset.mstep);if(n===1||n===2)goM(n);else if(state.time)openReservation();else goM(2);return}
+ if(e.target.closest('#mbar-btn')){if(mstep===1)goM(2);else openReservation();return}
+ if(e.target.closest('#my-bookings-m')){el('my-bookings-top').click();return}
  const ct=e.target.closest('[data-cat]');if(ct){activeCat=ct.dataset.cat;renderServices();return}
  const sv=e.target.closest('[data-service]');if(sv){state.service=sv.dataset.service;activate(2);render();return}
  const br=e.target.closest('[data-barber]');if(br){state.barber=br.dataset.barber;activate(3);render();return}
