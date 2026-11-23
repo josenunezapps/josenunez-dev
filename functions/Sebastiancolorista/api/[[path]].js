@@ -145,8 +145,14 @@ async function sendMail(env, to, subject, html, replyTo) {
       headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ from: MAIL_FROM, to: [to], subject, html, ...(isEmail(replyTo) ? { reply_to: replyTo } : {}) }),
     });
+    let info = "";
+    try { info = (await r.text()).slice(0, 300); } catch {}
+    try { await env.SG_DB.prepare("INSERT OR REPLACE INTO kv (key,value) VALUES ('last_mail',?)").bind(JSON.stringify({ at: new Date().toISOString(), to, subject, status: r.status, info })).run(); } catch {}
     return r.ok;
-  } catch { return false; }
+  } catch (e) {
+    try { await env.SG_DB.prepare("INSERT OR REPLACE INTO kv (key,value) VALUES ('last_mail',?)").bind(JSON.stringify({ at: new Date().toISOString(), to, subject, error: String(e) })).run(); } catch {}
+    return false;
+  }
 }
 async function notifyOwner(env, kind, b, svcName) {
   const to = await kvGet(env, "notify_email");
@@ -236,7 +242,7 @@ const normCode = (c) => { const x = String(c || "").toUpperCase().replace(/[^A-Z
 // ---------- handler ----------
 export async function onRequest({ request, env, params, waitUntil }) {
   if (!env.SG_DB) return json({ error: "Falta configurar la base de datos (binding SG_DB)" }, 500);
-  const later = (p) => { try { if (waitUntil) waitUntil(p); } catch { /* sin waitUntil */ } };
+  const later = (p) => Promise.race([Promise.resolve(p).then((r) => r, () => false), new Promise((res) => setTimeout(() => res("timeout"), 6000))]);
   const path = (Array.isArray(params.path) ? params.path.join("/") : String(params.path || "")).replace(/\/+$/, "");
   const method = request.method;
   let body = {};
@@ -282,8 +288,8 @@ export async function onRequest({ request, env, params, waitUntil }) {
       const problem = await slotProblem(env, b);
       if (problem) return json({ error: problem }, 409);
       await saveBooking(env, b, ip).run();
-      later(Promise.all([notifyOwner(env, "new", b, svc.name), mailClient(env, b, svc.name)]));
-      return json({ ok: true, booking: b });
+      const mailed = await later(Promise.all([notifyOwner(env, "new", b, svc.name), mailClient(env, b, svc.name)]));
+      return json({ ok: true, booking: b, mailed });
     }
 
     if (path === "mine" && method === "POST") {
@@ -304,8 +310,8 @@ export async function onRequest({ request, env, params, waitUntil }) {
       b.status = "cancelled";
       await saveBooking(env, b).run();
       const svc = (await catalog(env)).services[b.serviceId];
-      later(notifyOwner(env, "cancel", b, svc ? svc.name : b.serviceId));
-      return json({ ok: true });
+      const mailed = await later(notifyOwner(env, "cancel", b, svc ? svc.name : b.serviceId));
+      return json({ ok: true, mailed });
     }
 
     // ===== cuenta =====
@@ -333,7 +339,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
       if (isEmail(email) && Date.now() - last > 120000) {
         const token = randomToken();
         await env.SG_DB.batch([kvSet(env, "reset_hash", await sha256(token)), kvSet(env, "reset_expires", Date.now() + 3600000), kvSet(env, "reset_sent", Date.now())]);
-        later(sendMail(env, email, "Recuperar la contraseña de tu app de turnos",
+        await later(sendMail(env, email, "Recuperar la contraseña de tu app de turnos",
           mailLayout("¿Olvidaste tu contraseña?", "Recibimos un pedido para cambiar la contraseña de tu panel de turnos. Tocá el botón para crear una nueva. El enlace vence en 1 hora. Si no fuiste vos, ignorá este mail: tu contraseña actual sigue funcionando.", [], ["CREAR NUEVA CONTRASEÑA", `${SITE}/admin/?reset=${token}`], "Creá una contraseña nueva para tu panel de turnos. El enlace vence en 1 hora.")));
       }
       const hint = isEmail(email) ? email.replace(/^(.).*(@.*)$/, "$1•••$2") : "";
@@ -371,7 +377,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
           kvSet(env, "recovery_email", email), kvSet(env, "recovery_phone", phone), kvSet(env, "notify_email", email),
           env.SG_DB.prepare("DELETE FROM sessions WHERE token!=?").bind(token),
         ]);
-        later(sendMail(env, email, "Tu app de turnos ya está lista",
+        await later(sendMail(env, email, "Tu app de turnos ya está lista",
           mailLayout("¡Tu app de turnos ya está lista!", "Configuraste tu nueva contraseña. Desde ahora vas a recibir en este mail un aviso cada vez que reserven o cancelen un turno desde tu página.", [["Tu página", `<a href="${SITE}/" style="color:#9a6b38">zenix.com.ar/Sebastiancolorista</a>`], ["Tu panel", `<a href="${SITE}/admin/" style="color:#9a6b38">zenix.com.ar/Sebastiancolorista/admin</a>`], ["Celular de recuperación", esc(phone)]], ["ABRIR MI PANEL", SITE + "/admin/"], "Desde ahora te avisamos por acá cada turno nuevo o cancelado")));
         return json({ ok: true });
       }
