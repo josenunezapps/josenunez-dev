@@ -46,7 +46,15 @@
       var next = JSON.parse(v), r;
       SGS.lastError = '';
       if (ADMIN) {
-        r = req('PUT', 'admin/' + n, next);
+        var payload = next;
+        if (n === 'bookings') {
+          // enviar solo los turnos que cambiaron
+          var before = {};
+          cache.bookings.forEach(function (b) { before[b.id] = JSON.stringify(b); });
+          payload = next.filter(function (b) { return before[b.id] !== JSON.stringify(b); });
+          if (!payload.length) { cache[n] = next; return; }
+        }
+        r = req('PUT', 'admin/' + n, payload);
         if (r.status !== 200) { SGS.lastError = r.data.error || 'No se pudo guardar'; throw new Error(SGS.lastError); }
         cache[n] = next;
         return;

@@ -13,6 +13,31 @@ const COOKIE = "sg_admin";
 const SESSION_HOURS = 24 * 14;
 const TZ_OFFSET_MIN = -180; // Argentina, UTC-3
 
+// Catálogo base (los ajustes del panel pueden cambiar nombre, precio, duración y si está activo)
+const SERVICES = {
+  raices: [50000, 90], balayage: [140000, 180], iluminacion: [140000, 180], fantasia: [80000, 150], botox: [65000, 90],
+  alisado: [90000, 150], alisadosf: [120000, 180], ondulacion: [70000, 120], cortedama: [30000, 60], tendencia: [30000, 60],
+  caballero: [25000, 45], brushcorto: [18000, 30], brushlargo: [20000, 45], urbano: [50000, 60], gala: [50000, 90], lavado: [7000, 30],
+};
+const STAFF = ["sebastian"];
+
+async function catalog(env) {
+  const row = await env.SG_DB.prepare("SELECT value FROM kv WHERE key='settings'").first();
+  let st = {};
+  try { st = row ? JSON.parse(row.value) : {}; } catch {}
+  const out = {};
+  for (const [id, [price, duration]] of Object.entries(SERVICES)) {
+    const o = (st.services || []).find((x) => x && x.id === id) || {};
+    out[id] = {
+      price: Number.isFinite(Number(o.price)) && Number(o.price) >= 0 ? Number(o.price) : price,
+      duration: Number(o.duration) >= 15 && Number(o.duration) <= 300 ? Number(o.duration) : duration,
+      active: o.active !== false,
+    };
+  }
+  const staffOff = new Set((st.staff || []).filter((x) => x && x.active === false).map((x) => x.id));
+  return { services: out, staff: STAFF.filter((x) => !staffOff.has(x)) };
+}
+
 const json = (data, status = 200, extra = {}) =>
   new Response(JSON.stringify(data), {
     status,
@@ -124,6 +149,11 @@ export async function onRequest({ request, env, params }) {
     if (path === "bookings" && method === "POST") {
       const b = cleanBooking(body);
       b.status = "confirmed";
+      const cat = await catalog(env);
+      const svc = cat.services[b.serviceId];
+      if (!svc || !svc.active || !cat.staff.includes(b.barberId)) return json({ error: "Servicio no disponible" }, 400);
+      b.duration = svc.duration;
+      b.price = svc.price;
       if (!b.id || str(b.name, 80).trim().length < 2 || digits(b.phone).length < 6) return json({ error: "Faltan datos del turno" }, 400);
       const exists = await env.SG_DB.prepare("SELECT 1 FROM bookings WHERE id=?").bind(b.id).first();
       if (exists) return json({ error: "Turno duplicado" }, 409);
@@ -170,10 +200,9 @@ export async function onRequest({ request, env, params }) {
       if (!(await isAdmin(env, request))) return json({ error: "No autorizado" }, 401);
       if (path === "admin/state" && method === "GET") return json(await loadAll(env));
       if (path === "admin/bookings" && method === "PUT") {
+        // Solo actualiza los turnos enviados (nunca borra): evita pisar reservas nuevas hechas mientras el panel estaba abierto
         const list = (Array.isArray(body) ? body : []).map(cleanBooking).filter((b) => b.id && isDate(b.date));
-        const ids = list.map((b) => b.id);
-        const stmts = [env.SG_DB.prepare(`DELETE FROM bookings WHERE id NOT IN (${ids.map(() => "?").join(",") || "''"})`).bind(...ids), ...list.map((b) => insertStmt(env, b))];
-        await env.SG_DB.batch(stmts);
+        if (list.length) await env.SG_DB.batch(list.map((b) => insertStmt(env, b)));
         return json({ ok: true });
       }
       if (path === "admin/blocks" && method === "PUT") {
