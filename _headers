@@ -61,3 +61,11 @@
   Cache-Control: no-cache
 
 
+
+# Estudio Aurora: demo independiente, no indexar.
+/aurora
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+/aurora/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
